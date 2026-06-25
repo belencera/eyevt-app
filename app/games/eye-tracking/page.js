@@ -1,81 +1,116 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import './eyeTracking.css'
+import { useEffect, useRef, useState } from 'react'
+import { GameShell } from '../_shared/GameShell'
+import { useGameSession } from '../_shared/useGameSession'
+
+const MIN = 2
+const MAX = 98
+
+function velocityFromAngle(angle, speed) {
+  return {
+    x: Math.cos(angle) * speed,
+    y: Math.sin(angle) * speed,
+  }
+}
+
+function randomVelocity(speed) {
+  return velocityFromAngle(Math.random() * Math.PI * 2, speed)
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value))
+}
+
+function setVelocityMagnitude(vel, speed) {
+  const mag = Math.hypot(vel.x, vel.y) || 1
+  vel.x = (vel.x / mag) * speed
+  vel.y = (vel.y / mag) * speed
+}
 
 export default function EyeTrackingGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
-  const [running, setRunning] = useState(false)
-  const [score, setScore] = useState(0)
-  const [countdown, setCountdown] = useState(3)
-  const [started, setStarted] = useState(false)
+  const [speed, setSpeed] = useState(28)
 
-  const startGame = () => {
-    setScore(0)
-    setCountdown(3)
-    setStarted(false)
+  const positionRef = useRef({ x: 50, y: 50 })
+  const velocityRef = useRef(randomVelocity(28))
 
-    let timer = 3
+  const resetBall = () => {
+    positionRef.current = { x: 50, y: 50 }
+    velocityRef.current = randomVelocity(speed)
+    setPosition({ x: 50, y: 50 })
+  }
 
-    const interval = setInterval(() => {
-      timer -= 1
-      setCountdown(timer)
+  const session = useGameSession({
+    onBeginPlay: resetBall,
+    onReset: resetBall,
+  })
 
-      if (timer === 0) {
-        clearInterval(interval)
-        setStarted(true)
-        setRunning(true)
-      }
-    }, 1000)
+  const handleSpeedChange = (value) => {
+    setSpeed(value)
+    setVelocityMagnitude(velocityRef.current, value)
   }
 
   useEffect(() => {
-    if (!running) return
+    if (!session.running) return
 
-    const interval = setInterval(() => {
-      setPosition({
-        x: Math.random() * 80 + 10,
-        y: Math.random() * 80 + 10
-      })
-    }, 900)
+    let frameId
+    let lastTime = performance.now()
 
-    return () => clearInterval(interval)
-  }, [running])
+    const tick = (now) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.05)
+      lastTime = now
 
-  const handleClick = () => {
-    if (!running) return
-    setScore(prev => prev + 1)
-  }
+      const pos = positionRef.current
+      const vel = velocityRef.current
+
+      pos.x += vel.x * dt
+      pos.y += vel.y * dt
+
+      if (pos.x <= MIN || pos.x >= MAX) {
+        vel.x *= -1
+        pos.x = clamp(pos.x, MIN, MAX)
+      }
+      if (pos.y <= MIN || pos.y >= MAX) {
+        vel.y *= -1
+        pos.y = clamp(pos.y, MIN, MAX)
+      }
+
+      setPosition({ x: pos.x, y: pos.y })
+      frameId = requestAnimationFrame(tick)
+    }
+
+    frameId = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frameId)
+  }, [session.running])
+
+  const showDot =
+    session.started && (session.isPlaying || session.isPaused)
 
   return (
-    <div className="gameContainer">
-
-      <div className="panel">
-        <h1>Eye Tracking</h1>
-
-        <p>Score: {score}</p>
-
-        {!started && (
-          <button onClick={startGame} className="button">
-            Start
-          </button>
-        )}
-
-        {countdown > 0 && !started && (
-          <p className="countdown">{countdown}</p>
-        )}
-      </div>
-
-      {started && (
+    <GameShell
+      title="Seguimientos"
+      hint="Sigue el punto con la mirada"
+      session={session}
+      speedControl={{
+        id: 'speed',
+        label: 'Velocidad',
+        value: speed,
+        min: 12,
+        max: 48,
+        step: 2,
+        onChange: handleSpeedChange,
+      }}
+    >
+      {showDot && (
         <div
-          className="dot"
-          onClick={handleClick}
+          className={`gameDot ${session.isPaused ? 'gameDotPaused' : ''}`}
           style={{
             left: `${position.x}%`,
-            top: `${position.y}%`
+            top: `${position.y}%`,
           }}
         />
       )}
-    </div>
+    </GameShell>
   )
 }

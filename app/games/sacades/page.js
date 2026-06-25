@@ -1,81 +1,90 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import './sacades.css'
+import { useEffect, useRef, useState } from 'react'
+import { GameShell } from '../_shared/GameShell'
+import { useGameSession } from '../_shared/useGameSession'
+
+const MIN = 2
+const MAX = 98
+
+function randomPosition() {
+  return {
+    x: Math.random() * (MAX - MIN) + MIN,
+    y: Math.random() * (MAX - MIN) + MIN,
+  }
+}
+
+/** Convierte velocidad del slider (12–48) en intervalo entre saltos (ms). */
+function speedToInterval(speed) {
+  return Math.round(1500 - speed * 25)
+}
 
 export default function SacadesGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
-  const [running, setRunning] = useState(false)
-  const [score, setScore] = useState(0)
-  const [countdown, setCountdown] = useState(3)
-  const [started, setStarted] = useState(false)
+  const [speed, setSpeed] = useState(28)
+  const intervalRef = useRef(null)
 
-  const startGame = () => {
-    setScore(0)
-    setCountdown(3)
-    setStarted(false)
-
-    let timer = 3
-
-    const interval = setInterval(() => {
-      timer -= 1
-      setCountdown(timer)
-
-      if (timer === 0) {
-        clearInterval(interval)
-        setStarted(true)
-        setRunning(true)
-      }
-    }, 1000)
+  const clearJumpInterval = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
   }
+
+  const jumpToRandom = () => {
+    setPosition(randomPosition())
+  }
+
+  const startJumping = () => {
+    clearJumpInterval()
+    jumpToRandom()
+    intervalRef.current = setInterval(jumpToRandom, speedToInterval(speed))
+  }
+
+  const resetBall = () => {
+    clearJumpInterval()
+    setPosition({ x: 50, y: 50 })
+  }
+
+  const session = useGameSession({
+    onBeginPlay: startJumping,
+    onPause: clearJumpInterval,
+    onResume: startJumping,
+    onReset: resetBall,
+    onEnd: clearJumpInterval,
+  })
 
   useEffect(() => {
-    if (!running) return
+    return () => clearJumpInterval()
+  }, [])
 
-    const interval = setInterval(() => {
-      setPosition({
-        x: Math.random() * 80 + 10,
-        y: Math.random() * 80 + 10
-      })
-    }, 900)
-
-    return () => clearInterval(interval)
-  }, [running])
-
-  const handleClick = () => {
-    if (!running) return
-    setScore(prev => prev + 1)
-  }
+  const showDot =
+    session.started && (session.isPlaying || session.isPaused)
 
   return (
-    <div className="gameContainer">
-
-      <div className="panel">
-        <h1>Sacades</h1>
-
-        <p>Score: {score}</p>
-
-        {!started && (
-          <button onClick={startGame} className="button">
-            Start
-          </button>
-        )}
-
-        {countdown > 0 && !started && (
-          <p className="countdown">{countdown}</p>
-        )}
-      </div>
-
-      {started && (
+    <GameShell
+      title="Sacádicos"
+      hint="Salta la mirada de un punto a otro"
+      session={session}
+      speedControl={{
+        id: 'sacade-speed',
+        label: 'Velocidad',
+        value: speed,
+        min: 12,
+        max: 48,
+        step: 2,
+        onChange: setSpeed,
+      }}
+    >
+      {showDot && (
         <div
-          className="dot"
-          onClick={handleClick}
+          className={`gameDot ${session.isPaused ? 'gameDotPaused' : ''}`}
           style={{
             left: `${position.x}%`,
-            top: `${position.y}%`
+            top: `${position.y}%`,
           }}
         />
       )}
-    </div>
+    </GameShell>
   )
 }
