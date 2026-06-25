@@ -6,7 +6,6 @@
   color: #f8fafc;
 }
 
-/* Panel izquierdo — configuración (~20%) */
 .configPanel {
   flex: 0 0 20%;
   min-width: 200px;
@@ -15,7 +14,6 @@
   padding: 20px 18px;
   display: flex;
   flex-direction: column;
-  gap: 0;
   background: #0f172a;
   border-right: 1px solid rgba(148, 163, 184, 0.2);
   overflow-y: auto;
@@ -26,7 +24,7 @@
   display: inline-block;
   color: #94a3b8;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.8rem;
   margin-bottom: 12px;
 }
 
@@ -35,14 +33,14 @@
 }
 
 .gameTitle {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: 4px;
 }
 
 .gameHint {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #64748b;
   margin-bottom: 20px;
 }
@@ -61,12 +59,11 @@
 }
 
 .controlLabel {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #64748b;
-  margin-bottom: 5px;
 }
 
 .speedControl {
@@ -95,22 +92,105 @@
   min-width: 1.5rem;
 }
 
-.controlSelect {
+/* Selector personalizado (sustituye al <select> nativo) */
+.optionPicker {
+  position: relative;
+}
+
+.optionPickerTrigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.25);
   background: rgba(30, 41, 59, 0.9);
   color: #f1f5f9;
   font-size: 0.875rem;
   cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
 }
 
-.controlSelect:disabled {
+.optionPickerTrigger:hover:not(:disabled) {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(30, 41, 59, 1);
+}
+
+.optionPickerTrigger:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 
-/* Contador de tiempo */
+.optionPickerOpen .optionPickerTrigger {
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
+}
+
+.optionPickerChevron {
+  width: 18px;
+  height: 18px;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+
+.optionPickerOpen .optionPickerChevron {
+  transform: rotate(180deg);
+}
+
+.optionPickerMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border-radius: 12px;
+  background: #1e293b;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  z-index: 30;
+  animation: optionMenuIn 0.15s ease-out;
+}
+
+@keyframes optionMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.optionPickerItem {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.optionPickerItem:hover {
+  background: rgba(51, 65, 85, 0.8);
+}
+
+.optionPickerItemActive {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  font-weight: 600;
+}
+
 .timerWidget {
   display: flex;
   flex-direction: column;
@@ -197,7 +277,7 @@
   border: none;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.12s, opacity 0.12s, background 0.12s, box-shadow 0.12s;
+  transition: transform 0.12s, opacity 0.12s, background 0.12s;
 }
 
 .btnIcon {
@@ -256,7 +336,6 @@
   border-color: rgba(148, 163, 184, 0.5);
 }
 
-/* Zona de juego — ~80% derecha */
 .playArea {
   flex: 1;
   position: relative;
@@ -302,7 +381,8 @@
   }
 }
 
-.dot {
+/* Estilos base del punto (cada juego puede ampliar) */
+.gameDot {
   position: absolute;
   width: 28px;
   height: 28px;
@@ -315,7 +395,7 @@
   will-change: left, top;
 }
 
-.dotPaused {
+.gameDotPaused {
   opacity: 0.55;
   box-shadow: 0 0 16px rgba(34, 197, 94, 0.4);
 }
