@@ -16,7 +16,7 @@ export default function Home() {
         </div>
 
         <p className="description">
-          ¡Elige tu juego y entrena tu visión!
+          ¡Elige un juego y entrena tu visión!
         </p>
       </header>
 
