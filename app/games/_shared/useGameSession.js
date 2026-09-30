@@ -9,7 +9,10 @@ import { COUNTDOWN_START } from './constants'
  */
 export function useGameSession(callbacks = {}) {
   const callbacksRef = useRef(callbacks)
-  callbacksRef.current = callbacks
+
+  useEffect(() => {
+    callbacksRef.current = callbacks
+  })
 
   const [running, setRunning] = useState(false)
   const [paused, setPaused] = useState(false)

@@ -34,13 +34,17 @@ export function GameShell({
     isPlaying,
     isPaused,
     isIdle,
+    started,
     showTimer,
     timerProgress,
   } = session
 
   return (
-    <div className="gameLayout">
-      <aside className="configPanel">
+    <div className={`gameLayout ${started ? 'gameLayoutFullscreen' : ''}`}>
+      <aside
+        className={`configPanel ${started ? 'configPanelHidden' : ''}`}
+        aria-hidden={started}
+      >
         <Link href="/" className="gameBack">
           ← Inicio
         </Link>
@@ -141,6 +145,37 @@ export function GameShell({
 
       <main className="playArea">
         {children}
+
+        {started && (
+          <div className="floatingGameBar" aria-label="Controles del juego">
+            <button
+              type="button"
+              className={`btn btnIcon floatingBtn ${
+                isPaused ? 'floatingBtnPlay' : 'floatingBtnPause'
+              }`}
+              disabled={isCountingDown}
+              onClick={handleTogglePause}
+              aria-label={isPaused ? 'Reanudar' : 'Pausar'}
+              title={isPaused ? 'Reanudar' : 'Pausar'}
+            >
+              {isPaused ? <IconPlay /> : <IconPause />}
+            </button>
+            <button
+              type="button"
+              className="btn btnIcon floatingBtn floatingBtnReset"
+              onClick={handleReset}
+              aria-label="Reiniciar y volver al menú"
+              title="Reiniciar y volver al menú"
+            >
+              <IconReset />
+            </button>
+            {showTimer && (
+              <div className="floatingTimer">
+                <span className="floatingTimerValue">{formatTime(timeLeft)}</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {isCountingDown && (
           <div className="countdownOverlay" aria-live="polite">

@@ -18,6 +18,18 @@
   border-right: 1px solid rgba(148, 163, 184, 0.2);
   overflow-y: auto;
   z-index: 2;
+  transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+}
+
+.configPanelHidden {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  border-right: none !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .gameBack {
@@ -75,7 +87,7 @@
 .speedControl input[type='range'] {
   flex: 1;
   height: 5px;
-  accent-color: #22c55e;
+  accent-color: #38bdf8;
   cursor: pointer;
 }
 
@@ -88,7 +100,7 @@
   font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #4ade80;
+  color: #38bdf8;
   min-width: 1.5rem;
 }
 
@@ -115,7 +127,7 @@
 }
 
 .optionPickerTrigger:hover:not(:disabled) {
-  border-color: rgba(34, 197, 94, 0.4);
+  border-color: rgba(56, 189, 248, 0.4);
   background: rgba(30, 41, 59, 1);
 }
 
@@ -125,8 +137,8 @@
 }
 
 .optionPickerOpen .optionPickerTrigger {
-  border-color: rgba(34, 197, 94, 0.5);
-  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
 }
 
 .optionPickerChevron {
@@ -186,9 +198,207 @@
 }
 
 .optionPickerItemActive {
-  background: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
   font-weight: 600;
+}
+
+.optionPickerItem:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.optionPickerItem:disabled:hover {
+  background: transparent;
+  color: #94a3b8;
+}
+
+/* Indicador en tiempo real para el terapeuta */
+.therapistFeedback {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 12px;
+  animation: optionMenuIn 0.2s ease-out;
+}
+
+.therapistFeedbackLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.therapistColorBadge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.therapistColorDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.therapistColorName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
+}
+
+/* Selector visual en cuadrícula de estímulo */
+.stimulusGridContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stimulusGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.stimulusCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(30, 41, 59, 0.75);
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.14s ease, background-color 0.14s ease, box-shadow 0.14s ease;
+  user-select: none;
+  text-align: center;
+}
+
+.stimulusCard:last-child:nth-child(odd) {
+  grid-column: span 2;
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+}
+
+.stimulusCard:hover:not(:disabled) {
+  background: rgba(51, 65, 85, 0.85);
+  border-color: rgba(56, 189, 248, 0.45);
+  transform: translateY(-1px);
+}
+
+.stimulusCard:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.stimulusCardActive {
+  background: rgba(56, 189, 248, 0.14) !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.25), inset 0 0 10px rgba(56, 189, 248, 0.08);
+  color: #f8fafc;
+}
+
+.stimulusCardActive .stimulusCardLabel {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.stimulusCard:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  border-style: dashed;
+  border-color: rgba(148, 163, 184, 0.18);
+  transform: none;
+}
+
+.stimulusCardIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+}
+
+.stimulusCardLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #cbd5e1;
+  letter-spacing: -0.01em;
+  transition: color 0.14s ease;
+}
+
+.stimulusBadgePronto {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.52rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+}
+
+.stimulusIconDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+.stimulusIconColors {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #ef4444 0deg,
+    #facc15 72deg,
+    #22c55e 144deg,
+    #38bdf8 216deg,
+    #f472b6 288deg,
+    #ef4444 360deg
+  );
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+
+.stimulusIconLetters {
+  font-size: 0.95rem;
+  font-weight: 800;
+  font-family: monospace, sans-serif;
+  color: #cbd5e1;
+  line-height: 1;
+}
+
+.stimulusIconWords {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #cbd5e1;
+  padding: 1px 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  line-height: 1.2;
+}
+
+.stimulusIconAnimals {
+  font-size: 1.05rem;
+  line-height: 1;
 }
 
 .timerWidget {
@@ -222,13 +432,13 @@
   display: grid;
   place-items: center;
   background: conic-gradient(
-    #22c55e 0%,
-    #22c55e var(--progress),
+    #38bdf8 0%,
+    #38bdf8 var(--progress),
     rgba(51, 65, 85, 0.6) var(--progress),
     rgba(51, 65, 85, 0.6) 100%
   );
   transition: background 0.4s ease;
-  box-shadow: 0 0 24px rgba(34, 197, 94, 0.15);
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.2);
 }
 
 .timerRingInner {
@@ -261,7 +471,7 @@
 .timerBarFill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #16a34a, #4ade80);
+  background: linear-gradient(90deg, #0284c7, #38bdf8);
   transition: width 0.4s ease, background 0.2s;
 }
 
@@ -307,12 +517,12 @@
 }
 
 .btnPrimary {
-  background: #22c55e;
-  color: #052e16;
+  background: #38bdf8;
+  color: #082f49;
 }
 
 .btnPrimary:not(:disabled):hover {
-  background: #4ade80;
+  background: #7dd3fc;
 }
 
 .btnSecondary {
@@ -361,7 +571,7 @@
   line-height: 1;
   color: #f8fafc;
   text-shadow:
-    0 0 60px rgba(34, 197, 94, 0.5),
+    0 0 60px rgba(56, 189, 248, 0.5),
     0 4px 24px rgba(0, 0, 0, 0.5);
   animation: countdownPulse 0.9s ease-out;
 }
@@ -386,18 +596,109 @@
   position: absolute;
   width: 28px;
   height: 28px;
-  background: #22c55e;
+  background: #38bdf8;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   box-shadow:
-    0 0 24px rgba(34, 197, 94, 0.85),
-    0 0 48px rgba(34, 197, 94, 0.35);
+    0 0 24px rgba(56, 189, 248, 0.85),
+    0 0 48px rgba(56, 189, 248, 0.35);
   will-change: left, top;
 }
 
 .gameDotPaused {
   opacity: 0.55;
-  box-shadow: 0 0 16px rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+}
+
+/* Barra flotante de controles cuando el juego está a pantalla completa */
+.floatingGameBar {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  animation: optionMenuIn 0.25s ease-out;
+  transition: opacity 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.floatingGameBar:hover {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.floatingBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.floatingBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.floatingBtnPause {
+  background: rgba(51, 65, 85, 0.85);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.floatingBtnPause:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.18);
+  color: #7dd3fc;
+  border-color: #38bdf8;
+  transform: scale(1.05);
+}
+
+.floatingBtnPlay {
+  background: #38bdf8;
+  color: #082f49;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+}
+
+.floatingBtnPlay:hover:not(:disabled) {
+  background: #7dd3fc;
+  transform: scale(1.05);
+}
+
+.floatingBtnReset {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.floatingBtnReset:hover:not(:disabled) {
+  color: #f1f5f9;
+  border-color: rgba(148, 163, 184, 0.5);
+  background: rgba(51, 65, 85, 0.6);
+  transform: scale(1.05);
+}
+
+.floatingTimer {
+  padding: 0 6px 0 4px;
+  display: flex;
+  align-items: center;
+}
+
+.floatingTimerValue {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
 }
 
 @media (max-width: 720px) {
@@ -412,6 +713,13 @@
     max-height: 42vh;
     border-right: none;
     border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+  }
+
+  .configPanelHidden {
+    max-height: 0 !important;
+    padding: 0 !important;
+    border-bottom: none !important;
   }
 
   .gameActions {
