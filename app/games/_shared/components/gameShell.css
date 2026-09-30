@@ -19,6 +19,30 @@
   overflow-y: auto;
   z-index: 2;
   transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+.configPanel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.configPanel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.configPanel::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+.configPanel::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.55);
+}
+
+.configPanel::-webkit-scrollbar-thumb:active {
+  background: rgba(56, 189, 248, 0.85);
 }
 
 .configPanelHidden {
