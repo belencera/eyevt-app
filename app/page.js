@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Footer from "./components/Footer"
-import { TrackingPreview, SaccadesPreview, PeripheryPreview } from "./components/GamePreviews"
+import { FixationPreview, TrackingPreview, SaccadesPreview, PeripheryPreview } from "./components/GamePreviews"
 
 export default function Home() {
   return (
@@ -24,16 +24,22 @@ export default function Home() {
 
         <div className="games-grid">
 
+          <Link href="/games/fixation" className="game-card">
+            <FixationPreview />
+            <h3>Fijación</h3>
+            <p>Entrena la estabilidad visual y la capacidad de mantener la mirada en un punto fijo central</p>
+          </Link>
+
           <Link href="/games/eye-tracking" className="game-card">
             <TrackingPreview />
             <h3>Seguimientos</h3>
-            <p>Mejora movimientos de seguimiento ocular con diferentes estímulos visuales</p>
+            <p>Mejora tus movimientos de seguimiento ocular con estímulos visuales personalizados</p>
           </Link>
 
           <Link href="/games/sacades" className="game-card">
             <SaccadesPreview />
             <h3>Sacádicos</h3>
-            <p>Entrena movimientos oculares rápidos y precisos entre distintos puntos de fijación</p>
+            <p>Entrena tus movimientos oculares rápidos y precisos entre distintos puntos de fijación</p>
           </Link>
 
           <Link href="/games/periphery" className="game-card">

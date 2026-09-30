@@ -20,6 +20,33 @@
 }
 
 /* =========================================
+   0. FIJACION PREVIEW (Punto central estable y halo respiratorio)
+   ========================================= */
+.fixation-halo {
+  fill: none;
+  stroke: #38bdf8;
+  transform-origin: 100px 45px;
+  animation: fixationBreathe 4s infinite ease-in-out;
+}
+
+@keyframes fixationBreathe {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.25;
+    stroke-width: 1px;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.75;
+    stroke-width: 1.5px;
+  }
+}
+
+.fixation-center-dot {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 14px rgba(56, 189, 248, 0.95));
+}
+
+/* =========================================
    1. SEGUIMIENTOS PREVIEW (Velocidad suave constante)
    ========================================= */
 .svg-tracking-dot {

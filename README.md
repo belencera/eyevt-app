@@ -25,22 +25,30 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
 
 ## 🎯 Ejercicios Clínicos
 
-### 1. Seguimientos (`/games/eye-tracking`)
-- **Objetivo:** Estimulación de movimientos oculares suaves (*pursuits*) siguiendo un estímulo en movimiento continuo continuo dentro del área visual.
+### 1. Fijación (`/games/fixation`)
+- **Objetivo:** Estimulación de la estabilidad foveal y entrenamiento de la capacidad del paciente para mantener la mirada fija en un punto central estable sin desviar los ojos ni mover la cabeza.
+- **Configuración:**
+  - Estímulo central elegible entre todos los disponibles (Punto, Colores, Letras, Palabras, Números, Flechas, Animales, Frutas).
+  - Velocidad de cambio / cadencia regulable (1 s a 10 s).
+  - Temporizador de sesión (1 a 5 min, o modo infinito).
+  - Panel superior flotante durante la sesión para pausar, reanudar o reiniciar.
+
+### 2. Seguimientos (`/games/eye-tracking`)
+- **Objetivo:** Estimulación de movimientos oculares suaves (*pursuits*) siguiendo un estímulo en movimiento continuo dentro del área visual.
 - **Configuración:**
   - Velocidad de desplazamiento regulable (8 a 60).
   - Temporizador de sesión (1 a 5 min, o modo infinito).
   - Intervalos de rotación periódica del estímulo configurables (1 s a 5 s).
   - Panel superior flotante durante la sesión para control rápido (pausa, reanudación y parada).
 
-### 2. Sacádicos (`/games/sacades`)
+### 3. Sacádicos (`/games/sacades`)
 - **Objetivo:** Entrenamiento de movimientos sacádicos rápidos y precisos mediante fijaciones alternantes aleatorias.
 - **Configuración:**
   - Cadencia y velocidad entre saltos (12 a 48).
   - Rotación dinámica de estímulo en cada salto (color, letra, palabra, número, flecha o ilustración diferente).
   - Temporizador de sesión con barra de progreso y control flotante.
 
-### 3. Periferia (`/games/periphery`)
+### 4. Periferia (`/games/periphery`)
 - **Objetivo:** Entrenamiento y ampliación del campo visual periférico manteniendo una fijación central estable.
 - **Modos de Juego:**
   - **Foco Central:** El paciente mantiene la mirada en el punto central mientras detecta estímulos intermitentes en la periferia.
@@ -95,6 +103,7 @@ eyevt/
 │   │   │   ├── utils/            # Formateadores (formatTime) e iconos SVG
 │   │   │   └── index.js          # Exportaciones centralizadas de _shared
 │   │   ├── eye-tracking/         # Ejercicio de Seguimientos Oculares
+│   │   ├── fixation/             # Ejercicio de Fijación Central Estable
 │   │   ├── periphery/            # Ejercicio de Campo Visual Periférico
 │   │   └── sacades/              # Ejercicio de Movimientos Sacádicos
 │   ├── favicon.ico

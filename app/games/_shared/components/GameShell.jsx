@@ -128,7 +128,9 @@ export function GameShell({
                       }
                       className="dashSlider"
                     />
-                    <span className="speedSliderValue">{speedControl.value}</span>
+                    <span className="speedSliderValue">
+                      {speedControl.value}{speedControl.unit ?? ''}
+                    </span>
                   </div>
                 </>
               ) : (
