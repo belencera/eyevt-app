@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { DURATION_OPTIONS } from './constants'
-import { formatTime } from './formatTime'
-import { IconPause, IconPlay, IconReset } from './icons'
+import { DURATION_OPTIONS } from '../data/constants'
+import { formatTime } from '../utils/formatTime'
+import { IconPause, IconPlay, IconReset } from '../utils/icons'
 import { OptionPicker } from './OptionPicker'
 import './gameShell.css'
 

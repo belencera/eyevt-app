@@ -1,6 +1,6 @@
 'use client'
 
-import { STIMULUS_OPTIONS } from './constants'
+import { STIMULUS_OPTIONS } from '../data/constants'
 
 function StimulusIcon({ type }) {
   switch (type) {

@@ -5,14 +5,14 @@ import { StimulusWord } from './StimulusWord'
 import { StimulusAnimal } from './StimulusAnimal'
 
 /**
- * Componente de estímulo visual.
+ * Componente despachador de estímulo visual.
  * 
  * Soporta:
- * - Punto fijo celeste
- * - Punto dinámico de colores
- * - Letras sueltas en mayúscula con selección de tamaño
- * - Palabras de 3 a 6 letras en mayúscula
- * - Animales ilustrados con selección de tamaño
+ * - Punto fijo celeste ('classic')
+ * - Punto dinámico de colores ('colors')
+ * - Letras sueltas en mayúscula con selección de tamaño ('letters')
+ * - Palabras de 3 a 6 letras en mayúscula con selección de tamaño ('words')
+ * - Animales ilustrados con selección de tamaño ('animals')
  */
 export function StimulusDot({
   position,
