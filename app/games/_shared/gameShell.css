@@ -18,6 +18,18 @@
   border-right: 1px solid rgba(148, 163, 184, 0.2);
   overflow-y: auto;
   z-index: 2;
+  transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+}
+
+.configPanelHidden {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  padding: 0 !important;
+  border-right: none !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .gameBack {
@@ -598,6 +610,97 @@
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
 }
 
+/* Barra flotante de controles cuando el juego está a pantalla completa */
+.floatingGameBar {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  animation: optionMenuIn 0.25s ease-out;
+  transition: opacity 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.floatingGameBar:hover {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.floatingBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.floatingBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.floatingBtnPause {
+  background: rgba(51, 65, 85, 0.85);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.floatingBtnPause:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.18);
+  color: #7dd3fc;
+  border-color: #38bdf8;
+  transform: scale(1.05);
+}
+
+.floatingBtnPlay {
+  background: #38bdf8;
+  color: #082f49;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+}
+
+.floatingBtnPlay:hover:not(:disabled) {
+  background: #7dd3fc;
+  transform: scale(1.05);
+}
+
+.floatingBtnReset {
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.floatingBtnReset:hover:not(:disabled) {
+  color: #f1f5f9;
+  border-color: rgba(148, 163, 184, 0.5);
+  background: rgba(51, 65, 85, 0.6);
+  transform: scale(1.05);
+}
+
+.floatingTimer {
+  padding: 0 6px 0 4px;
+  display: flex;
+  align-items: center;
+}
+
+.floatingTimerValue {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+}
+
 @media (max-width: 720px) {
   .gameLayout {
     flex-direction: column;
@@ -610,6 +713,13 @@
     max-height: 42vh;
     border-right: none;
     border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+  }
+
+  .configPanelHidden {
+    max-height: 0 !important;
+    padding: 0 !important;
+    border-bottom: none !important;
   }
 
   .gameActions {
