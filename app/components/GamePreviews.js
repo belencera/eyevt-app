@@ -10,17 +10,7 @@ export function TrackingPreview() {
           strokeWidth="1.5"
           strokeDasharray="4 4"
         />
-        <circle className="svg-tracking-dot" r="6" fill="#38bdf8">
-          <animateMotion
-            dur="3.2s"
-            repeatCount="indefinite"
-            path="M 25 45 Q 65 15, 100 45 T 175 45"
-            keyPoints="0;1;0"
-            keyTimes="0;0.5;1"
-            calcMode="spline"
-            keySplines="0.45 0 0.55 1; 0.45 0 0.55 1"
-          />
-        </circle>
+        <circle className="svg-tracking-dot" r="6" fill="#38bdf8" />
       </svg>
     </div>
   )
@@ -49,11 +39,7 @@ export function PeripheryPreview() {
         <circle cx="100" cy="45" r="36" stroke="rgba(56, 189, 248, 0.15)" strokeWidth="1" strokeDasharray="4 4" />
 
         {/* Onda expansiva de estimulación periférica */}
-        <circle cx="100" cy="45" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5">
-          <animate attributeName="r" values="6; 37" dur="2.4s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.8; 0" dur="2.4s" repeatCount="indefinite" />
-          <animate attributeName="stroke-width" values="1.5; 0.5" dur="2.4s" repeatCount="indefinite" />
-        </circle>
+        <circle cx="100" cy="45" r="36" className="svg-peripheral-wave" />
 
         {/* Marcadores de posición periféricos */}
         <circle cx="64" cy="45" r="4.5" stroke="rgba(56, 189, 248, 0.35)" strokeDasharray="2 2" strokeWidth="1" />
