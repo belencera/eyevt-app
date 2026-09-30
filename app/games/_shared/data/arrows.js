@@ -11,10 +11,10 @@ export const ARROW_DIRECTIONS = [
 ]
 
 export const ARROW_SIZE_OPTIONS = [
-  { value: 'sm', label: 'Pequeña (32px)' },
-  { value: 'md', label: 'Mediana (48px)' },
-  { value: 'lg', label: 'Grande (68px)' },
-  { value: 'xl', label: 'Muy grande (92px)' },
+  { value: 'sm', label: 'Pequeña' },
+  { value: 'md', label: 'Mediana' },
+  { value: 'lg', label: 'Grande' },
+  { value: 'xl', label: 'Muy grande' },
 ]
 
 export const ARROW_INTERVAL_OPTIONS = [

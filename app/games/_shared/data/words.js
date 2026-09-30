@@ -3,10 +3,10 @@ import { WORD_BANKS } from './wordsBanks'
 export { WORD_BANKS } from './wordsBanks'
 
 export const WORD_SIZE_OPTIONS = [
-  { value: 'sm', label: 'Pequeña (26px)' },
-  { value: 'md', label: 'Mediana (38px)' },
-  { value: 'lg', label: 'Grande (54px)' },
-  { value: 'xl', label: 'Muy grande (74px)' },
+  { value: 'sm', label: 'Pequeña' },
+  { value: 'md', label: 'Mediana' },
+  { value: 'lg', label: 'Grande' },
+  { value: 'xl', label: 'Muy grande' },
 ]
 
 export const WORD_LENGTH_OPTIONS = [

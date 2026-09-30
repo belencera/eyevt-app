@@ -7,7 +7,6 @@
 export { GameShell } from './components/GameShell'
 export { OptionPicker } from './components/OptionPicker'
 export { StimulusGrid } from './components/StimulusGrid'
-export { TherapistBadge } from './components/TherapistBadge'
 
 // Estímulos visuales
 export { StimulusDot } from './stimuli/StimulusDot'

@@ -1,82 +1,68 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+function getActiveBadge(label, option) {
+  if (!option) return null
+  const lbl = option.label
+  const intervalMatch = lbl.match(/^(\d+)\s*s$/)
+  if (intervalMatch) {
+    return `Cada ${intervalMatch[1]} segundos`
+  }
+  return `${lbl} activo`
+}
 
+/**
+ * Selector con botones en una única fila / cuadrícula compacta para opciones de configuración de ejercicios.
+ * Sin menús desplegables: todo directo y visible.
+ */
 export function OptionPicker({
   id,
   label,
   value,
-  options,
+  options = [],
   disabled = false,
   onChange,
 }) {
-  const [open, setOpen] = useState(false)
-  const rootRef = useRef(null)
-
   const selected = options.find((opt) => opt.value === value)
 
-  const isOpen = open && !disabled
-
-  useEffect(() => {
-    const closeOnOutside = (event) => {
-      if (!rootRef.current?.contains(event.target)) {
-        setOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', closeOnOutside)
-    return () => document.removeEventListener('mousedown', closeOnOutside)
-  }, [])
-
   return (
-    <div className="controlGroup" ref={rootRef}>
-      <span className="controlLabel" id={`${id}-label`}>
-        {label}
-      </span>
-      <div className={`optionPicker ${isOpen ? 'optionPickerOpen' : ''}`}>
-        <button
-          type="button"
-          id={id}
-          className="optionPickerTrigger"
-          disabled={disabled}
-          aria-haspopup="listbox"
-          aria-expanded={open}
-          aria-labelledby={`${id}-label`}
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          <span>{selected?.label ?? '—'}</span>
-          <svg className="optionPickerChevron" viewBox="0 0 24 24" aria-hidden>
-            <path
-              fill="currentColor"
-              d="M7 10l5 5 5-5H7z"
-            />
-          </svg>
-        </button>
-        {isOpen && (
-          <ul className="optionPickerMenu" role="listbox" aria-labelledby={`${id}-label`}>
-            {options.map((opt) => (
-              <li key={opt.value} role="none">
-                <button
-                  type="button"
-                  role="option"
-                  disabled={opt.disabled}
-                  aria-selected={opt.value === value}
-                  aria-disabled={opt.disabled}
-                  className={`optionPickerItem ${
-                    opt.value === value ? 'optionPickerItemActive' : ''
-                  }`}
-                  onClick={() => {
-                    if (opt.disabled) return
-                    onChange(opt.value)
-                    setOpen(false)
-                  }}
-                >
-                  {opt.label}
-                </button>
-              </li>
-            ))}
-          </ul>
+    <div className="controlGroup" id={`${id}-group`}>
+      <div className="dashCardHead" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+        <span className="controlLabel" id={`${id}-label`}>
+          {label}
+        </span>
+        {selected && (
+          <span className="dashCardSub" style={{ marginLeft: 'auto' }}>
+            {getActiveBadge(label, selected)}
+          </span>
         )}
+      </div>
+      <div
+        className="optionButtonGroup"
+        role="radiogroup"
+        aria-labelledby={`${id}-label`}
+      >
+        {options.map((opt) => {
+          const isSelected = opt.value === value
+          const isDisabled = disabled || opt.disabled
+
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              disabled={isDisabled}
+              className={`optionGridBtn ${isSelected ? 'optionGridBtnActive' : ''}`}
+              onClick={() => {
+                if (!isDisabled && onChange) {
+                  onChange(opt.value)
+                }
+              }}
+            >
+              {opt.label}
+            </button>
+          )
+        })}
       </div>
     </div>
   )
