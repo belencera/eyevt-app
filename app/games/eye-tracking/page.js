@@ -22,6 +22,8 @@ import {
   NUMBER_SIZE_OPTIONS,
   NUMBER_DIGITS_OPTIONS,
   NUMBER_INTERVAL_OPTIONS,
+  ARROW_SIZE_OPTIONS,
+  ARROW_INTERVAL_OPTIONS,
   getRandomWord,
   getRandomNumber,
 } from '../_shared'
@@ -55,6 +57,7 @@ const HINTS = {
   fruits: 'Sigue la fruta y nómbrala en voz alta',
   words: 'Sigue la palabra y léela en voz alta',
   numbers: 'Sigue el número y dilo en voz alta',
+  arrows: 'Sigue la flecha y di su dirección en voz alta',
   letters: 'Sigue la letra y dila en voz alta',
   colors: 'Sigue el punto y di el color en voz alta',
   classic: 'Sigue el punto con la mirada sin mover la cabeza',
@@ -142,6 +145,8 @@ export default function EyeTrackingGame() {
         targetInterval = stim.refs.fruitIntervalRef.current
       } else if (type === 'numbers') {
         targetInterval = stim.refs.numberIntervalRef.current
+      } else if (type === 'arrows') {
+        targetInterval = stim.refs.arrowIntervalRef.current
       }
 
       if (targetInterval) {
@@ -282,6 +287,27 @@ export default function EyeTrackingGame() {
             </>
           )}
 
+          {stimulus.stimulusType === 'arrows' && (
+            <>
+              <OptionPicker
+                id="arrow-size"
+                label="Tamaño de flecha"
+                value={stimulus.arrowSize}
+                options={ARROW_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setArrowSize}
+              />
+              <OptionPicker
+                id="arrow-interval"
+                label="Cambio de flecha"
+                value={stimulus.arrowInterval}
+                options={ARROW_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setArrowInterval}
+              />
+            </>
+          )}
+
           {stimulus.stimulusType === 'animals' && (
             <>
               <OptionPicker
@@ -331,6 +357,7 @@ export default function EyeTrackingGame() {
               letter={stimulus.currentLetter}
               word={stimulus.currentWord}
               number={stimulus.currentNumber}
+              arrow={stimulus.currentArrow}
               animal={stimulus.currentAnimal}
               fruit={stimulus.currentFruit}
             />
@@ -348,6 +375,8 @@ export default function EyeTrackingGame() {
           wordSize={stimulus.wordSize}
           number={stimulus.currentNumber}
           numberSize={stimulus.numberSize}
+          arrow={stimulus.currentArrow}
+          arrowSize={stimulus.arrowSize}
           animal={stimulus.currentAnimal}
           animalSize={stimulus.animalSize}
           fruit={stimulus.currentFruit}

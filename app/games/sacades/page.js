@@ -16,6 +16,7 @@ import {
   FRUIT_SIZE_OPTIONS,
   NUMBER_SIZE_OPTIONS,
   NUMBER_DIGITS_OPTIONS,
+  ARROW_SIZE_OPTIONS,
   getRandomWord,
   getRandomNumber,
 } from '../_shared'
@@ -40,6 +41,7 @@ const HINTS = {
   fruits: 'Salta la mirada y nombra la fruta en voz alta',
   words: 'Salta la mirada y lee la palabra en voz alta',
   numbers: 'Salta la mirada y di el número en voz alta',
+  arrows: 'Salta la mirada y di la dirección en voz alta',
   letters: 'Salta la mirada y di la letra en voz alta',
   colors: 'Salta la mirada y di el color en voz alta',
   classic: 'Salta la mirada de un punto a otro',
@@ -171,6 +173,17 @@ export default function SacadesGame() {
             </>
           )}
 
+          {stimulus.stimulusType === 'arrows' && (
+            <OptionPicker
+              id="sacade-arrow-size"
+              label="Tamaño de flecha"
+              value={stimulus.arrowSize}
+              options={ARROW_SIZE_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={stimulus.setArrowSize}
+            />
+          )}
+
           {stimulus.stimulusType === 'animals' && (
             <OptionPicker
               id="sacade-animal-size"
@@ -200,6 +213,7 @@ export default function SacadesGame() {
               letter={stimulus.currentLetter}
               word={stimulus.currentWord}
               number={stimulus.currentNumber}
+              arrow={stimulus.currentArrow}
               animal={stimulus.currentAnimal}
               fruit={stimulus.currentFruit}
             />
@@ -217,6 +231,8 @@ export default function SacadesGame() {
           wordSize={stimulus.wordSize}
           number={stimulus.currentNumber}
           numberSize={stimulus.numberSize}
+          arrow={stimulus.currentArrow}
+          arrowSize={stimulus.arrowSize}
           animal={stimulus.currentAnimal}
           animalSize={stimulus.animalSize}
           fruit={stimulus.currentFruit}

@@ -54,9 +54,7 @@ export const STIMULUS_OPTIONS = [
     value: 'arrows',
     label: 'Flechas',
     iconType: 'arrows',
-    description: 'Dirección de flechas (Próximamente)',
-    badge: 'Pronto',
-    disabled: true,
+    description: 'Flechas cardinales en 4 direcciones',
   },
   {
     value: 'animals',
@@ -113,5 +111,6 @@ export * from './illustrations'
 export * from './letters'
 export * from './words'
 export * from './numbers'
+export * from './arrows'
 export * from './animals'
 export * from './fruits'

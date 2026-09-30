@@ -876,6 +876,70 @@
   filter: grayscale(40%);
 }
 
+/* Estilos para el estímulo de flechas direccionales (mismo color que palabras #f8fafc) */
+.stimulusArrow {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  will-change: left, top;
+  line-height: 1;
+  color: #f8fafc;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
+  transition: opacity 0.15s ease;
+}
+
+.stimulusArrowSvg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Tamaños configurables del estímulo de flecha */
+.stimulusArrow-sm {
+  width: 32px;
+  height: 32px;
+}
+
+.stimulusArrow-md {
+  width: 48px;
+  height: 48px;
+}
+
+.stimulusArrow-lg {
+  width: 68px;
+  height: 68px;
+}
+
+.stimulusArrow-xl {
+  width: 92px;
+  height: 92px;
+}
+
+.stimulusArrowPaused {
+  opacity: 0.4;
+  color: #94a3b8;
+  filter: none;
+}
+
+/* Badge de terapeuta para flecha */
+.therapistArrowBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.therapistArrowSymbol {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #38bdf8;
+  line-height: 1;
+}
+
 /* Barra flotante de controles cuando el juego está a pantalla completa */
 .floatingGameBar {
   position: absolute;

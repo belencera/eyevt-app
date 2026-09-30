@@ -12,6 +12,7 @@ export function TherapistBadge({
   animal,
   fruit,
   number,
+  arrow,
 }) {
   if (stimulusType === 'colors' && color) {
     return (
@@ -59,6 +60,18 @@ export function TherapistBadge({
         <span className="therapistFeedbackLabel">Número actual</span>
         <div className="therapistWordBadge">
           <span className="therapistWordText">{number}</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (stimulusType === 'arrows' && arrow) {
+    return (
+      <div className="therapistFeedback">
+        <span className="therapistFeedbackLabel">Dirección actual</span>
+        <div className="therapistWordBadge therapistArrowBadge">
+          <span className="therapistArrowSymbol">{arrow.symbol}</span>
+          <span className="therapistWordText">{arrow.name}</span>
         </div>
       </div>
     )

@@ -6,13 +6,14 @@ import {
   getRandomLetter,
   getRandomWord,
   getRandomNumber,
+  getRandomArrow,
   getRandomAnimal,
   getRandomFruit,
 } from '../data/constants'
 
 /**
  * Hook modular para gestionar los estados, configuraciones y generación
- * aleatoria de estímulos (colores, letras, palabras, números, animales, frutas).
+ * aleatoria de estímulos (colores, letras, palabras, números, flechas, animales, frutas).
  */
 export function useStimulusManager(initialType = 'classic') {
   const [stimulusType, setStimulusType] = useState(initialType)
@@ -38,6 +39,11 @@ export function useStimulusManager(initialType = 'classic') {
   const [numberInterval, setNumberInterval] = useState(3)
   const [currentNumber, setCurrentNumber] = useState(() => getRandomNumber(1))
 
+  // Opciones de flechas (4 direcciones cardinales)
+  const [arrowSize, setArrowSize] = useState('md')
+  const [arrowInterval, setArrowInterval] = useState(3)
+  const [currentArrow, setCurrentArrow] = useState(() => getRandomArrow())
+
   // Opciones de animales
   const [animalSize, setAnimalSize] = useState('md')
   const [animalInterval, setAnimalInterval] = useState(3)
@@ -60,6 +66,8 @@ export function useStimulusManager(initialType = 'classic') {
   const numberIntervalRef = useRef(numberInterval)
   const numberDigitsRef = useRef(numberDigits)
   const currentNumberRef = useRef(currentNumber)
+  const arrowIntervalRef = useRef(arrowInterval)
+  const currentArrowRef = useRef(currentArrow)
   const animalIntervalRef = useRef(animalInterval)
   const currentAnimalRef = useRef(currentAnimal)
   const fruitIntervalRef = useRef(fruitInterval)
@@ -77,6 +85,8 @@ export function useStimulusManager(initialType = 'classic') {
     numberIntervalRef.current = numberInterval
     numberDigitsRef.current = numberDigits
     currentNumberRef.current = currentNumber
+    arrowIntervalRef.current = arrowInterval
+    currentArrowRef.current = currentArrow
     animalIntervalRef.current = animalInterval
     currentAnimalRef.current = currentAnimal
     fruitIntervalRef.current = fruitInterval
@@ -93,6 +103,8 @@ export function useStimulusManager(initialType = 'classic') {
     numberInterval,
     numberDigits,
     currentNumber,
+    arrowInterval,
+    currentArrow,
     animalInterval,
     currentAnimal,
     fruitInterval,
@@ -128,6 +140,13 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomNumber(numberDigitsRef.current, currentNumberRef.current)
       currentNumberRef.current = next
       setCurrentNumber(next)
+      return next
+    }
+
+    if (type === 'arrows') {
+      const next = getRandomArrow(currentArrowRef.current)
+      currentArrowRef.current = next
+      setCurrentArrow(next)
       return next
     }
 
@@ -173,6 +192,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomNumber(numberDigitsRef.current)
       currentNumberRef.current = next
       setCurrentNumber(next)
+    } else if (newType === 'arrows') {
+      const next = getRandomArrow()
+      currentArrowRef.current = next
+      setCurrentArrow(next)
     } else if (newType === 'animals') {
       const next = getRandomAnimal()
       currentAnimalRef.current = next
@@ -207,6 +230,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomNumber(numberDigitsRef.current, currentNumberRef.current)
       currentNumberRef.current = next
       setCurrentNumber(next)
+    } else if (type === 'arrows') {
+      const next = getRandomArrow(currentArrowRef.current)
+      currentArrowRef.current = next
+      setCurrentArrow(next)
     } else if (type === 'animals') {
       const next = getRandomAnimal(currentAnimalRef.current)
       currentAnimalRef.current = next
@@ -259,6 +286,14 @@ export function useStimulusManager(initialType = 'classic') {
     numberInterval,
     setNumberInterval,
 
+    // Flechas
+    currentArrow,
+    setCurrentArrow,
+    arrowSize,
+    setArrowSize,
+    arrowInterval,
+    setArrowInterval,
+
     // Animales
     currentAnimal,
     setCurrentAnimal,
@@ -288,6 +323,8 @@ export function useStimulusManager(initialType = 'classic') {
       numberIntervalRef,
       numberDigitsRef,
       currentNumberRef,
+      arrowIntervalRef,
+      currentArrowRef,
       animalIntervalRef,
       currentAnimalRef,
       fruitIntervalRef,

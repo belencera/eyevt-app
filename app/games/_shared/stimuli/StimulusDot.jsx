@@ -3,6 +3,7 @@
 import { StimulusLetter } from './StimulusLetter'
 import { StimulusWord } from './StimulusWord'
 import { StimulusNumber } from './StimulusNumber'
+import { StimulusArrow } from './StimulusArrow'
 import { StimulusIllustration } from './StimulusIllustration'
 
 /**
@@ -14,6 +15,7 @@ import { StimulusIllustration } from './StimulusIllustration'
  * - Letras sueltas en mayúscula con selección de tamaño ('letters')
  * - Palabras de 3 a 6 letras en mayúscula con selección de tamaño ('words')
  * - Números aleatorios de 1 a 5 cifras con selección de tamaño ('numbers')
+ * - Flechas direccionales en 4 sentidos cardinales ('arrows')
  * - Animales ilustrados con selección de tamaño ('animals')
  * - Frutas ilustradas con selección de tamaño ('fruits')
  */
@@ -26,6 +28,8 @@ export function StimulusDot({
   wordSize = 'md',
   number = '7',
   numberSize = 'md',
+  arrow,
+  arrowSize = 'md',
   animal,
   animalSize = 'md',
   fruit,
@@ -61,6 +65,17 @@ export function StimulusDot({
         position={position}
         number={number}
         size={numberSize}
+        isPaused={isPaused}
+      />
+    )
+  }
+
+  if (stimulusType === 'arrows') {
+    return (
+      <StimulusArrow
+        position={position}
+        arrow={arrow}
+        size={arrowSize}
         isPaused={isPaused}
       />
     )
