@@ -9,23 +9,51 @@ export const DURATION_OPTIONS = [
 ]
 
 export const STIMULUS_TYPES = {
-  COLORS: 'colors',
   CLASSIC: 'classic',
+  COLORS: 'colors',
   LETTERS: 'letters',
   WORDS: 'words',
   ANIMALS: 'animals',
 }
 
 export const STIMULUS_OPTIONS = [
-  { value: 'colors', label: 'Colores' },
-  { value: 'classic', label: 'Punto fijo' },
-  { value: 'letters', label: 'Letras (próx.)', disabled: true },
-  { value: 'words', label: 'Palabras (próx.)', disabled: true },
-  { value: 'animals', label: 'Animales (próx.)', disabled: true },
+  {
+    value: 'classic',
+    label: 'Punto fijo',
+    iconType: 'classic',
+    description: 'Estímulo fijo celeste',
+  },
+  {
+    value: 'colors',
+    label: 'Colores',
+    iconType: 'colors',
+    description: 'Cambio dinámico de color',
+  },
+  {
+    value: 'letters',
+    label: 'Letras',
+    iconType: 'letters',
+    disabled: true,
+    badge: 'Pronto',
+  },
+  {
+    value: 'words',
+    label: 'Palabras',
+    iconType: 'words',
+    disabled: true,
+    badge: 'Pronto',
+  },
+  {
+    value: 'animals',
+    label: 'Animales',
+    iconType: 'animals',
+    disabled: true,
+    badge: 'Pronto',
+  },
 ]
 
 export const COLOR_INTERVAL_OPTIONS = [
-  { value: 1.5, label: '1.5 s' },
+  { value: 1, label: '1 s' },
   { value: 2, label: '2 s' },
   { value: 3, label: '3 s' },
   { value: 4, label: '4 s' },
@@ -51,7 +79,7 @@ export const BASIC_COLORS = [
  */
 export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
   if (!palette || palette.length === 0) {
-    return { name: 'Verde', hex: '#22c55e' }
+    return { name: 'Celeste', hex: '#38bdf8' }
   }
   const pool =
     prevColor && palette.length > 1

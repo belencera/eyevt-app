@@ -4,11 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import { GameShell } from '../_shared/GameShell'
 import { OptionPicker } from '../_shared/OptionPicker'
 import { StimulusDot } from '../_shared/StimulusDot'
+import { StimulusGrid } from '../_shared/StimulusGrid'
 import { useGameSession } from '../_shared/useGameSession'
 import {
-  BASIC_COLORS,
   COLOR_INTERVAL_OPTIONS,
-  STIMULUS_OPTIONS,
   getRandomColor,
 } from '../_shared/constants'
 
@@ -39,9 +38,9 @@ function setVelocityMagnitude(vel, speed) {
 export default function EyeTrackingGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
   const [speed, setSpeed] = useState(28)
-  const [stimulusType, setStimulusType] = useState('colors')
+  const [stimulusType, setStimulusType] = useState('classic')
   const [colorInterval, setColorInterval] = useState(3)
-  const [currentColor, setCurrentColor] = useState(BASIC_COLORS[0])
+  const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
 
   const positionRef = useRef({ x: 50, y: 50 })
   const velocityRef = useRef(randomVelocity(28))
@@ -64,7 +63,7 @@ export default function EyeTrackingGame() {
     const nextColor =
       stimulusType === 'colors'
         ? getRandomColor(currentColorRef.current)
-        : { name: 'Verde', hex: '#22c55e' }
+        : { name: 'Celeste', hex: '#38bdf8' }
 
     setCurrentColor(nextColor)
     setPosition({ x: 50, y: 50 })
@@ -83,7 +82,7 @@ export default function EyeTrackingGame() {
   const handleStimulusChange = (type) => {
     setStimulusType(type)
     if (type === 'classic') {
-      setCurrentColor({ name: 'Verde', hex: '#22c55e' })
+      setCurrentColor({ name: 'Celeste', hex: '#38bdf8' })
     } else if (type === 'colors') {
       setCurrentColor(getRandomColor())
     }
@@ -155,11 +154,8 @@ export default function EyeTrackingGame() {
       }}
       extraControls={
         <>
-          <OptionPicker
-            id="stimulus-type"
-            label="Estímulo"
+          <StimulusGrid
             value={stimulusType}
-            options={STIMULUS_OPTIONS}
             disabled={!session.isIdle}
             onChange={handleStimulusChange}
           />

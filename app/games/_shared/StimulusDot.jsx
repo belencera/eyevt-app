@@ -13,7 +13,7 @@ export function StimulusDot({
   isPaused = false,
   stimulusType = 'colors',
 }) {
-  const hex = color?.hex || '#22c55e'
+  const hex = color?.hex || '#38bdf8'
 
   return (
     <div

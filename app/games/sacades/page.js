@@ -2,14 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { GameShell } from '../_shared/GameShell'
-import { OptionPicker } from '../_shared/OptionPicker'
 import { StimulusDot } from '../_shared/StimulusDot'
+import { StimulusGrid } from '../_shared/StimulusGrid'
 import { useGameSession } from '../_shared/useGameSession'
-import {
-  BASIC_COLORS,
-  STIMULUS_OPTIONS,
-  getRandomColor,
-} from '../_shared/constants'
+import { getRandomColor } from '../_shared/constants'
 
 const MIN = 2
 const MAX = 98
@@ -29,8 +25,8 @@ function speedToInterval(speed) {
 export default function SacadesGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
   const [speed, setSpeed] = useState(28)
-  const [stimulusType, setStimulusType] = useState('colors')
-  const [currentColor, setCurrentColor] = useState(BASIC_COLORS[0])
+  const [stimulusType, setStimulusType] = useState('classic')
+  const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
 
   const intervalRef = useRef(null)
   const currentColorRef = useRef(currentColor)
@@ -70,7 +66,7 @@ export default function SacadesGame() {
     const initColor =
       stimulusType === 'colors'
         ? getRandomColor(currentColorRef.current)
-        : { name: 'Verde', hex: '#22c55e' }
+        : { name: 'Celeste', hex: '#38bdf8' }
     currentColorRef.current = initColor
     setCurrentColor(initColor)
     setPosition({ x: 50, y: 50 })
@@ -79,7 +75,7 @@ export default function SacadesGame() {
   const handleStimulusChange = (type) => {
     setStimulusType(type)
     if (type === 'classic') {
-      setCurrentColor({ name: 'Verde', hex: '#22c55e' })
+      setCurrentColor({ name: 'Celeste', hex: '#38bdf8' })
     } else if (type === 'colors') {
       setCurrentColor(getRandomColor())
     }
@@ -120,11 +116,8 @@ export default function SacadesGame() {
       }}
       extraControls={
         <>
-          <OptionPicker
-            id="sacades-stimulus"
-            label="Estímulo"
+          <StimulusGrid
             value={stimulusType}
-            options={STIMULUS_OPTIONS}
             disabled={!session.isIdle}
             onChange={handleStimulusChange}
           />
