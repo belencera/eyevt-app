@@ -1,12 +1,12 @@
 import Link from "next/link"
 import Footer from "./components/Footer"
-import { FixationPreview, TrackingPreview, SaccadesPreview, PeripheryPreview } from "./components/GamePreviews"
+import { GamePreview } from "./components/GamePreviews"
+import { CATEGORIES } from "./data/categories"
 
 export default function Home() {
   return (
     <div className="container">
       <header className="header">
-
         <div className="title-container">
           <img className="logo" src="/logo.png" alt="EYEVT logo" />
           <div>
@@ -21,33 +21,25 @@ export default function Home() {
       </header>
 
       <main className="main">
+        <div className="categories-container">
+          {CATEGORIES.map((category) => (
+            <section key={category.id} className="category-section">
+              <div className="category-header">
+                <h2 className="category-title">{category.title}</h2>
+                <p className="category-desc">{category.description}</p>
+              </div>
 
-        <div className="games-grid">
-
-          <Link href="/games/fixation" className="game-card">
-            <FixationPreview />
-            <h3>Fijación</h3>
-            <p>Entrena la estabilidad visual y la capacidad de mantener la mirada en un punto fijo central</p>
-          </Link>
-
-          <Link href="/games/eye-tracking" className="game-card">
-            <TrackingPreview />
-            <h3>Seguimientos</h3>
-            <p>Mejora tus movimientos de seguimiento ocular con estímulos visuales personalizados</p>
-          </Link>
-
-          <Link href="/games/sacades" className="game-card">
-            <SaccadesPreview />
-            <h3>Sacádicos</h3>
-            <p>Entrena tus movimientos oculares rápidos y precisos entre distintos puntos de fijación</p>
-          </Link>
-
-          <Link href="/games/periphery" className="game-card">
-            <PeripheryPreview />
-            <h3>Periferia</h3>
-            <p>Amplía tu campo visual y estimula la atención periférica manteniendo la fijación central</p>
-          </Link>
-
+              <div className="games-grid">
+                {category.games.map((game) => (
+                  <Link key={game.id} href={game.href} className="game-card">
+                    <GamePreview previewKey={game.previewKey} />
+                    <h3>{game.title}</h3>
+                    <p>{game.description}</p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ))}
         </div>
       </main>
 

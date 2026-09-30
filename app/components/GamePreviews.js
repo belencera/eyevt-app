@@ -83,3 +83,82 @@ export function PeripheryPreview() {
     </div>
   )
 }
+
+export function ConvergencePreview() {
+  return (
+    <div className="card-preview convergence-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        <line x1="30" y1="45" x2="170" y2="45" stroke="rgba(148, 163, 184, 0.25)" strokeWidth="1" strokeDasharray="3 3" />
+        <circle cx="100" cy="45" r="14" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1" strokeDasharray="2 2" />
+        <circle cx="100" cy="45" r="2.5" fill="rgba(56, 189, 248, 0.5)" />
+        <circle cx="45" cy="45" r="5" fill="#38bdf8" className="convergence-dot-left" />
+        <circle cx="155" cy="45" r="5" fill="#38bdf8" className="convergence-dot-right" />
+      </svg>
+    </div>
+  )
+}
+
+export function DivergencePreview() {
+  return (
+    <div className="card-preview divergence-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        <line x1="30" y1="45" x2="170" y2="45" stroke="rgba(148, 163, 184, 0.25)" strokeWidth="1" strokeDasharray="3 3" />
+        <circle cx="100" cy="45" r="14" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1" strokeDasharray="2 2" />
+        <circle cx="100" cy="45" r="2.5" fill="rgba(56, 189, 248, 0.5)" />
+        <circle cx="45" cy="45" r="5" fill="#38bdf8" className="divergence-dot-left" />
+        <circle cx="155" cy="45" r="5" fill="#38bdf8" className="divergence-dot-right" />
+      </svg>
+    </div>
+  )
+}
+
+export function VergenceFlexibilityPreview() {
+  return (
+    <div className="card-preview flexibility-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        <line x1="30" y1="45" x2="170" y2="45" stroke="rgba(148, 163, 184, 0.25)" strokeWidth="1" strokeDasharray="3 3" />
+        <circle cx="100" cy="45" r="14" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1" strokeDasharray="2 2" />
+        <circle cx="100" cy="45" r="2.5" fill="rgba(56, 189, 248, 0.5)" />
+        <circle cx="45" cy="45" r="5" fill="#38bdf8" className="flexibility-dot-left" />
+        <circle cx="155" cy="45" r="5" fill="#38bdf8" className="flexibility-dot-right" />
+      </svg>
+    </div>
+  )
+}
+
+export function VisualMemoryPreview() {
+  return (
+    <div className="card-preview memory-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        <circle cx="82" cy="30" r="10" className="memory-node node-1" />
+        <circle cx="118" cy="30" r="10" className="memory-node node-2" />
+        <circle cx="82" cy="60" r="10" className="memory-node node-3" />
+        <circle cx="118" cy="60" r="10" className="memory-node node-4" />
+      </svg>
+    </div>
+  )
+}
+
+export function GamePreview({ previewKey }) {
+  switch (previewKey) {
+    case 'fixation':
+      return <FixationPreview />
+    case 'tracking':
+      return <TrackingPreview />
+    case 'saccades':
+      return <SaccadesPreview />
+    case 'periphery':
+      return <PeripheryPreview />
+    case 'convergence':
+      return <ConvergencePreview />
+    case 'divergence':
+      return <DivergencePreview />
+    case 'flexibility':
+      return <VergenceFlexibilityPreview />
+    case 'memory':
+      return <VisualMemoryPreview />
+    default:
+      return <FixationPreview />
+  }
+}
+

@@ -177,3 +177,160 @@
     transform: scale(0.8);
   }
 }
+
+/* =========================================
+   4. CONVERGENCIA PREVIEW (De fuera hacia dentro, y al llegar al centro vuelve directamente a los extremos)
+   ========================================= */
+.convergence-dot-left {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
+  animation: convergeInLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.convergence-dot-right {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
+  animation: convergeInRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes convergeInLeft {
+  0% {
+    transform: translateX(0);
+  }
+  68% {
+    transform: translateX(47px);
+  }
+  74% {
+    transform: translateX(47px);
+  }
+  84% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes convergeInRight {
+  0% {
+    transform: translateX(0);
+  }
+  68% {
+    transform: translateX(-47px);
+  }
+  74% {
+    transform: translateX(-47px);
+  }
+  84% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* =========================================
+   5. DIVERGENCIA PREVIEW (Al revés: de dentro hacia fuera, y al llegar a los extremos vuelve directamente al centro)
+   ========================================= */
+.divergence-dot-left {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
+  animation: divergeOutLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.divergence-dot-right {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
+  animation: divergeOutRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes divergeOutLeft {
+  0% {
+    transform: translateX(47px);
+  }
+  68% {
+    transform: translateX(0);
+  }
+  74% {
+    transform: translateX(0);
+  }
+  84% {
+    transform: translateX(47px);
+  }
+  100% {
+    transform: translateX(47px);
+  }
+}
+
+@keyframes divergeOutRight {
+  0% {
+    transform: translateX(-47px);
+  }
+  68% {
+    transform: translateX(0);
+  }
+  74% {
+    transform: translateX(0);
+  }
+  84% {
+    transform: translateX(-47px);
+  }
+  100% {
+    transform: translateX(-47px);
+  }
+}
+
+/* =========================================
+   6. FLEXIBILIDAD PREVIEW (Oscilando suave y continuo entre dentro y fuera)
+   ========================================= */
+.flexibility-dot-left {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
+  animation: flexOscillateLeft 4s ease-in-out infinite;
+}
+
+.flexibility-dot-right {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
+  animation: flexOscillateRight 4s ease-in-out infinite;
+}
+
+@keyframes flexOscillateLeft {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(47px);
+  }
+}
+
+@keyframes flexOscillateRight {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-47px);
+  }
+}
+
+/* =========================================
+   7. MEMORIA VISUAL PREVIEW (Secuencia de nodos)
+   ========================================= */
+.memory-node {
+  stroke: rgba(56, 189, 248, 0.4);
+  stroke-width: 1.5;
+  fill: rgba(15, 23, 42, 0.6);
+  transition: all 0.3s ease;
+  animation: memorySequence 4.8s infinite ease-in-out;
+}
+
+.memory-node.node-1 { animation-delay: 0s; }
+.memory-node.node-2 { animation-delay: 1.2s; }
+.memory-node.node-3 { animation-delay: 2.4s; }
+.memory-node.node-4 { animation-delay: 3.6s; }
+
+@keyframes memorySequence {
+  0%, 15% {
+    fill: #38bdf8;
+    filter: drop-shadow(0 0 6px #38bdf8);
+  }
+  30%, 100% {
+    fill: rgba(15, 23, 42, 0.6);
+    filter: none;
+  }
+}
+
