@@ -2,10 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { GameShell } from '../_shared/GameShell'
+import { OptionPicker } from '../_shared/OptionPicker'
 import { StimulusDot } from '../_shared/StimulusDot'
 import { StimulusGrid } from '../_shared/StimulusGrid'
 import { useGameSession } from '../_shared/useGameSession'
-import { getRandomColor } from '../_shared/constants'
+import {
+  getRandomColor,
+  LETTER_SIZE_OPTIONS,
+  getRandomLetter,
+} from '../_shared/constants'
 
 const MIN = 2
 const MAX = 98
@@ -27,15 +32,19 @@ export default function SacadesGame() {
   const [speed, setSpeed] = useState(28)
   const [stimulusType, setStimulusType] = useState('classic')
   const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
+  const [letterSize, setLetterSize] = useState('md')
+  const [currentLetter, setCurrentLetter] = useState('A')
 
   const intervalRef = useRef(null)
   const currentColorRef = useRef(currentColor)
+  const currentLetterRef = useRef(currentLetter)
   const stimulusTypeRef = useRef(stimulusType)
 
   useEffect(() => {
     stimulusTypeRef.current = stimulusType
     currentColorRef.current = currentColor
-  }, [stimulusType, currentColor])
+    currentLetterRef.current = currentLetter
+  }, [stimulusType, currentColor, currentLetter])
 
   const clearJumpInterval = () => {
     if (intervalRef.current) {
@@ -47,11 +56,15 @@ export default function SacadesGame() {
   const jumpToRandom = () => {
     setPosition(randomPosition())
 
-    // En sacádicos, cada vez que cambia de posición sale un color aleatorio
+    // En sacádicos, cada vez que cambia de posición sale un color o letra aleatoria
     if (stimulusTypeRef.current === 'colors') {
       const nextColor = getRandomColor(currentColorRef.current)
       currentColorRef.current = nextColor
       setCurrentColor(nextColor)
+    } else if (stimulusTypeRef.current === 'letters') {
+      const nextLetter = getRandomLetter(currentLetterRef.current)
+      currentLetterRef.current = nextLetter
+      setCurrentLetter(nextLetter)
     }
   }
 
@@ -69,6 +82,14 @@ export default function SacadesGame() {
         : { name: 'Celeste', hex: '#38bdf8' }
     currentColorRef.current = initColor
     setCurrentColor(initColor)
+
+    const initLetter =
+      stimulusType === 'letters'
+        ? getRandomLetter(currentLetterRef.current)
+        : currentLetterRef.current
+    currentLetterRef.current = initLetter
+    setCurrentLetter(initLetter)
+
     setPosition({ x: 50, y: 50 })
   }
 
@@ -78,6 +99,10 @@ export default function SacadesGame() {
       setCurrentColor({ name: 'Celeste', hex: '#38bdf8' })
     } else if (type === 'colors') {
       setCurrentColor(getRandomColor())
+    } else if (type === 'letters') {
+      const nextLetter = getRandomLetter()
+      currentLetterRef.current = nextLetter
+      setCurrentLetter(nextLetter)
     }
   }
 
@@ -100,7 +125,9 @@ export default function SacadesGame() {
     <GameShell
       title="Sacádicos"
       hint={
-        stimulusType === 'colors'
+        stimulusType === 'letters'
+          ? 'Salta la mirada y di la letra en voz alta'
+          : stimulusType === 'colors'
           ? 'Salta la mirada y di el color en voz alta'
           : 'Salta la mirada de un punto a otro'
       }
@@ -122,6 +149,17 @@ export default function SacadesGame() {
             onChange={handleStimulusChange}
           />
 
+          {stimulusType === 'letters' && (
+            <OptionPicker
+              id="sacade-letter-size"
+              label="Tamaño de letra"
+              value={letterSize}
+              options={LETTER_SIZE_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={setLetterSize}
+            />
+          )}
+
           {session.started && stimulusType === 'colors' && (
             <div className="therapistFeedback">
               <span className="therapistFeedbackLabel">Color actual</span>
@@ -137,6 +175,15 @@ export default function SacadesGame() {
               </div>
             </div>
           )}
+
+          {session.started && stimulusType === 'letters' && (
+            <div className="therapistFeedback">
+              <span className="therapistFeedbackLabel">Letra actual</span>
+              <div className="therapistLetterBadge">
+                <span className="therapistLetterChar">{currentLetter}</span>
+              </div>
+            </div>
+          )}
         </>
       }
     >
@@ -144,6 +191,8 @@ export default function SacadesGame() {
         <StimulusDot
           position={position}
           color={currentColor}
+          letter={currentLetter}
+          letterSize={letterSize}
           isPaused={session.isPaused}
           stimulusType={stimulusType}
         />

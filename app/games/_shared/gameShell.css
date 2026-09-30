@@ -254,6 +254,28 @@
   letter-spacing: -0.01em;
 }
 
+.therapistLetterBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.15);
+}
+
+.therapistLetterChar {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #38bdf8;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
 /* Selector visual en cuadrícula de estímulo */
 .stimulusGridContainer {
   display: flex;
@@ -608,6 +630,61 @@
 .gameDotPaused {
   opacity: 0.55;
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+}
+
+/* Estilos para el estímulo de letra suelta en mayúscula */
+.stimulusLetter {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  will-change: left, top;
+  line-height: 1;
+  transition: opacity 0.15s ease;
+}
+
+.stimulusLetterChar {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #ffffff;
+  display: inline-block;
+  line-height: 1;
+  text-shadow:
+    0 0 10px rgba(56, 189, 248, 0.95),
+    0 0 24px rgba(56, 189, 248, 0.75),
+    0 0 48px rgba(56, 189, 248, 0.45);
+}
+
+/* Tamaños configurables del estímulo de letra */
+.stimulusLetter-sm .stimulusLetterChar {
+  font-size: 1.75rem; /* ~28px */
+}
+
+.stimulusLetter-md .stimulusLetterChar {
+  font-size: 2.75rem; /* ~44px */
+}
+
+.stimulusLetter-lg .stimulusLetterChar {
+  font-size: 4rem; /* ~64px */
+}
+
+.stimulusLetter-xl .stimulusLetterChar {
+  font-size: 5.5rem; /* ~88px */
+}
+
+.stimulusLetterPaused {
+  opacity: 0.5;
+}
+
+.stimulusLetterPaused .stimulusLetterChar {
+  text-shadow:
+    0 0 12px rgba(148, 163, 184, 0.5),
+    0 0 24px rgba(148, 163, 184, 0.25);
+  color: #cbd5e1;
 }
 
 /* Barra flotante de controles cuando el juego está a pantalla completa */

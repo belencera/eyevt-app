@@ -9,6 +9,9 @@ import { useGameSession } from '../_shared/useGameSession'
 import {
   COLOR_INTERVAL_OPTIONS,
   getRandomColor,
+  LETTER_SIZE_OPTIONS,
+  LETTER_INTERVAL_OPTIONS,
+  getRandomLetter,
 } from '../_shared/constants'
 
 const MIN = 2
@@ -41,31 +44,46 @@ export default function EyeTrackingGame() {
   const [stimulusType, setStimulusType] = useState('classic')
   const [colorInterval, setColorInterval] = useState(3)
   const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
+  const [letterSize, setLetterSize] = useState('md')
+  const [letterInterval, setLetterInterval] = useState(3)
+  const [currentLetter, setCurrentLetter] = useState('A')
 
   const positionRef = useRef({ x: 50, y: 50 })
   const velocityRef = useRef(randomVelocity(28))
   const colorTimerRef = useRef(0)
+  const letterTimerRef = useRef(0)
   const currentColorRef = useRef(currentColor)
+  const currentLetterRef = useRef(currentLetter)
   const stimulusTypeRef = useRef(stimulusType)
   const colorIntervalRef = useRef(colorInterval)
+  const letterIntervalRef = useRef(letterInterval)
 
   useEffect(() => {
     stimulusTypeRef.current = stimulusType
     colorIntervalRef.current = colorInterval
     currentColorRef.current = currentColor
-  }, [stimulusType, colorInterval, currentColor])
+    letterIntervalRef.current = letterInterval
+    currentLetterRef.current = currentLetter
+  }, [stimulusType, colorInterval, currentColor, letterInterval, currentLetter])
 
   const resetBall = () => {
     positionRef.current = { x: 50, y: 50 }
     velocityRef.current = randomVelocity(speed)
     colorTimerRef.current = 0
+    letterTimerRef.current = 0
 
     const nextColor =
       stimulusType === 'colors'
         ? getRandomColor(currentColorRef.current)
         : { name: 'Celeste', hex: '#38bdf8' }
 
+    const nextLetter =
+      stimulusType === 'letters'
+        ? getRandomLetter(currentLetterRef.current)
+        : currentLetterRef.current
+
     setCurrentColor(nextColor)
+    setCurrentLetter(nextLetter)
     setPosition({ x: 50, y: 50 })
   }
 
@@ -85,6 +103,8 @@ export default function EyeTrackingGame() {
       setCurrentColor({ name: 'Celeste', hex: '#38bdf8' })
     } else if (type === 'colors') {
       setCurrentColor(getRandomColor())
+    } else if (type === 'letters') {
+      setCurrentLetter(getRandomLetter())
     }
   }
 
@@ -123,6 +143,16 @@ export default function EyeTrackingGame() {
         }
       }
 
+      // En modo letras, cambiar la letra periódicamente para lectura verbal del paciente
+      if (stimulusTypeRef.current === 'letters') {
+        letterTimerRef.current += dt
+        if (letterTimerRef.current >= letterIntervalRef.current) {
+          letterTimerRef.current = 0
+          const nextLetter = getRandomLetter(currentLetterRef.current)
+          setCurrentLetter(nextLetter)
+        }
+      }
+
       setPosition({ x: pos.x, y: pos.y })
       frameId = requestAnimationFrame(tick)
     }
@@ -138,7 +168,9 @@ export default function EyeTrackingGame() {
     <GameShell
       title="Seguimientos"
       hint={
-        stimulusType === 'colors'
+        stimulusType === 'letters'
+          ? 'Sigue la letra y dila en voz alta'
+          : stimulusType === 'colors'
           ? 'Sigue el punto y di el color en voz alta'
           : 'Sigue el punto con la mirada'
       }
@@ -171,6 +203,27 @@ export default function EyeTrackingGame() {
             />
           )}
 
+          {stimulusType === 'letters' && (
+            <>
+              <OptionPicker
+                id="letter-size"
+                label="Tamaño de letra"
+                value={letterSize}
+                options={LETTER_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={setLetterSize}
+              />
+              <OptionPicker
+                id="letter-interval"
+                label="Cambio de letra"
+                value={letterInterval}
+                options={LETTER_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={setLetterInterval}
+              />
+            </>
+          )}
+
           {session.started && stimulusType === 'colors' && (
             <div className="therapistFeedback">
               <span className="therapistFeedbackLabel">Color actual</span>
@@ -186,6 +239,15 @@ export default function EyeTrackingGame() {
               </div>
             </div>
           )}
+
+          {session.started && stimulusType === 'letters' && (
+            <div className="therapistFeedback">
+              <span className="therapistFeedbackLabel">Letra actual</span>
+              <div className="therapistLetterBadge">
+                <span className="therapistLetterChar">{currentLetter}</span>
+              </div>
+            </div>
+          )}
         </>
       }
     >
@@ -193,6 +255,8 @@ export default function EyeTrackingGame() {
         <StimulusDot
           position={position}
           color={currentColor}
+          letter={currentLetter}
+          letterSize={letterSize}
           isPaused={session.isPaused}
           stimulusType={stimulusType}
         />

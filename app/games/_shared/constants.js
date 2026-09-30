@@ -33,8 +33,7 @@ export const STIMULUS_OPTIONS = [
     value: 'letters',
     label: 'Letras',
     iconType: 'letters',
-    disabled: true,
-    badge: 'Pronto',
+    description: 'Letras mayúsculas del abecedario',
   },
   {
     value: 'words',
@@ -88,3 +87,5 @@ export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
   const idx = Math.floor(Math.random() * pool.length)
   return pool[idx]
 }
+
+export * from './letters'

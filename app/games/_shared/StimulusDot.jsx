@@ -1,18 +1,35 @@
 'use client'
 
+import { StimulusLetter } from './StimulusLetter'
+
 /**
  * Componente de estímulo visual.
  * 
- * En esta versión renderiza el estímulo por colores (o punto clásico),
- * con brillo dinámico acorde al tono actual.
- * Diseñado para extenderse fácilmente a letras, palabras, animales, etc.
+ * Soporta:
+ * - Punto fijo celeste
+ * - Punto dinámico de colores
+ * - Letras sueltas en mayúscula con selección de tamaño
+ * Diseñado para extenderse fácilmente a palabras, animales, etc.
  */
 export function StimulusDot({
   position,
   color,
+  letter = 'A',
+  letterSize = 'md',
   isPaused = false,
   stimulusType = 'colors',
 }) {
+  if (stimulusType === 'letters') {
+    return (
+      <StimulusLetter
+        position={position}
+        letter={letter}
+        size={letterSize}
+        isPaused={isPaused}
+      />
+    )
+  }
+
   const hex = color?.hex || '#38bdf8'
 
   return (

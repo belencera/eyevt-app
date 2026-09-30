@@ -9,7 +9,7 @@ function StimulusIcon({ type }) {
     case 'colors':
       return <span className="stimulusIconColors" aria-hidden />
     case 'letters':
-      return <span className="stimulusIconLetters" aria-hidden>Aa</span>
+      return <span className="stimulusIconLetters" aria-hidden>A</span>
     case 'words':
       return <span className="stimulusIconWords" aria-hidden>abc</span>
     case 'animals':
