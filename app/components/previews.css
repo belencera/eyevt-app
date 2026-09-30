@@ -1,0 +1,74 @@
+/* CARD PREVIEW - SEAMLESSLY INTEGRATED */
+.card-preview {
+  position: relative;
+  width: 100%;
+  height: 95px;
+  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.06) 0%, transparent 72%);
+  border: none;
+  box-shadow: none;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.preview-svg-path {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.svg-tracking-dot {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 14px rgba(56, 189, 248, 0.9));
+}
+
+/* SACADICOS ANIMATION (Fast Jumps) */
+.saccade-target {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 1px dashed rgba(56, 189, 248, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.saccade-target.t1 { top: 28%; left: 22%; }
+.saccade-target.t2 { top: 72%; left: 78%; }
+.saccade-target.t3 { top: 26%; left: 75%; }
+.saccade-target.t4 { top: 70%; left: 25%; }
+
+.saccade-dot {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  background: #38bdf8;
+  border-radius: 50%;
+  box-shadow:
+    0 0 10px #38bdf8,
+    0 0 20px rgba(56, 189, 248, 0.85);
+  animation: saccadeJump 4s steps(1) infinite;
+}
+
+@keyframes saccadeJump {
+  0%, 24% {
+    top: 28%;
+    left: 22%;
+    transform: translate(-50%, -50%);
+  }
+  25%, 49% {
+    top: 72%;
+    left: 78%;
+    transform: translate(-50%, -50%);
+  }
+  50%, 74% {
+    top: 26%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+  }
+  75%, 99% {
+    top: 70%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+  }
+}

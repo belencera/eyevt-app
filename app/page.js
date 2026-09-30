@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Footer from "./components/Footer"
+import { TrackingPreview, SaccadesPreview } from "./components/GamePreviews"
 
 export default function Home() {
   return (
@@ -24,11 +25,13 @@ export default function Home() {
         <div className="games-grid">
 
           <Link href="/games/eye-tracking" className="game-card">
+            <TrackingPreview />
             <h3>Seguimientos</h3>
             <p>Seguimientos oculares, elije tu nivel y comienza</p>
           </Link>
 
           <Link href="/games/sacades" className="game-card">
+            <SaccadesPreview />
             <h3>Sacádicos</h3>
             <p>Entrena tus movimientos oculares rápidos y precisos</p>
           </Link>
