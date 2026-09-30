@@ -2,7 +2,7 @@ export const CATEGORIES = [
   {
     id: 'oculomotricidad',
     title: 'OCULOMOTRICIDAD',
-    description: 'Control del movimiento ocular, estabilidad de la fijación y campo visual.',
+    description: 'Control del movimiento ocular, estabilidad de la fijación y atención periférica.',
     games: [
       {
         id: 'fixation',
@@ -37,27 +37,27 @@ export const CATEGORIES = [
   {
     id: 'binocularidad',
     title: 'BINOCULARIDAD Y VERGENCIAS',
-    description: 'Coordinación binocular, trabajo en equipo de ambos ojos y alineación visual.',
+    description: 'Coordinación binocular, control, amplitud y flexibilidad de vergencias.',
     games: [
       {
         id: 'convergence',
         title: 'Convergencia',
         href: '/games/convergence',
-        description: 'Entrena la capacidad de coordinar ambos ojos hacia adentro manteniendo una imagen única',
+        description: 'Entrena la capacidad de converger manteniendo la visión binocular de distintos estímulos',
         previewKey: 'convergence',
       },
       {
         id: 'divergence',
         title: 'Divergencia',
         href: '/games/divergence',
-        description: 'Entrena la alineación visual hacia afuera y la relajación de la convergencia binocular',
+        description: 'Entrena la capacidad de diverger manteniendo la visión binocular con estímulos fijos, a saltos y suaves',
         previewKey: 'divergence',
       },
       {
         id: 'vergence-flexibility',
         title: 'Flexibilidad',
         href: '/games/vergence-flexibility',
-        description: 'Alternancia ágil entre demandas de convergencia y divergencia binocular',
+        description: 'Alternancia entre demandas de convergencia y divergencia de distintos niveles de dificultad',
         previewKey: 'flexibility',
       },
     ],
@@ -65,13 +65,13 @@ export const CATEGORIES = [
   {
     id: 'percepcion',
     title: 'PERCEPCIÓN VISUAL',
-    description: 'Procesamiento visual, memoria foveal y discriminación de formas.',
+    description: 'Procesamiento visual, memoria visual y discriminación.',
     games: [
       {
         id: 'visual-memory',
         title: 'Memoria visual',
         href: '/games/visual-memory',
-        description: 'Entrena la retención visual, el reconocimiento de patrones y la memoria de trabajo',
+        description: 'Entrena la memoria visual de manera personalizada',
         previewKey: 'memory',
       },
     ],
