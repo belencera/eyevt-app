@@ -155,3 +155,32 @@ body {
   color: #ffffff;
   transform: translateY(-2px);
 }
+
+/* SCROLLBAR PERSONALIZADA GLOBAL */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.28) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.55);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: rgba(56, 189, 248, 0.85);
+}

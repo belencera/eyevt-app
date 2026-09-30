@@ -1,0 +1,63 @@
+/**
+ * Banco de palabras cotidianas en español en mayúsculas para terapia visual.
+ * Organizadas por longitud: 3, 4, 5 y 6 letras.
+ */
+
+export const WORD_BANKS = {
+  3: [
+    'SOL', 'PAN', 'MAR', 'SAL', 'LUZ', 'OJO', 'PIE', 'REY',
+    'RIO', 'DIA', 'SUR', 'GAS', 'PAZ', 'VOZ', 'DOS', 'MIL',
+    'GOL', 'OSO', 'RED', 'ORO', 'LEY', 'TIO', 'BAR', 'UVA',
+    'FIN', 'AÑO', 'VAN', 'MES', 'FEO', 'VIA', 'COL', 'TOS',
+    'ECO', 'OLA', 'AJO', 'ALA', 'AMO', 'AVE', 'BOA', 'CAL',
+    'CAN', 'COZ', 'DON', 'DUO', 'EJE', 'ERA', 'FAZ', 'GEL',
+    'HAZ', 'HOY', 'IRA', 'LIO', 'MAL', 'MAS', 'MIO', 'MUY',
+    'OSA', 'PAR', 'PEZ', 'PIO', 'PRO', 'PUM', 'RAS', 'REA',
+    'RON', 'RUA', 'SED', 'SER', 'SET', 'SIN', 'SON', 'SOS',
+    'TAL', 'TAN', 'TEZ', 'TIA', 'TIC', 'TOP', 'UNO', 'UÑA',
+    'VAL', 'VAS', 'VEZ', 'VID', 'VIL', 'ZOO', 'ZEN', 'ASA',
+    'ATO', 'DAR', 'VER', 'OIR', 'PIN', 'TES', 'VOS', 'ASO',
+  ],
+  4: [
+    'CASA', 'LUNA', 'MESA', 'FLOR', 'GATO', 'AZUL', 'MANO', 'AGUA',
+    'NUBE', 'HOJA', 'BOCA', 'PASO', 'ROJO', 'TREN', 'PATO', 'RANA',
+    'VINO', 'CAFE', 'AIRE', 'BOLA', 'ROPA', 'VIDA', 'ALMA', 'VASO',
+    'CUNA', 'DADO', 'SAPO', 'LORO', 'LOBO', 'PELO', 'FARO', 'LEON',
+    'RAYO', 'PUMA', 'NIDO', 'MONO', 'VACA', 'ALTO', 'ARTE', 'BOTE',
+    'BUHO', 'CAMA', 'CARA', 'CERO', 'COCO', 'COLA', 'COPA', 'DEDO',
+    'DIOS', 'DOCE', 'DURO', 'FOCO', 'FOTO', 'FRIO', 'GOMA', 'GRIS',
+    'HIJO', 'HILO', 'HORA', 'HUMO', 'ISLA', 'JUGO', 'LAGO', 'LANA',
+    'LATA', 'LIMA', 'MAIZ', 'MAPA', 'MIEL', 'MINA', 'MURO', 'NATA',
+    'NAVE', 'NUEZ', 'OIDO', 'OLAS', 'PALA', 'PALO', 'PENA', 'PERA',
+    'PESO', 'PINO', 'PISO', 'POZO', 'RAMA', 'RATA', 'RICO', 'ROSA',
+    'RUTA', 'SEDA', 'SOFA', 'TAZA', 'BESO', 'BODA', 'CAJA', 'CINE',
+  ],
+  5: [
+    'ARBOL', 'PERRO', 'BARCO', 'PLAYA', 'VERDE', 'NOCHE', 'LIBRO', 'FUEGO',
+    'LLAVE', 'CARRO', 'CAMPO', 'RELOJ', 'GLOBO', 'PLUMA', 'RATON', 'TIGRE',
+    'MANGO', 'MONTE', 'FRESA', 'PIANO', 'SABOR', 'DULCE', 'CALOR', 'PECHO',
+    'BRAZO', 'NIEVE', 'CIRCO', 'TORRE', 'CABLE', 'PLAZA', 'LETRA', 'COLOR',
+    'LISTA', 'OVEJA', 'SUELO', 'ACERO', 'ACTOR', 'AGUJA', 'ALDEA', 'AMIGO',
+    'ANGEL', 'ARENA', 'AVION', 'BAILE', 'BANCO', 'BARBA', 'BOLSO', 'BOTON',
+    'BRUJA', 'BURRO', 'CALLE', 'CANTO', 'CARTA', 'CEBRA', 'CESTA', 'CIELO',
+    'CISNE', 'CLAVO', 'CORAL', 'CORTO', 'CREMA', 'CUERO', 'CUEVA', 'DANZA',
+    'DISCO', 'ENERO', 'FALDA', 'FERIA', 'FORMA', 'FRUTA', 'GRANO', 'GRUPO',
+    'HIELO', 'HOTEL', 'HUEVO', 'JABON', 'JAULA', 'JUEGO', 'LABIO', 'LAPIZ',
+    'LIMON', 'LINEA', 'LUCES', 'MADRE', 'MAGIA', 'MARCO', 'METAL', 'MUNDO',
+    'NARIZ', 'PADRE', 'BOMBA', 'BOTAS', 'BRISA', 'CALDO', 'CHICO', 'COCHE',
+  ],
+  6: [
+    'CIUDAD', 'PUERTA', 'BLANCO', 'CAMINO', 'VIENTO', 'BOSQUE', 'AMIGOS', 'VERANO',
+    'PLANTA', 'JARDIN', 'MUSICA', 'COHETE', 'FAROLA', 'CUERPO', 'CABEZA', 'PINTOR',
+    'DORMIR', 'CORRER', 'TIEMPO', 'FUERZA', 'SEMANA', 'COCINA', 'PIEDRA', 'PUENTE',
+    'TEATRO', 'CAMISA', 'ZAPATO', 'MADERA', 'SOMBRA', 'ANIMAL', 'BALCON', 'DIBUJO',
+    'FLORES', 'ABUELA', 'ABUELO', 'ACEITE', 'AGUILA', 'ALTURA', 'ANILLO', 'AZUCAR',
+    'BARRIO', 'BEBIDA', 'BIGOTE', 'BOCINA', 'BOMBIN', 'CABINA', 'CADENA', 'CAJERO',
+    'CALIMA', 'CAMARA', 'CAMION', 'CANICA', 'CANTOR', 'CARTEL', 'CEREZA', 'CIERVO',
+    'CLAVEL', 'CODIGO', 'COLINA', 'COMIDA', 'CORONA', 'CUADRO', 'CUERDA', 'DELFIN',
+    'DINERO', 'DOCTOR', 'ESPEJO', 'ESPADA', 'FIESTA', 'FLECHA', 'FOGATA', 'FUENTE',
+    'FUTBOL', 'GRANJA', 'GUANTE', 'HELADO', 'HIERBA', 'ISLEÑO', 'JIRAFA', 'LLUVIA',
+    'MALETA', 'MAÑANA', 'MEDICO', 'MOLINO', 'MONEDA', 'NIEBLA', 'NUMERO', 'PAGINA',
+    'ABRIGO', 'ALARMA', 'BARCOS', 'BOCADO', 'BOMBON', 'CAMPOS', 'CARTON', 'CEREAL',
+  ],
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { COUNTDOWN_START } from './constants'
+import { COUNTDOWN_START } from '../data/constants'
 
 /**
  * Gestiona cuenta atrás, play/pausa/reinicio y temporizador de duración.
@@ -23,6 +23,7 @@ export function useGameSession(callbacks = {}) {
 
   const countdownIntervalRef = useRef(null)
   const durationIntervalRef = useRef(null)
+  const menuTransitionTimeoutRef = useRef(null)
 
   const clearCountdownTimer = useCallback(() => {
     if (countdownIntervalRef.current) {
@@ -38,19 +39,28 @@ export function useGameSession(callbacks = {}) {
     }
   }, [])
 
+  const clearMenuTransitionTimer = useCallback(() => {
+    if (menuTransitionTimeoutRef.current) {
+      clearTimeout(menuTransitionTimeoutRef.current)
+      menuTransitionTimeoutRef.current = null
+    }
+  }, [])
+
   const clearTimers = useCallback(() => {
     clearCountdownTimer()
     clearDurationTimer()
-  }, [clearCountdownTimer, clearDurationTimer])
+    clearMenuTransitionTimer()
+  }, [clearCountdownTimer, clearDurationTimer, clearMenuTransitionTimer])
 
   const endSession = useCallback(() => {
     clearDurationTimer()
+    clearMenuTransitionTimer()
     setRunning(false)
     setPaused(false)
     setStarted(false)
     setTimeLeft(null)
     callbacksRef.current.onEnd?.()
-  }, [clearDurationTimer])
+  }, [clearDurationTimer, clearMenuTransitionTimer])
 
   const startDurationTimer = useCallback(
     (seconds) => {
@@ -88,7 +98,7 @@ export function useGameSession(callbacks = {}) {
     clearTimers()
     setRunning(false)
     setPaused(false)
-    setStarted(false)
+    setStarted(true)
     setTimeLeft(null)
 
     setCountdown(COUNTDOWN_START)

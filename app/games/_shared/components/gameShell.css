@@ -19,6 +19,30 @@
   overflow-y: auto;
   z-index: 2;
   transition: width 0.3s ease, min-width 0.3s ease, max-width 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+}
+
+.configPanel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.configPanel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.configPanel::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.28);
+  border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+.configPanel::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.55);
+}
+
+.configPanel::-webkit-scrollbar-thumb:active {
+  background: rgba(56, 189, 248, 0.85);
 }
 
 .configPanelHidden {
@@ -254,6 +278,77 @@
   letter-spacing: -0.01em;
 }
 
+.therapistLetterBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.15);
+}
+
+.therapistLetterChar {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #38bdf8;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.therapistWordBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  min-height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.15);
+}
+
+.therapistWordText {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.therapistAnimalBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  min-height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.15);
+}
+
+.therapistAnimalThumb {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.therapistAnimalName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
+}
+
 /* Selector visual en cuadrícula de estímulo */
 .stimulusGridContainer {
   display: flex;
@@ -385,7 +480,8 @@
   line-height: 1;
 }
 
-.stimulusIconWords {
+.stimulusIconWords,
+.stimulusIconNumbers {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -396,9 +492,25 @@
   line-height: 1.2;
 }
 
-.stimulusIconAnimals {
-  font-size: 1.05rem;
+.stimulusIconArrows {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #38bdf8;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.stimulusIconAnimals,
+.stimulusIconFruits {
+  font-size: 1.25rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
 }
 
 .timerWidget {
@@ -610,6 +722,248 @@
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
 }
 
+/* Estilos para el estímulo de letra suelta en mayúscula */
+.stimulusLetter {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  will-change: left, top;
+  line-height: 1;
+  transition: opacity 0.15s ease;
+}
+
+.stimulusLetterChar {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #f8fafc;
+  display: inline-block;
+  line-height: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+/* Tamaños configurables del estímulo de letra */
+.stimulusLetter-sm .stimulusLetterChar {
+  font-size: 1.75rem; /* ~28px */
+}
+
+.stimulusLetter-md .stimulusLetterChar {
+  font-size: 2.75rem; /* ~44px */
+}
+
+.stimulusLetter-lg .stimulusLetterChar {
+  font-size: 4rem; /* ~64px */
+}
+
+.stimulusLetter-xl .stimulusLetterChar {
+  font-size: 5.5rem; /* ~88px */
+}
+
+.stimulusLetterPaused {
+  opacity: 0.4;
+}
+
+.stimulusLetterPaused .stimulusLetterChar {
+  color: #94a3b8;
+  text-shadow: none;
+}
+
+/* Estilos para el estímulo de palabra en mayúsculas (sin caja ni borde) */
+.stimulusWord {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  will-change: left, top;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: opacity 0.15s ease;
+}
+
+.stimulusWordText {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f8fafc;
+  display: inline-block;
+  line-height: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+/* Tamaños configurables del estímulo de palabra */
+.stimulusWord-sm .stimulusWordText {
+  font-size: 1.6rem; /* ~26px */
+}
+
+.stimulusWord-md .stimulusWordText {
+  font-size: 2.4rem; /* ~38px */
+}
+
+.stimulusWord-lg .stimulusWordText {
+  font-size: 3.4rem; /* ~54px */
+}
+
+.stimulusWord-xl .stimulusWordText {
+  font-size: 4.6rem; /* ~74px */
+}
+
+.stimulusWordPaused {
+  opacity: 0.4;
+}
+
+.stimulusWordPaused .stimulusWordText {
+  color: #94a3b8;
+  text-shadow: none;
+}
+
+/* Estilos para el estímulo de animal o fruta ilustrada (SVG / PNG) */
+.stimulusAnimal,
+.stimulusIllustration {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  will-change: left, top;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+
+.stimulusAnimalImg,
+.stimulusIllustrationImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+}
+
+.stimulusIllustrationFallback {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f8fafc;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  white-space: nowrap;
+}
+
+/* Tamaños configurables del estímulo gráfico (animales y frutas) */
+.stimulusAnimal-sm,
+.stimulusIllustration-sm {
+  width: 48px;
+  height: 48px;
+}
+
+.stimulusAnimal-md,
+.stimulusIllustration-md {
+  width: 72px;
+  height: 72px;
+}
+
+.stimulusAnimal-lg,
+.stimulusIllustration-lg {
+  width: 96px;
+  height: 96px;
+}
+
+.stimulusAnimal-xl,
+.stimulusIllustration-xl {
+  width: 124px;
+  height: 124px;
+}
+
+.stimulusAnimalPaused,
+.stimulusIllustrationPaused {
+  opacity: 0.45;
+  filter: grayscale(40%);
+}
+
+/* Estilos para el estímulo de flechas direccionales (mismo color que palabras #f8fafc) */
+.stimulusArrow {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  will-change: left, top;
+  line-height: 1;
+  color: #f8fafc;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
+  transition: opacity 0.15s ease;
+}
+
+.stimulusArrowSvg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Tamaños configurables del estímulo de flecha */
+.stimulusArrow-sm {
+  width: 32px;
+  height: 32px;
+}
+
+.stimulusArrow-md {
+  width: 48px;
+  height: 48px;
+}
+
+.stimulusArrow-lg {
+  width: 68px;
+  height: 68px;
+}
+
+.stimulusArrow-xl {
+  width: 92px;
+  height: 92px;
+}
+
+.stimulusArrowPaused {
+  opacity: 0.4;
+  color: #94a3b8;
+  filter: none;
+}
+
+/* Badge de terapeuta para flecha */
+.therapistArrowBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.therapistArrowSymbol {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #38bdf8;
+  line-height: 1;
+}
+
 /* Barra flotante de controles cuando el juego está a pantalla completa */
 .floatingGameBar {
   position: absolute;
@@ -701,25 +1055,51 @@
   letter-spacing: -0.02em;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 860px) {
   .gameLayout {
     flex-direction: column;
   }
 
-  .configPanel {
-    flex: 0 0 auto;
-    max-width: none;
+  /* Estado inicial (configuración del juego): el menú ocupa toda la pantalla disponible */
+  .gameLayout:not(.gameLayoutFullscreen) .configPanel {
+    flex: 1 1 100%;
     width: 100%;
-    max-height: 42vh;
+    max-width: none;
+    height: 100%;
+    max-height: 100vh;
     border-right: none;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+    border-bottom: none;
+    padding: 20px 20px 36px;
+    overflow-y: auto;
   }
 
-  .configPanelHidden {
-    max-height: 0 !important;
-    padding: 0 !important;
-    border-bottom: none !important;
+  /* Inicialmente no se muestra la zona de juego cuando el espacio es pequeño */
+  .gameLayout:not(.gameLayoutFullscreen) .playArea {
+    display: none !important;
+  }
+
+  /* Centrado ergonómico de los controles para pantallas medianas/tablets */
+  .gameLayout:not(.gameLayoutFullscreen) .gameBack,
+  .gameLayout:not(.gameLayoutFullscreen) .gameTitle,
+  .gameLayout:not(.gameLayoutFullscreen) .gameHint,
+  .gameLayout:not(.gameLayoutFullscreen) .gameControls {
+    width: 100%;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Estado activo (juego iniciado): el menú se oculta por completo y la zona de juego toma el 100% */
+  .gameLayoutFullscreen .configPanel {
+    display: none !important;
+  }
+
+  .gameLayoutFullscreen .playArea {
+    display: block !important;
+    flex: 1 1 100%;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
   }
 
   .gameActions {
@@ -729,10 +1109,5 @@
   .gameActions .btnIcon {
     flex: 1;
     max-width: none;
-  }
-
-  .playArea {
-    flex: 1;
-    min-height: 50vh;
   }
 }

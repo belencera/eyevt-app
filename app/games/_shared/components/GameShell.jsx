@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { DURATION_OPTIONS } from './constants'
-import { formatTime } from './formatTime'
-import { IconPause, IconPlay, IconReset } from './icons'
+import { DURATION_OPTIONS } from '../data/constants'
+import { formatTime } from '../utils/formatTime'
+import { IconPause, IconPlay, IconReset } from '../utils/icons'
 import { OptionPicker } from './OptionPicker'
 import './gameShell.css'
 
@@ -39,11 +39,13 @@ export function GameShell({
     timerProgress,
   } = session
 
+  const isGameActive = started || isCountingDown
+
   return (
-    <div className={`gameLayout ${started ? 'gameLayoutFullscreen' : ''}`}>
+    <div className={`gameLayout ${isGameActive ? 'gameLayoutFullscreen' : ''}`}>
       <aside
-        className={`configPanel ${started ? 'configPanelHidden' : ''}`}
-        aria-hidden={started}
+        className={`configPanel ${isGameActive ? 'configPanelHidden' : ''}`}
+        aria-hidden={isGameActive}
       >
         <Link href="/" className="gameBack">
           ← Inicio

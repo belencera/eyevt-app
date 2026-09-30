@@ -1,15 +1,32 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { GameShell } from '../_shared/GameShell'
-import { OptionPicker } from '../_shared/OptionPicker'
-import { StimulusDot } from '../_shared/StimulusDot'
-import { StimulusGrid } from '../_shared/StimulusGrid'
-import { useGameSession } from '../_shared/useGameSession'
 import {
+  GameShell,
+  OptionPicker,
+  StimulusDot,
+  StimulusGrid,
+  TherapistBadge,
+  useGameSession,
+  useStimulusManager,
   COLOR_INTERVAL_OPTIONS,
-  getRandomColor,
-} from '../_shared/constants'
+  LETTER_SIZE_OPTIONS,
+  LETTER_INTERVAL_OPTIONS,
+  WORD_SIZE_OPTIONS,
+  WORD_LENGTH_OPTIONS,
+  WORD_INTERVAL_OPTIONS,
+  ANIMAL_SIZE_OPTIONS,
+  ANIMAL_INTERVAL_OPTIONS,
+  FRUIT_SIZE_OPTIONS,
+  FRUIT_INTERVAL_OPTIONS,
+  NUMBER_SIZE_OPTIONS,
+  NUMBER_DIGITS_OPTIONS,
+  NUMBER_INTERVAL_OPTIONS,
+  ARROW_SIZE_OPTIONS,
+  ARROW_INTERVAL_OPTIONS,
+  getRandomWord,
+  getRandomNumber,
+} from '../_shared'
 
 const MIN = 2
 const MAX = 98
@@ -35,58 +52,56 @@ function setVelocityMagnitude(vel, speed) {
   vel.y = (vel.y / mag) * speed
 }
 
+const HINTS = {
+  animals: 'Sigue al animal y nómbralo en voz alta',
+  fruits: 'Sigue la fruta y nómbrala en voz alta',
+  words: 'Sigue la palabra y léela en voz alta',
+  numbers: 'Sigue el número y dilo en voz alta',
+  arrows: 'Sigue la flecha y di su dirección en voz alta',
+  letters: 'Sigue la letra y dila en voz alta',
+  colors: 'Sigue el punto y di el color en voz alta',
+  classic: 'Sigue el punto con la mirada sin mover la cabeza',
+}
+
 export default function EyeTrackingGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
   const [speed, setSpeed] = useState(28)
-  const [stimulusType, setStimulusType] = useState('classic')
-  const [colorInterval, setColorInterval] = useState(3)
-  const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
+
+  const stimulus = useStimulusManager('classic')
+  const stimulusRef = useRef(stimulus)
+  useEffect(() => {
+    stimulusRef.current = stimulus
+  }, [stimulus])
 
   const positionRef = useRef({ x: 50, y: 50 })
   const velocityRef = useRef(randomVelocity(28))
-  const colorTimerRef = useRef(0)
-  const currentColorRef = useRef(currentColor)
-  const stimulusTypeRef = useRef(stimulusType)
-  const colorIntervalRef = useRef(colorInterval)
+  const timerRef = useRef(0)
 
   useEffect(() => {
-    stimulusTypeRef.current = stimulusType
-    colorIntervalRef.current = colorInterval
-    currentColorRef.current = currentColor
-  }, [stimulusType, colorInterval, currentColor])
+    setVelocityMagnitude(velocityRef.current, speed)
+  }, [speed])
+
+  const resetTimers = () => {
+    timerRef.current = 0
+  }
 
   const resetBall = () => {
     positionRef.current = { x: 50, y: 50 }
     velocityRef.current = randomVelocity(speed)
-    colorTimerRef.current = 0
-
-    const nextColor =
-      stimulusType === 'colors'
-        ? getRandomColor(currentColorRef.current)
-        : { name: 'Celeste', hex: '#38bdf8' }
-
-    setCurrentColor(nextColor)
+    resetTimers()
+    stimulus.resetStimulus()
     setPosition({ x: 50, y: 50 })
   }
 
   const session = useGameSession({
-    onBeginPlay: resetBall,
+    onBeginPlay: () => {
+      positionRef.current = { x: 50, y: 50 }
+      velocityRef.current = randomVelocity(speed)
+      resetTimers()
+      setPosition({ x: 50, y: 50 })
+    },
     onReset: resetBall,
   })
-
-  const handleSpeedChange = (value) => {
-    setSpeed(value)
-    setVelocityMagnitude(velocityRef.current, value)
-  }
-
-  const handleStimulusChange = (type) => {
-    setStimulusType(type)
-    if (type === 'classic') {
-      setCurrentColor({ name: 'Celeste', hex: '#38bdf8' })
-    } else if (type === 'colors') {
-      setCurrentColor(getRandomColor())
-    }
-  }
 
   useEffect(() => {
     if (!session.running) return
@@ -113,13 +128,32 @@ export default function EyeTrackingGame() {
         pos.y = clamp(pos.y, MIN, MAX)
       }
 
-      // En modo colores, cambiar el color periódicamente para el feedback verbal del paciente
-      if (stimulusTypeRef.current === 'colors') {
-        colorTimerRef.current += dt
-        if (colorTimerRef.current >= colorIntervalRef.current) {
-          colorTimerRef.current = 0
-          const nextColor = getRandomColor(currentColorRef.current)
-          setCurrentColor(nextColor)
+      // Comprobación de cambio periódico del estímulo activo a través de ref para no re-montar el bucle
+      const stim = stimulusRef.current
+      const type = stim.refs.stimulusTypeRef.current
+      let targetInterval = null
+
+      if (type === 'colors') {
+        targetInterval = stim.refs.colorIntervalRef.current
+      } else if (type === 'letters') {
+        targetInterval = stim.refs.letterIntervalRef.current
+      } else if (type === 'words') {
+        targetInterval = stim.refs.wordIntervalRef.current
+      } else if (type === 'animals') {
+        targetInterval = stim.refs.animalIntervalRef.current
+      } else if (type === 'fruits') {
+        targetInterval = stim.refs.fruitIntervalRef.current
+      } else if (type === 'numbers') {
+        targetInterval = stim.refs.numberIntervalRef.current
+      } else if (type === 'arrows') {
+        targetInterval = stim.refs.arrowIntervalRef.current
+      }
+
+      if (targetInterval) {
+        timerRef.current += dt
+        if (timerRef.current >= targetInterval) {
+          timerRef.current = 0
+          stim.nextStimulus()
         }
       }
 
@@ -131,60 +165,202 @@ export default function EyeTrackingGame() {
     return () => cancelAnimationFrame(frameId)
   }, [session.running])
 
-  const showDot =
-    session.started && (session.isPlaying || session.isPaused)
+  const showDot = session.started && (session.isPlaying || session.isPaused)
 
   return (
     <GameShell
       title="Seguimientos"
-      hint={
-        stimulusType === 'colors'
-          ? 'Sigue el punto y di el color en voz alta'
-          : 'Sigue el punto con la mirada'
-      }
+      hint={HINTS[stimulus.stimulusType] || HINTS.classic}
       session={session}
       speedControl={{
         id: 'speed',
         label: 'Velocidad',
         value: speed,
-        min: 12,
-        max: 48,
-        step: 2,
-        onChange: handleSpeedChange,
+        min: 8,
+        max: 60,
+        onChange: setSpeed,
       }}
       extraControls={
         <>
           <StimulusGrid
-            value={stimulusType}
+            value={stimulus.stimulusType}
             disabled={!session.isIdle}
-            onChange={handleStimulusChange}
+            onChange={(val) => {
+              resetTimers()
+              stimulus.handleStimulusChange(val)
+            }}
           />
 
-          {stimulusType === 'colors' && (
+          {stimulus.stimulusType === 'colors' && (
             <OptionPicker
               id="color-interval"
               label="Cambio de color"
-              value={colorInterval}
+              value={stimulus.colorInterval}
               options={COLOR_INTERVAL_OPTIONS}
               disabled={!session.isIdle}
-              onChange={setColorInterval}
+              onChange={stimulus.setColorInterval}
             />
           )}
 
-          {session.started && stimulusType === 'colors' && (
-            <div className="therapistFeedback">
-              <span className="therapistFeedbackLabel">Color actual</span>
-              <div className="therapistColorBadge">
-                <span
-                  className="therapistColorDot"
-                  style={{
-                    backgroundColor: currentColor.hex,
-                    boxShadow: `0 0 10px ${currentColor.hex}`,
-                  }}
-                />
-                <span className="therapistColorName">{currentColor.name}</span>
-              </div>
-            </div>
+          {stimulus.stimulusType === 'letters' && (
+            <>
+              <OptionPicker
+                id="letter-size"
+                label="Tamaño de letra"
+                value={stimulus.letterSize}
+                options={LETTER_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setLetterSize}
+              />
+              <OptionPicker
+                id="letter-interval"
+                label="Cambio de letra"
+                value={stimulus.letterInterval}
+                options={LETTER_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setLetterInterval}
+              />
+            </>
+          )}
+
+          {stimulus.stimulusType === 'words' && (
+            <>
+              <OptionPicker
+                id="word-size"
+                label="Tamaño de palabra"
+                value={stimulus.wordSize}
+                options={WORD_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setWordSize}
+              />
+              <OptionPicker
+                id="word-length"
+                label="Longitud de palabra"
+                value={stimulus.wordLength}
+                options={WORD_LENGTH_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={(val) => {
+                  stimulus.setWordLength(val)
+                  stimulus.setCurrentWord(getRandomWord(val))
+                }}
+              />
+              <OptionPicker
+                id="word-interval"
+                label="Cambio de palabra"
+                value={stimulus.wordInterval}
+                options={WORD_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setWordInterval}
+              />
+            </>
+          )}
+
+          {stimulus.stimulusType === 'numbers' && (
+            <>
+              <OptionPicker
+                id="number-size"
+                label="Tamaño de número"
+                value={stimulus.numberSize}
+                options={NUMBER_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setNumberSize}
+              />
+              <OptionPicker
+                id="number-digits"
+                label="Cifras"
+                value={stimulus.numberDigits}
+                options={NUMBER_DIGITS_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={(val) => {
+                  stimulus.setNumberDigits(val)
+                  stimulus.setCurrentNumber(getRandomNumber(val))
+                }}
+              />
+              <OptionPicker
+                id="number-interval"
+                label="Cambio de número"
+                value={stimulus.numberInterval}
+                options={NUMBER_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setNumberInterval}
+              />
+            </>
+          )}
+
+          {stimulus.stimulusType === 'arrows' && (
+            <>
+              <OptionPicker
+                id="arrow-size"
+                label="Tamaño de flecha"
+                value={stimulus.arrowSize}
+                options={ARROW_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setArrowSize}
+              />
+              <OptionPicker
+                id="arrow-interval"
+                label="Cambio de flecha"
+                value={stimulus.arrowInterval}
+                options={ARROW_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setArrowInterval}
+              />
+            </>
+          )}
+
+          {stimulus.stimulusType === 'animals' && (
+            <>
+              <OptionPicker
+                id="animal-size"
+                label="Tamaño de animal"
+                value={stimulus.animalSize}
+                options={ANIMAL_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setAnimalSize}
+              />
+              <OptionPicker
+                id="animal-interval"
+                label="Cambio de animal"
+                value={stimulus.animalInterval}
+                options={ANIMAL_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setAnimalInterval}
+              />
+            </>
+          )}
+
+          {stimulus.stimulusType === 'fruits' && (
+            <>
+              <OptionPicker
+                id="fruit-size"
+                label="Tamaño de fruta"
+                value={stimulus.fruitSize}
+                options={FRUIT_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setFruitSize}
+              />
+              <OptionPicker
+                id="fruit-interval"
+                label="Cambio de fruta"
+                value={stimulus.fruitInterval}
+                options={FRUIT_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setFruitInterval}
+              />
+            </>
+          )}
+
+          {session.started && (
+            <TherapistBadge
+              stimulusType={stimulus.stimulusType}
+              color={stimulus.currentColor}
+              letter={stimulus.currentLetter}
+              word={stimulus.currentWord}
+              number={stimulus.currentNumber}
+              arrow={stimulus.currentArrow}
+              animal={stimulus.currentAnimal}
+              fruit={stimulus.currentFruit}
+            />
           )}
         </>
       }
@@ -192,12 +368,23 @@ export default function EyeTrackingGame() {
       {showDot && (
         <StimulusDot
           position={position}
-          color={currentColor}
+          color={stimulus.currentColor}
+          letter={stimulus.currentLetter}
+          letterSize={stimulus.letterSize}
+          word={stimulus.currentWord}
+          wordSize={stimulus.wordSize}
+          number={stimulus.currentNumber}
+          numberSize={stimulus.numberSize}
+          arrow={stimulus.currentArrow}
+          arrowSize={stimulus.arrowSize}
+          animal={stimulus.currentAnimal}
+          animalSize={stimulus.animalSize}
+          fruit={stimulus.currentFruit}
+          fruitSize={stimulus.fruitSize}
           isPaused={session.isPaused}
-          stimulusType={stimulusType}
+          stimulusType={stimulus.stimulusType}
         />
       )}
     </GameShell>
   )
 }
-

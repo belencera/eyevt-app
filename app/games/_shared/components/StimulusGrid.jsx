@@ -1,6 +1,6 @@
 'use client'
 
-import { STIMULUS_OPTIONS } from './constants'
+import { STIMULUS_OPTIONS } from '../data/constants'
 
 function StimulusIcon({ type }) {
   switch (type) {
@@ -9,11 +9,17 @@ function StimulusIcon({ type }) {
     case 'colors':
       return <span className="stimulusIconColors" aria-hidden />
     case 'letters':
-      return <span className="stimulusIconLetters" aria-hidden>Aa</span>
+      return <span className="stimulusIconLetters" aria-hidden>A</span>
     case 'words':
-      return <span className="stimulusIconWords" aria-hidden>abc</span>
+      return <span className="stimulusIconWords" aria-hidden>ABC</span>
+    case 'numbers':
+      return <span className="stimulusIconNumbers" aria-hidden>123</span>
+    case 'arrows':
+      return <span className="stimulusIconArrows" aria-hidden>➜</span>
     case 'animals':
-      return <span className="stimulusIconAnimals" aria-hidden>🐾</span>
+      return <span className="stimulusIconAnimals" aria-hidden>🦁</span>
+    case 'fruits':
+      return <span className="stimulusIconFruits" aria-hidden>🍓</span>
     default:
       return null
   }

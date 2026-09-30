@@ -13,7 +13,10 @@ export const STIMULUS_TYPES = {
   COLORS: 'colors',
   LETTERS: 'letters',
   WORDS: 'words',
+  NUMBERS: 'numbers',
+  ARROWS: 'arrows',
   ANIMALS: 'animals',
+  FRUITS: 'fruits',
 }
 
 export const STIMULUS_OPTIONS = [
@@ -33,22 +36,37 @@ export const STIMULUS_OPTIONS = [
     value: 'letters',
     label: 'Letras',
     iconType: 'letters',
-    disabled: true,
-    badge: 'Pronto',
+    description: 'Letras mayúsculas del abecedario',
   },
   {
     value: 'words',
     label: 'Palabras',
     iconType: 'words',
-    disabled: true,
-    badge: 'Pronto',
+    description: 'Palabras de 3 a 6 letras en mayúscula',
+  },
+  {
+    value: 'numbers',
+    label: 'Números',
+    iconType: 'numbers',
+    description: 'Cifras numéricas aleatorias (1 a 5 cifras)',
+  },
+  {
+    value: 'arrows',
+    label: 'Flechas',
+    iconType: 'arrows',
+    description: 'Flechas cardinales en 4 direcciones',
   },
   {
     value: 'animals',
     label: 'Animales',
     iconType: 'animals',
-    disabled: true,
-    badge: 'Pronto',
+    description: 'Animales ilustrados aleatorios',
+  },
+  {
+    value: 'fruits',
+    label: 'Frutas',
+    iconType: 'fruits',
+    description: 'Frutas ilustradas aleatorias',
   },
 ]
 
@@ -88,3 +106,11 @@ export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
   const idx = Math.floor(Math.random() * pool.length)
   return pool[idx]
 }
+
+export * from './illustrations'
+export * from './letters'
+export * from './words'
+export * from './numbers'
+export * from './arrows'
+export * from './animals'
+export * from './fruits'

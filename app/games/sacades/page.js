@@ -1,11 +1,25 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { GameShell } from '../_shared/GameShell'
-import { StimulusDot } from '../_shared/StimulusDot'
-import { StimulusGrid } from '../_shared/StimulusGrid'
-import { useGameSession } from '../_shared/useGameSession'
-import { getRandomColor } from '../_shared/constants'
+import {
+  GameShell,
+  OptionPicker,
+  StimulusDot,
+  StimulusGrid,
+  TherapistBadge,
+  useGameSession,
+  useStimulusManager,
+  LETTER_SIZE_OPTIONS,
+  WORD_SIZE_OPTIONS,
+  WORD_LENGTH_OPTIONS,
+  ANIMAL_SIZE_OPTIONS,
+  FRUIT_SIZE_OPTIONS,
+  NUMBER_SIZE_OPTIONS,
+  NUMBER_DIGITS_OPTIONS,
+  ARROW_SIZE_OPTIONS,
+  getRandomWord,
+  getRandomNumber,
+} from '../_shared'
 
 const MIN = 2
 const MAX = 98
@@ -22,20 +36,23 @@ function speedToInterval(speed) {
   return Math.round(1500 - speed * 25)
 }
 
+const HINTS = {
+  animals: 'Salta la mirada y nombra al animal en voz alta',
+  fruits: 'Salta la mirada y nombra la fruta en voz alta',
+  words: 'Salta la mirada y lee la palabra en voz alta',
+  numbers: 'Salta la mirada y di el número en voz alta',
+  arrows: 'Salta la mirada y di la dirección en voz alta',
+  letters: 'Salta la mirada y di la letra en voz alta',
+  colors: 'Salta la mirada y di el color en voz alta',
+  classic: 'Salta la mirada de un punto a otro',
+}
+
 export default function SacadesGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
   const [speed, setSpeed] = useState(28)
-  const [stimulusType, setStimulusType] = useState('classic')
-  const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
-
   const intervalRef = useRef(null)
-  const currentColorRef = useRef(currentColor)
-  const stimulusTypeRef = useRef(stimulusType)
 
-  useEffect(() => {
-    stimulusTypeRef.current = stimulusType
-    currentColorRef.current = currentColor
-  }, [stimulusType, currentColor])
+  const stimulus = useStimulusManager('classic')
 
   const clearJumpInterval = () => {
     if (intervalRef.current) {
@@ -46,13 +63,7 @@ export default function SacadesGame() {
 
   const jumpToRandom = () => {
     setPosition(randomPosition())
-
-    // En sacádicos, cada vez que cambia de posición sale un color aleatorio
-    if (stimulusTypeRef.current === 'colors') {
-      const nextColor = getRandomColor(currentColorRef.current)
-      currentColorRef.current = nextColor
-      setCurrentColor(nextColor)
-    }
+    stimulus.nextStimulus()
   }
 
   const startJumping = () => {
@@ -63,22 +74,8 @@ export default function SacadesGame() {
 
   const resetBall = () => {
     clearJumpInterval()
-    const initColor =
-      stimulusType === 'colors'
-        ? getRandomColor(currentColorRef.current)
-        : { name: 'Celeste', hex: '#38bdf8' }
-    currentColorRef.current = initColor
-    setCurrentColor(initColor)
+    stimulus.resetStimulus()
     setPosition({ x: 50, y: 50 })
-  }
-
-  const handleStimulusChange = (type) => {
-    setStimulusType(type)
-    if (type === 'classic') {
-      setCurrentColor({ name: 'Celeste', hex: '#38bdf8' })
-    } else if (type === 'colors') {
-      setCurrentColor(getRandomColor())
-    }
   }
 
   const session = useGameSession({
@@ -93,17 +90,12 @@ export default function SacadesGame() {
     return () => clearJumpInterval()
   }, [])
 
-  const showDot =
-    session.started && (session.isPlaying || session.isPaused)
+  const showDot = session.started && (session.isPlaying || session.isPaused)
 
   return (
     <GameShell
       title="Sacádicos"
-      hint={
-        stimulusType === 'colors'
-          ? 'Salta la mirada y di el color en voz alta'
-          : 'Salta la mirada de un punto a otro'
-      }
+      hint={HINTS[stimulus.stimulusType] || HINTS.classic}
       session={session}
       speedControl={{
         id: 'sacade-speed',
@@ -117,25 +109,114 @@ export default function SacadesGame() {
       extraControls={
         <>
           <StimulusGrid
-            value={stimulusType}
+            value={stimulus.stimulusType}
             disabled={!session.isIdle}
-            onChange={handleStimulusChange}
+            onChange={stimulus.handleStimulusChange}
           />
 
-          {session.started && stimulusType === 'colors' && (
-            <div className="therapistFeedback">
-              <span className="therapistFeedbackLabel">Color actual</span>
-              <div className="therapistColorBadge">
-                <span
-                  className="therapistColorDot"
-                  style={{
-                    backgroundColor: currentColor.hex,
-                    boxShadow: `0 0 10px ${currentColor.hex}`,
-                  }}
-                />
-                <span className="therapistColorName">{currentColor.name}</span>
-              </div>
-            </div>
+          {stimulus.stimulusType === 'letters' && (
+            <OptionPicker
+              id="sacade-letter-size"
+              label="Tamaño de letra"
+              value={stimulus.letterSize}
+              options={LETTER_SIZE_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={stimulus.setLetterSize}
+            />
+          )}
+
+          {stimulus.stimulusType === 'words' && (
+            <>
+              <OptionPicker
+                id="sacade-word-size"
+                label="Tamaño de palabra"
+                value={stimulus.wordSize}
+                options={WORD_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setWordSize}
+              />
+              <OptionPicker
+                id="sacade-word-length"
+                label="Longitud de palabra"
+                value={stimulus.wordLength}
+                options={WORD_LENGTH_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={(val) => {
+                  stimulus.setWordLength(val)
+                  stimulus.setCurrentWord(getRandomWord(val))
+                }}
+              />
+            </>
+          )}
+
+          {stimulus.stimulusType === 'numbers' && (
+            <>
+              <OptionPicker
+                id="sacade-number-size"
+                label="Tamaño de número"
+                value={stimulus.numberSize}
+                options={NUMBER_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setNumberSize}
+              />
+              <OptionPicker
+                id="sacade-number-digits"
+                label="Cifras"
+                value={stimulus.numberDigits}
+                options={NUMBER_DIGITS_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={(val) => {
+                  stimulus.setNumberDigits(val)
+                  stimulus.setCurrentNumber(getRandomNumber(val))
+                }}
+              />
+            </>
+          )}
+
+          {stimulus.stimulusType === 'arrows' && (
+            <OptionPicker
+              id="sacade-arrow-size"
+              label="Tamaño de flecha"
+              value={stimulus.arrowSize}
+              options={ARROW_SIZE_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={stimulus.setArrowSize}
+            />
+          )}
+
+          {stimulus.stimulusType === 'animals' && (
+            <OptionPicker
+              id="sacade-animal-size"
+              label="Tamaño de animal"
+              value={stimulus.animalSize}
+              options={ANIMAL_SIZE_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={stimulus.setAnimalSize}
+            />
+          )}
+
+          {stimulus.stimulusType === 'fruits' && (
+            <OptionPicker
+              id="sacade-fruit-size"
+              label="Tamaño de fruta"
+              value={stimulus.fruitSize}
+              options={FRUIT_SIZE_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={stimulus.setFruitSize}
+            />
+          )}
+
+          {session.started && (
+            <TherapistBadge
+              stimulusType={stimulus.stimulusType}
+              color={stimulus.currentColor}
+              letter={stimulus.currentLetter}
+              word={stimulus.currentWord}
+              number={stimulus.currentNumber}
+              arrow={stimulus.currentArrow}
+              animal={stimulus.currentAnimal}
+              fruit={stimulus.currentFruit}
+            />
           )}
         </>
       }
@@ -143,12 +224,23 @@ export default function SacadesGame() {
       {showDot && (
         <StimulusDot
           position={position}
-          color={currentColor}
+          color={stimulus.currentColor}
+          letter={stimulus.currentLetter}
+          letterSize={stimulus.letterSize}
+          word={stimulus.currentWord}
+          wordSize={stimulus.wordSize}
+          number={stimulus.currentNumber}
+          numberSize={stimulus.numberSize}
+          arrow={stimulus.currentArrow}
+          arrowSize={stimulus.arrowSize}
+          animal={stimulus.currentAnimal}
+          animalSize={stimulus.animalSize}
+          fruit={stimulus.currentFruit}
+          fruitSize={stimulus.fruitSize}
           isPaused={session.isPaused}
-          stimulusType={stimulusType}
+          stimulusType={stimulus.stimulusType}
         />
       )}
     </GameShell>
   )
 }
-
