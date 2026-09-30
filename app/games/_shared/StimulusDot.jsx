@@ -20,6 +20,7 @@ export function StimulusDot({
   letter = 'A',
   letterSize = 'md',
   word = 'SOL',
+  wordSize = 'md',
   animal,
   animalSize = 'md',
   isPaused = false,
@@ -41,6 +42,7 @@ export function StimulusDot({
       <StimulusWord
         position={position}
         word={word}
+        size={wordSize}
         isPaused={isPaused}
       />
     )

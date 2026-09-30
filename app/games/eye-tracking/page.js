@@ -12,6 +12,7 @@ import {
   LETTER_SIZE_OPTIONS,
   LETTER_INTERVAL_OPTIONS,
   getRandomLetter,
+  WORD_SIZE_OPTIONS,
   WORD_LENGTH_OPTIONS,
   WORD_INTERVAL_OPTIONS,
   getRandomWord,
@@ -53,6 +54,7 @@ export default function EyeTrackingGame() {
   const [letterSize, setLetterSize] = useState('md')
   const [letterInterval, setLetterInterval] = useState(3)
   const [currentLetter, setCurrentLetter] = useState('A')
+  const [wordSize, setWordSize] = useState('md')
   const [wordLength, setWordLength] = useState(4)
   const [wordInterval, setWordInterval] = useState(3)
   const [currentWord, setCurrentWord] = useState('CASA')
@@ -304,6 +306,14 @@ export default function EyeTrackingGame() {
           {stimulusType === 'words' && (
             <>
               <OptionPicker
+                id="word-size"
+                label="Tamaño de palabra"
+                value={wordSize}
+                options={WORD_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={setWordSize}
+              />
+              <OptionPicker
                 id="word-length"
                 label="Longitud de palabra"
                 value={wordLength}
@@ -405,6 +415,7 @@ export default function EyeTrackingGame() {
           letter={currentLetter}
           letterSize={letterSize}
           word={currentWord}
+          wordSize={wordSize}
           animal={currentAnimal}
           animalSize={animalSize}
           isPaused={session.isPaused}

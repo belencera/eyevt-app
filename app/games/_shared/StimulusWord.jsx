@@ -10,6 +10,7 @@
  */
 export function StimulusWord({
   word = 'SOL',
+  size = 'md',
   position,
   isPaused = false,
 }) {
@@ -17,7 +18,9 @@ export function StimulusWord({
 
   return (
     <div
-      className={`stimulusWord ${isPaused ? 'stimulusWordPaused' : ''}`}
+      className={`stimulusWord stimulusWord-${size} ${
+        isPaused ? 'stimulusWordPaused' : ''
+      }`}
       style={{
         left: `${position.x}%`,
         top: `${position.y}%`,

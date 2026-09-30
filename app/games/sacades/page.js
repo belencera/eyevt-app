@@ -10,6 +10,7 @@ import {
   getRandomColor,
   LETTER_SIZE_OPTIONS,
   getRandomLetter,
+  WORD_SIZE_OPTIONS,
   WORD_LENGTH_OPTIONS,
   getRandomWord,
   ANIMAL_SIZE_OPTIONS,
@@ -38,6 +39,7 @@ export default function SacadesGame() {
   const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
   const [letterSize, setLetterSize] = useState('md')
   const [currentLetter, setCurrentLetter] = useState('A')
+  const [wordSize, setWordSize] = useState('md')
   const [wordLength, setWordLength] = useState(4)
   const [currentWord, setCurrentWord] = useState('CASA')
   const [animalSize, setAnimalSize] = useState('md')
@@ -209,17 +211,27 @@ export default function SacadesGame() {
           )}
 
           {stimulusType === 'words' && (
-            <OptionPicker
-              id="sacade-word-length"
-              label="Longitud de palabra"
-              value={wordLength}
-              options={WORD_LENGTH_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={(val) => {
-                setWordLength(val)
-                setCurrentWord(getRandomWord(val))
-              }}
-            />
+            <>
+              <OptionPicker
+                id="sacade-word-size"
+                label="Tamaño de palabra"
+                value={wordSize}
+                options={WORD_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={setWordSize}
+              />
+              <OptionPicker
+                id="sacade-word-length"
+                label="Longitud de palabra"
+                value={wordLength}
+                options={WORD_LENGTH_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={(val) => {
+                  setWordLength(val)
+                  setCurrentWord(getRandomWord(val))
+                }}
+              />
+            </>
           )}
 
           {stimulusType === 'animals' && (
@@ -292,6 +304,7 @@ export default function SacadesGame() {
           letter={currentLetter}
           letterSize={letterSize}
           word={currentWord}
+          wordSize={wordSize}
           animal={currentAnimal}
           animalSize={animalSize}
           isPaused={session.isPaused}
