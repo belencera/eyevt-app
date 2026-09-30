@@ -456,7 +456,8 @@
   line-height: 1;
 }
 
-.stimulusIconWords {
+.stimulusIconWords,
+.stimulusIconNumbers {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -466,6 +467,17 @@
   border-radius: 4px;
   line-height: 1.2;
 }
+
+.stimulusIconArrows {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #38bdf8;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 
 .stimulusIconAnimals,
 .stimulusIconFruits {

@@ -5,13 +5,14 @@ import {
   getRandomColor,
   getRandomLetter,
   getRandomWord,
+  getRandomNumber,
   getRandomAnimal,
   getRandomFruit,
 } from '../data/constants'
 
 /**
  * Hook modular para gestionar los estados, configuraciones y generación
- * aleatoria de estímulos (colores, letras, palabras, animales, frutas).
+ * aleatoria de estímulos (colores, letras, palabras, números, animales, frutas).
  */
 export function useStimulusManager(initialType = 'classic') {
   const [stimulusType, setStimulusType] = useState(initialType)
@@ -30,6 +31,12 @@ export function useStimulusManager(initialType = 'classic') {
   const [wordLength, setWordLength] = useState(4)
   const [wordInterval, setWordInterval] = useState(3)
   const [currentWord, setCurrentWord] = useState('CASA')
+
+  // Opciones de números
+  const [numberSize, setNumberSize] = useState('md')
+  const [numberDigits, setNumberDigits] = useState(1)
+  const [numberInterval, setNumberInterval] = useState(3)
+  const [currentNumber, setCurrentNumber] = useState(() => getRandomNumber(1))
 
   // Opciones de animales
   const [animalSize, setAnimalSize] = useState('md')
@@ -50,6 +57,9 @@ export function useStimulusManager(initialType = 'classic') {
   const wordIntervalRef = useRef(wordInterval)
   const wordLengthRef = useRef(wordLength)
   const currentWordRef = useRef(currentWord)
+  const numberIntervalRef = useRef(numberInterval)
+  const numberDigitsRef = useRef(numberDigits)
+  const currentNumberRef = useRef(currentNumber)
   const animalIntervalRef = useRef(animalInterval)
   const currentAnimalRef = useRef(currentAnimal)
   const fruitIntervalRef = useRef(fruitInterval)
@@ -64,6 +74,9 @@ export function useStimulusManager(initialType = 'classic') {
     wordIntervalRef.current = wordInterval
     wordLengthRef.current = wordLength
     currentWordRef.current = currentWord
+    numberIntervalRef.current = numberInterval
+    numberDigitsRef.current = numberDigits
+    currentNumberRef.current = currentNumber
     animalIntervalRef.current = animalInterval
     currentAnimalRef.current = currentAnimal
     fruitIntervalRef.current = fruitInterval
@@ -77,6 +90,9 @@ export function useStimulusManager(initialType = 'classic') {
     wordInterval,
     wordLength,
     currentWord,
+    numberInterval,
+    numberDigits,
+    currentNumber,
     animalInterval,
     currentAnimal,
     fruitInterval,
@@ -105,6 +121,13 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomWord(wordLengthRef.current, currentWordRef.current)
       currentWordRef.current = next
       setCurrentWord(next)
+      return next
+    }
+
+    if (type === 'numbers') {
+      const next = getRandomNumber(numberDigitsRef.current, currentNumberRef.current)
+      currentNumberRef.current = next
+      setCurrentNumber(next)
       return next
     }
 
@@ -146,6 +169,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomWord(wordLengthRef.current)
       currentWordRef.current = next
       setCurrentWord(next)
+    } else if (newType === 'numbers') {
+      const next = getRandomNumber(numberDigitsRef.current)
+      currentNumberRef.current = next
+      setCurrentNumber(next)
     } else if (newType === 'animals') {
       const next = getRandomAnimal()
       currentAnimalRef.current = next
@@ -176,6 +203,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomWord(wordLengthRef.current, currentWordRef.current)
       currentWordRef.current = next
       setCurrentWord(next)
+    } else if (type === 'numbers') {
+      const next = getRandomNumber(numberDigitsRef.current, currentNumberRef.current)
+      currentNumberRef.current = next
+      setCurrentNumber(next)
     } else if (type === 'animals') {
       const next = getRandomAnimal(currentAnimalRef.current)
       currentAnimalRef.current = next
@@ -218,6 +249,16 @@ export function useStimulusManager(initialType = 'classic') {
     wordInterval,
     setWordInterval,
 
+    // Números
+    currentNumber,
+    setCurrentNumber,
+    numberSize,
+    setNumberSize,
+    numberDigits,
+    setNumberDigits,
+    numberInterval,
+    setNumberInterval,
+
     // Animales
     currentAnimal,
     setCurrentAnimal,
@@ -244,6 +285,9 @@ export function useStimulusManager(initialType = 'classic') {
       wordIntervalRef,
       wordLengthRef,
       currentWordRef,
+      numberIntervalRef,
+      numberDigitsRef,
+      currentNumberRef,
       animalIntervalRef,
       currentAnimalRef,
       fruitIntervalRef,

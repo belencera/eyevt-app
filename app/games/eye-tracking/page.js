@@ -19,7 +19,11 @@ import {
   ANIMAL_INTERVAL_OPTIONS,
   FRUIT_SIZE_OPTIONS,
   FRUIT_INTERVAL_OPTIONS,
+  NUMBER_SIZE_OPTIONS,
+  NUMBER_DIGITS_OPTIONS,
+  NUMBER_INTERVAL_OPTIONS,
   getRandomWord,
+  getRandomNumber,
 } from '../_shared'
 
 const MIN = 2
@@ -50,6 +54,7 @@ const HINTS = {
   animals: 'Sigue al animal y nómbralo en voz alta',
   fruits: 'Sigue la fruta y nómbrala en voz alta',
   words: 'Sigue la palabra y léela en voz alta',
+  numbers: 'Sigue el número y dilo en voz alta',
   letters: 'Sigue la letra y dila en voz alta',
   colors: 'Sigue el punto y di el color en voz alta',
   classic: 'Sigue el punto con la mirada sin mover la cabeza',
@@ -135,6 +140,8 @@ export default function EyeTrackingGame() {
         targetInterval = stim.refs.animalIntervalRef.current
       } else if (type === 'fruits') {
         targetInterval = stim.refs.fruitIntervalRef.current
+      } else if (type === 'numbers') {
+        targetInterval = stim.refs.numberIntervalRef.current
       }
 
       if (targetInterval) {
@@ -243,6 +250,38 @@ export default function EyeTrackingGame() {
             </>
           )}
 
+          {stimulus.stimulusType === 'numbers' && (
+            <>
+              <OptionPicker
+                id="number-size"
+                label="Tamaño de número"
+                value={stimulus.numberSize}
+                options={NUMBER_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setNumberSize}
+              />
+              <OptionPicker
+                id="number-digits"
+                label="Cifras"
+                value={stimulus.numberDigits}
+                options={NUMBER_DIGITS_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={(val) => {
+                  stimulus.setNumberDigits(val)
+                  stimulus.setCurrentNumber(getRandomNumber(val))
+                }}
+              />
+              <OptionPicker
+                id="number-interval"
+                label="Cambio de número"
+                value={stimulus.numberInterval}
+                options={NUMBER_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setNumberInterval}
+              />
+            </>
+          )}
+
           {stimulus.stimulusType === 'animals' && (
             <>
               <OptionPicker
@@ -291,6 +330,7 @@ export default function EyeTrackingGame() {
               color={stimulus.currentColor}
               letter={stimulus.currentLetter}
               word={stimulus.currentWord}
+              number={stimulus.currentNumber}
               animal={stimulus.currentAnimal}
               fruit={stimulus.currentFruit}
             />
@@ -306,6 +346,8 @@ export default function EyeTrackingGame() {
           letterSize={stimulus.letterSize}
           word={stimulus.currentWord}
           wordSize={stimulus.wordSize}
+          number={stimulus.currentNumber}
+          numberSize={stimulus.numberSize}
           animal={stimulus.currentAnimal}
           animalSize={stimulus.animalSize}
           fruit={stimulus.currentFruit}

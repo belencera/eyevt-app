@@ -14,7 +14,10 @@ import {
   WORD_LENGTH_OPTIONS,
   ANIMAL_SIZE_OPTIONS,
   FRUIT_SIZE_OPTIONS,
+  NUMBER_SIZE_OPTIONS,
+  NUMBER_DIGITS_OPTIONS,
   getRandomWord,
+  getRandomNumber,
 } from '../_shared'
 
 const MIN = 2
@@ -36,6 +39,7 @@ const HINTS = {
   animals: 'Salta la mirada y nombra al animal en voz alta',
   fruits: 'Salta la mirada y nombra la fruta en voz alta',
   words: 'Salta la mirada y lee la palabra en voz alta',
+  numbers: 'Salta la mirada y di el número en voz alta',
   letters: 'Salta la mirada y di la letra en voz alta',
   colors: 'Salta la mirada y di el color en voz alta',
   classic: 'Salta la mirada de un punto a otro',
@@ -143,6 +147,30 @@ export default function SacadesGame() {
             </>
           )}
 
+          {stimulus.stimulusType === 'numbers' && (
+            <>
+              <OptionPicker
+                id="sacade-number-size"
+                label="Tamaño de número"
+                value={stimulus.numberSize}
+                options={NUMBER_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setNumberSize}
+              />
+              <OptionPicker
+                id="sacade-number-digits"
+                label="Cifras"
+                value={stimulus.numberDigits}
+                options={NUMBER_DIGITS_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={(val) => {
+                  stimulus.setNumberDigits(val)
+                  stimulus.setCurrentNumber(getRandomNumber(val))
+                }}
+              />
+            </>
+          )}
+
           {stimulus.stimulusType === 'animals' && (
             <OptionPicker
               id="sacade-animal-size"
@@ -171,6 +199,7 @@ export default function SacadesGame() {
               color={stimulus.currentColor}
               letter={stimulus.currentLetter}
               word={stimulus.currentWord}
+              number={stimulus.currentNumber}
               animal={stimulus.currentAnimal}
               fruit={stimulus.currentFruit}
             />
@@ -186,6 +215,8 @@ export default function SacadesGame() {
           letterSize={stimulus.letterSize}
           word={stimulus.currentWord}
           wordSize={stimulus.wordSize}
+          number={stimulus.currentNumber}
+          numberSize={stimulus.numberSize}
           animal={stimulus.currentAnimal}
           animalSize={stimulus.animalSize}
           fruit={stimulus.currentFruit}

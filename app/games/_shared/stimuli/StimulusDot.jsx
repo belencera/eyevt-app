@@ -2,6 +2,7 @@
 
 import { StimulusLetter } from './StimulusLetter'
 import { StimulusWord } from './StimulusWord'
+import { StimulusNumber } from './StimulusNumber'
 import { StimulusIllustration } from './StimulusIllustration'
 
 /**
@@ -12,6 +13,7 @@ import { StimulusIllustration } from './StimulusIllustration'
  * - Punto dinámico de colores ('colors')
  * - Letras sueltas en mayúscula con selección de tamaño ('letters')
  * - Palabras de 3 a 6 letras en mayúscula con selección de tamaño ('words')
+ * - Números aleatorios de 1 a 5 cifras con selección de tamaño ('numbers')
  * - Animales ilustrados con selección de tamaño ('animals')
  * - Frutas ilustradas con selección de tamaño ('fruits')
  */
@@ -22,6 +24,8 @@ export function StimulusDot({
   letterSize = 'md',
   word = 'SOL',
   wordSize = 'md',
+  number = '7',
+  numberSize = 'md',
   animal,
   animalSize = 'md',
   fruit,
@@ -46,6 +50,17 @@ export function StimulusDot({
         position={position}
         word={word}
         size={wordSize}
+        isPaused={isPaused}
+      />
+    )
+  }
+
+  if (stimulusType === 'numbers') {
+    return (
+      <StimulusNumber
+        position={position}
+        number={number}
+        size={numberSize}
         isPaused={isPaused}
       />
     )

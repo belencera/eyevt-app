@@ -13,6 +13,8 @@ export const STIMULUS_TYPES = {
   COLORS: 'colors',
   LETTERS: 'letters',
   WORDS: 'words',
+  NUMBERS: 'numbers',
+  ARROWS: 'arrows',
   ANIMALS: 'animals',
   FRUITS: 'fruits',
 }
@@ -41,6 +43,20 @@ export const STIMULUS_OPTIONS = [
     label: 'Palabras',
     iconType: 'words',
     description: 'Palabras de 3 a 6 letras en mayúscula',
+  },
+  {
+    value: 'numbers',
+    label: 'Números',
+    iconType: 'numbers',
+    description: 'Cifras numéricas aleatorias (1 a 5 cifras)',
+  },
+  {
+    value: 'arrows',
+    label: 'Flechas',
+    iconType: 'arrows',
+    description: 'Dirección de flechas (Próximamente)',
+    badge: 'Pronto',
+    disabled: true,
   },
   {
     value: 'animals',
@@ -96,5 +112,6 @@ export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
 export * from './illustrations'
 export * from './letters'
 export * from './words'
+export * from './numbers'
 export * from './animals'
 export * from './fruits'

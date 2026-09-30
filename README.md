@@ -48,10 +48,12 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
 | **Colores** | Cambio dinámico entre 8 colores de alto contraste | Intervalo de cambio (1 a 5 s) |
 | **Letras** | Letras sueltas del abecedario español en mayúsculas (con Ñ) | Tamaño (Pequeña 28px, Mediana 44px, Grande 64px, Muy grande 88px) e intervalo |
 | **Palabras** | Bancos de 96 palabras cotidianas por longitud en mayúsculas | **Tamaño** (Pequeña 26px, Mediana 38px, Grande 54px, Muy grande 74px), **Longitud** (3, 4, 5, 6 letras o Mixto) e intervalo |
+| **Números** | Cifras numéricas aleatorias de 1 a 5 dígitos | **Tamaño** (Pequeño 26px, Mediano 38px, Grande 54px, Muy grande 74px), **Cifras** (1, 2, 3, 4, 5 o Mixto) e intervalo |
+| **Flechas** | Estímulo direccional *(Próximamente)* | Botón placeholder activo en menú |
 | **Animales** | 28 ilustraciones vectoriales de alta definición | **Tamaño** (Pequeño 48px, Mediano 72px, Grande 96px, Muy grande 124px) e intervalo |
 | **Frutas** | 12 ilustraciones vectoriales en formato SVG | **Tamaño** (Pequeño 48px, Mediano 72px, Grande 96px, Muy grande 124px) e intervalo |
 
-> **Nota de diseño visual:** Las letras y palabras flotan limpias sobre el fondo oscuro sin cajas, bordes ni neón perimetral, favoreciendo la legibilidad sin distracciones lumínicas.
+> **Nota de diseño visual:** Las letras, palabras y números flotan limpios sobre el fondo oscuro sin cajas, bordes ni neón perimetral, favoreciendo la legibilidad sin distracciones lumínicas.
 
 ---
 
@@ -61,6 +63,7 @@ Tanto en *Seguimientos* como en *Sacádicos*, la interfaz incluye un indicador e
 - Nombre del color activo.
 - Letra mayúscula activa.
 - Palabra exacta en visualización.
+- Número actual en visualización.
 - Nombre y miniatura del animal o fruta actual.
 
 ---
