@@ -7,7 +7,7 @@
 
 body {
   font-family: system-ui, sans-serif;
-  background: #0f172a;
+  background: #0b1320;
   color: white;
 }
 
@@ -30,30 +30,36 @@ body {
 
 .title-container {
   display: flex;
-  gap: 10px;
+  gap: 16px;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .logo {
-  width: 125px;
+  width: 120px;
+  filter: drop-shadow(0 0 25px rgba(56, 189, 248, 0.45));
 }
 
 .title {
   font-size: 52px;
   font-weight: bold;
+  color: #38bdf8;
+  line-height: 1.1;
+  text-align: left;
 }
 
 .subtitle {
   font-size: 18px;
   color: #94a3b8;
+  margin-top: 4px;
+  text-align: left;
 }
 
 .description {
-  margin-top: 15px;
-  font-size: 16px;
+  margin-top: 16px;
+  font-size: 20px;
   color: #cbd5e1;
-  max-width: 500px;
+  max-width: 550px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.5;
