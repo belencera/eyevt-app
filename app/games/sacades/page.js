@@ -2,7 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { GameShell } from '../_shared/GameShell'
+import { OptionPicker } from '../_shared/OptionPicker'
+import { StimulusDot } from '../_shared/StimulusDot'
 import { useGameSession } from '../_shared/useGameSession'
+import {
+  BASIC_COLORS,
+  STIMULUS_OPTIONS,
+  getRandomColor,
+} from '../_shared/constants'
 
 const MIN = 2
 const MAX = 98
@@ -22,7 +29,17 @@ function speedToInterval(speed) {
 export default function SacadesGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
   const [speed, setSpeed] = useState(28)
+  const [stimulusType, setStimulusType] = useState('colors')
+  const [currentColor, setCurrentColor] = useState(BASIC_COLORS[0])
+
   const intervalRef = useRef(null)
+  const currentColorRef = useRef(currentColor)
+  const stimulusTypeRef = useRef(stimulusType)
+
+  useEffect(() => {
+    stimulusTypeRef.current = stimulusType
+    currentColorRef.current = currentColor
+  }, [stimulusType, currentColor])
 
   const clearJumpInterval = () => {
     if (intervalRef.current) {
@@ -33,6 +50,13 @@ export default function SacadesGame() {
 
   const jumpToRandom = () => {
     setPosition(randomPosition())
+
+    // En sacádicos, cada vez que cambia de posición sale un color aleatorio
+    if (stimulusTypeRef.current === 'colors') {
+      const nextColor = getRandomColor(currentColorRef.current)
+      currentColorRef.current = nextColor
+      setCurrentColor(nextColor)
+    }
   }
 
   const startJumping = () => {
@@ -43,7 +67,22 @@ export default function SacadesGame() {
 
   const resetBall = () => {
     clearJumpInterval()
+    const initColor =
+      stimulusType === 'colors'
+        ? getRandomColor(currentColorRef.current)
+        : { name: 'Verde', hex: '#22c55e' }
+    currentColorRef.current = initColor
+    setCurrentColor(initColor)
     setPosition({ x: 50, y: 50 })
+  }
+
+  const handleStimulusChange = (type) => {
+    setStimulusType(type)
+    if (type === 'classic') {
+      setCurrentColor({ name: 'Verde', hex: '#22c55e' })
+    } else if (type === 'colors') {
+      setCurrentColor(getRandomColor())
+    }
   }
 
   const session = useGameSession({
@@ -64,7 +103,11 @@ export default function SacadesGame() {
   return (
     <GameShell
       title="Sacádicos"
-      hint="Salta la mirada de un punto a otro"
+      hint={
+        stimulusType === 'colors'
+          ? 'Salta la mirada y di el color en voz alta'
+          : 'Salta la mirada de un punto a otro'
+      }
       session={session}
       speedControl={{
         id: 'sacade-speed',
@@ -75,16 +118,44 @@ export default function SacadesGame() {
         step: 2,
         onChange: setSpeed,
       }}
+      extraControls={
+        <>
+          <OptionPicker
+            id="sacades-stimulus"
+            label="Estímulo"
+            value={stimulusType}
+            options={STIMULUS_OPTIONS}
+            disabled={!session.isIdle}
+            onChange={handleStimulusChange}
+          />
+
+          {session.started && stimulusType === 'colors' && (
+            <div className="therapistFeedback">
+              <span className="therapistFeedbackLabel">Color actual</span>
+              <div className="therapistColorBadge">
+                <span
+                  className="therapistColorDot"
+                  style={{
+                    backgroundColor: currentColor.hex,
+                    boxShadow: `0 0 10px ${currentColor.hex}`,
+                  }}
+                />
+                <span className="therapistColorName">{currentColor.name}</span>
+              </div>
+            </div>
+          )}
+        </>
+      }
     >
       {showDot && (
-        <div
-          className={`gameDot ${session.isPaused ? 'gameDotPaused' : ''}`}
-          style={{
-            left: `${position.x}%`,
-            top: `${position.y}%`,
-          }}
+        <StimulusDot
+          position={position}
+          color={currentColor}
+          isPaused={session.isPaused}
+          stimulusType={stimulusType}
         />
       )}
     </GameShell>
   )
 }
+

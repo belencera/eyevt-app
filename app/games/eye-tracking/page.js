@@ -2,7 +2,15 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { GameShell } from '../_shared/GameShell'
+import { OptionPicker } from '../_shared/OptionPicker'
+import { StimulusDot } from '../_shared/StimulusDot'
 import { useGameSession } from '../_shared/useGameSession'
+import {
+  BASIC_COLORS,
+  COLOR_INTERVAL_OPTIONS,
+  STIMULUS_OPTIONS,
+  getRandomColor,
+} from '../_shared/constants'
 
 const MIN = 2
 const MAX = 98
@@ -31,13 +39,34 @@ function setVelocityMagnitude(vel, speed) {
 export default function EyeTrackingGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
   const [speed, setSpeed] = useState(28)
+  const [stimulusType, setStimulusType] = useState('colors')
+  const [colorInterval, setColorInterval] = useState(3)
+  const [currentColor, setCurrentColor] = useState(BASIC_COLORS[0])
 
   const positionRef = useRef({ x: 50, y: 50 })
   const velocityRef = useRef(randomVelocity(28))
+  const colorTimerRef = useRef(0)
+  const currentColorRef = useRef(currentColor)
+  const stimulusTypeRef = useRef(stimulusType)
+  const colorIntervalRef = useRef(colorInterval)
+
+  useEffect(() => {
+    stimulusTypeRef.current = stimulusType
+    colorIntervalRef.current = colorInterval
+    currentColorRef.current = currentColor
+  }, [stimulusType, colorInterval, currentColor])
 
   const resetBall = () => {
     positionRef.current = { x: 50, y: 50 }
     velocityRef.current = randomVelocity(speed)
+    colorTimerRef.current = 0
+
+    const nextColor =
+      stimulusType === 'colors'
+        ? getRandomColor(currentColorRef.current)
+        : { name: 'Verde', hex: '#22c55e' }
+
+    setCurrentColor(nextColor)
     setPosition({ x: 50, y: 50 })
   }
 
@@ -49,6 +78,15 @@ export default function EyeTrackingGame() {
   const handleSpeedChange = (value) => {
     setSpeed(value)
     setVelocityMagnitude(velocityRef.current, value)
+  }
+
+  const handleStimulusChange = (type) => {
+    setStimulusType(type)
+    if (type === 'classic') {
+      setCurrentColor({ name: 'Verde', hex: '#22c55e' })
+    } else if (type === 'colors') {
+      setCurrentColor(getRandomColor())
+    }
   }
 
   useEffect(() => {
@@ -76,6 +114,16 @@ export default function EyeTrackingGame() {
         pos.y = clamp(pos.y, MIN, MAX)
       }
 
+      // En modo colores, cambiar el color periódicamente para el feedback verbal del paciente
+      if (stimulusTypeRef.current === 'colors') {
+        colorTimerRef.current += dt
+        if (colorTimerRef.current >= colorIntervalRef.current) {
+          colorTimerRef.current = 0
+          const nextColor = getRandomColor(currentColorRef.current)
+          setCurrentColor(nextColor)
+        }
+      }
+
       setPosition({ x: pos.x, y: pos.y })
       frameId = requestAnimationFrame(tick)
     }
@@ -90,7 +138,11 @@ export default function EyeTrackingGame() {
   return (
     <GameShell
       title="Seguimientos"
-      hint="Sigue el punto con la mirada"
+      hint={
+        stimulusType === 'colors'
+          ? 'Sigue el punto y di el color en voz alta'
+          : 'Sigue el punto con la mirada'
+      }
       session={session}
       speedControl={{
         id: 'speed',
@@ -101,16 +153,55 @@ export default function EyeTrackingGame() {
         step: 2,
         onChange: handleSpeedChange,
       }}
+      extraControls={
+        <>
+          <OptionPicker
+            id="stimulus-type"
+            label="Estímulo"
+            value={stimulusType}
+            options={STIMULUS_OPTIONS}
+            disabled={!session.isIdle}
+            onChange={handleStimulusChange}
+          />
+
+          {stimulusType === 'colors' && (
+            <OptionPicker
+              id="color-interval"
+              label="Cambio de color"
+              value={colorInterval}
+              options={COLOR_INTERVAL_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={setColorInterval}
+            />
+          )}
+
+          {session.started && stimulusType === 'colors' && (
+            <div className="therapistFeedback">
+              <span className="therapistFeedbackLabel">Color actual</span>
+              <div className="therapistColorBadge">
+                <span
+                  className="therapistColorDot"
+                  style={{
+                    backgroundColor: currentColor.hex,
+                    boxShadow: `0 0 10px ${currentColor.hex}`,
+                  }}
+                />
+                <span className="therapistColorName">{currentColor.name}</span>
+              </div>
+            </div>
+          )}
+        </>
+      }
     >
       {showDot && (
-        <div
-          className={`gameDot ${session.isPaused ? 'gameDotPaused' : ''}`}
-          style={{
-            left: `${position.x}%`,
-            top: `${position.y}%`,
-          }}
+        <StimulusDot
+          position={position}
+          color={currentColor}
+          isPaused={session.isPaused}
+          stimulusType={stimulusType}
         />
       )}
     </GameShell>
   )
 }
+
