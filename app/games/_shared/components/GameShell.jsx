@@ -21,6 +21,7 @@ export function GameShell({
   session,
   speedControl,
   extraControls,
+  isFullscreen,
   children,
 }) {
   const {
@@ -39,7 +40,8 @@ export function GameShell({
     timerProgress,
   } = session
 
-  const isGameActive = started || isCountingDown
+  const isGameActive =
+    isFullscreen !== undefined ? isFullscreen : started || isCountingDown
 
   return (
     <div className={`gameLayout ${isGameActive ? 'gameLayoutFullscreen' : ''}`}>

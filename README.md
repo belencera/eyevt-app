@@ -38,6 +38,10 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
   - Rotación automática de estímulo en cada salto (color, letra, palabra o animal diferente).
   - Temporizador de sesión con barra de progreso.
 
+### 3. Periferia (`/games/periphery`)
+- **Objetivo:** Entrenamiento y ampliación del campo visual periférico manteniendo una fijación central estable.
+- **Estado:** Tarjeta y previsualización animada integrada en la plataforma principal; desarrollo de mecánicas en curso.
+
 ---
 
 ## 🎨 Tipos de Estímulos Visuales

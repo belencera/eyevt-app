@@ -37,3 +37,39 @@ export function SaccadesPreview() {
     </div>
   )
 }
+
+export function PeripheryPreview() {
+  return (
+    <div className="card-preview periphery-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        {/* Retícula sutil del campo visual */}
+        <line x1="55" y1="45" x2="145" y2="45" stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" strokeDasharray="2 3" />
+        <line x1="100" y1="10" x2="100" y2="80" stroke="rgba(148, 163, 184, 0.2)" strokeWidth="1" strokeDasharray="2 3" />
+        <circle cx="100" cy="45" r="20" stroke="rgba(56, 189, 248, 0.2)" strokeWidth="1" strokeDasharray="3 3" />
+        <circle cx="100" cy="45" r="36" stroke="rgba(56, 189, 248, 0.15)" strokeWidth="1" strokeDasharray="4 4" />
+
+        {/* Onda expansiva de estimulación periférica */}
+        <circle cx="100" cy="45" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5">
+          <animate attributeName="r" values="6; 37" dur="2.4s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.8; 0" dur="2.4s" repeatCount="indefinite" />
+          <animate attributeName="stroke-width" values="1.5; 0.5" dur="2.4s" repeatCount="indefinite" />
+        </circle>
+
+        {/* Marcadores de posición periféricos */}
+        <circle cx="64" cy="45" r="4.5" stroke="rgba(56, 189, 248, 0.35)" strokeDasharray="2 2" strokeWidth="1" />
+        <circle cx="136" cy="45" r="4.5" stroke="rgba(56, 189, 248, 0.35)" strokeDasharray="2 2" strokeWidth="1" />
+        <circle cx="100" cy="11" r="4.5" stroke="rgba(56, 189, 248, 0.35)" strokeDasharray="2 2" strokeWidth="1" />
+        <circle cx="100" cy="79" r="4.5" stroke="rgba(56, 189, 248, 0.35)" strokeDasharray="2 2" strokeWidth="1" />
+
+        {/* Estímulos periféricos intermitentes */}
+        <circle cx="64" cy="45" r="4" fill="#38bdf8" className="svg-peripheral-dot dot-left" />
+        <circle cx="136" cy="45" r="4" fill="#38bdf8" className="svg-peripheral-dot dot-right" />
+        <circle cx="100" cy="11" r="4" fill="#38bdf8" className="svg-peripheral-dot dot-top" />
+        <circle cx="100" cy="79" r="4" fill="#38bdf8" className="svg-peripheral-dot dot-bottom" />
+
+        {/* Punto de fijación central permanente */}
+        <circle cx="100" cy="45" r="4" fill="#f8fafc" className="svg-center-fixation" />
+      </svg>
+    </div>
+  )
+}
