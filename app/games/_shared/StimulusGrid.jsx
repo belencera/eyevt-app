@@ -11,7 +11,7 @@ function StimulusIcon({ type }) {
     case 'letters':
       return <span className="stimulusIconLetters" aria-hidden>A</span>
     case 'words':
-      return <span className="stimulusIconWords" aria-hidden>abc</span>
+      return <span className="stimulusIconWords" aria-hidden>ABC</span>
     case 'animals':
       return <span className="stimulusIconAnimals" aria-hidden>🐾</span>
     default:

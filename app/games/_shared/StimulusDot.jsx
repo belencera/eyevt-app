@@ -1,6 +1,7 @@
 'use client'
 
 import { StimulusLetter } from './StimulusLetter'
+import { StimulusWord } from './StimulusWord'
 
 /**
  * Componente de estímulo visual.
@@ -9,13 +10,15 @@ import { StimulusLetter } from './StimulusLetter'
  * - Punto fijo celeste
  * - Punto dinámico de colores
  * - Letras sueltas en mayúscula con selección de tamaño
- * Diseñado para extenderse fácilmente a palabras, animales, etc.
+ * - Palabras de 3 a 6 letras en mayúscula
+ * Diseñado para extenderse fácilmente a animales, etc.
  */
 export function StimulusDot({
   position,
   color,
   letter = 'A',
   letterSize = 'md',
+  word = 'SOL',
   isPaused = false,
   stimulusType = 'colors',
 }) {
@@ -25,6 +28,16 @@ export function StimulusDot({
         position={position}
         letter={letter}
         size={letterSize}
+        isPaused={isPaused}
+      />
+    )
+  }
+
+  if (stimulusType === 'words') {
+    return (
+      <StimulusWord
+        position={position}
+        word={word}
         isPaused={isPaused}
       />
     )

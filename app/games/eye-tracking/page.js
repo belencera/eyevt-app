@@ -12,6 +12,9 @@ import {
   LETTER_SIZE_OPTIONS,
   LETTER_INTERVAL_OPTIONS,
   getRandomLetter,
+  WORD_LENGTH_OPTIONS,
+  WORD_INTERVAL_OPTIONS,
+  getRandomWord,
 } from '../_shared/constants'
 
 const MIN = 2
@@ -47,16 +50,23 @@ export default function EyeTrackingGame() {
   const [letterSize, setLetterSize] = useState('md')
   const [letterInterval, setLetterInterval] = useState(3)
   const [currentLetter, setCurrentLetter] = useState('A')
+  const [wordLength, setWordLength] = useState(4)
+  const [wordInterval, setWordInterval] = useState(3)
+  const [currentWord, setCurrentWord] = useState('CASA')
 
   const positionRef = useRef({ x: 50, y: 50 })
   const velocityRef = useRef(randomVelocity(28))
   const colorTimerRef = useRef(0)
   const letterTimerRef = useRef(0)
+  const wordTimerRef = useRef(0)
   const currentColorRef = useRef(currentColor)
   const currentLetterRef = useRef(currentLetter)
+  const currentWordRef = useRef(currentWord)
   const stimulusTypeRef = useRef(stimulusType)
   const colorIntervalRef = useRef(colorInterval)
   const letterIntervalRef = useRef(letterInterval)
+  const wordIntervalRef = useRef(wordInterval)
+  const wordLengthRef = useRef(wordLength)
 
   useEffect(() => {
     stimulusTypeRef.current = stimulusType
@@ -64,13 +74,26 @@ export default function EyeTrackingGame() {
     currentColorRef.current = currentColor
     letterIntervalRef.current = letterInterval
     currentLetterRef.current = currentLetter
-  }, [stimulusType, colorInterval, currentColor, letterInterval, currentLetter])
+    wordIntervalRef.current = wordInterval
+    wordLengthRef.current = wordLength
+    currentWordRef.current = currentWord
+  }, [
+    stimulusType,
+    colorInterval,
+    currentColor,
+    letterInterval,
+    currentLetter,
+    wordInterval,
+    wordLength,
+    currentWord,
+  ])
 
   const resetBall = () => {
     positionRef.current = { x: 50, y: 50 }
     velocityRef.current = randomVelocity(speed)
     colorTimerRef.current = 0
     letterTimerRef.current = 0
+    wordTimerRef.current = 0
 
     const nextColor =
       stimulusType === 'colors'
@@ -82,8 +105,14 @@ export default function EyeTrackingGame() {
         ? getRandomLetter(currentLetterRef.current)
         : currentLetterRef.current
 
+    const nextWord =
+      stimulusType === 'words'
+        ? getRandomWord(wordLengthRef.current, currentWordRef.current)
+        : currentWordRef.current
+
     setCurrentColor(nextColor)
     setCurrentLetter(nextLetter)
+    setCurrentWord(nextWord)
     setPosition({ x: 50, y: 50 })
   }
 
@@ -105,6 +134,8 @@ export default function EyeTrackingGame() {
       setCurrentColor(getRandomColor())
     } else if (type === 'letters') {
       setCurrentLetter(getRandomLetter())
+    } else if (type === 'words') {
+      setCurrentWord(getRandomWord(wordLength))
     }
   }
 
@@ -153,6 +184,16 @@ export default function EyeTrackingGame() {
         }
       }
 
+      // En modo palabras, cambiar la palabra periódicamente para lectura verbal del paciente
+      if (stimulusTypeRef.current === 'words') {
+        wordTimerRef.current += dt
+        if (wordTimerRef.current >= wordIntervalRef.current) {
+          wordTimerRef.current = 0
+          const nextWord = getRandomWord(wordLengthRef.current, currentWordRef.current)
+          setCurrentWord(nextWord)
+        }
+      }
+
       setPosition({ x: pos.x, y: pos.y })
       frameId = requestAnimationFrame(tick)
     }
@@ -168,7 +209,9 @@ export default function EyeTrackingGame() {
     <GameShell
       title="Seguimientos"
       hint={
-        stimulusType === 'letters'
+        stimulusType === 'words'
+          ? 'Sigue la palabra y léela en voz alta'
+          : stimulusType === 'letters'
           ? 'Sigue la letra y dila en voz alta'
           : stimulusType === 'colors'
           ? 'Sigue el punto y di el color en voz alta'
@@ -224,6 +267,30 @@ export default function EyeTrackingGame() {
             </>
           )}
 
+          {stimulusType === 'words' && (
+            <>
+              <OptionPicker
+                id="word-length"
+                label="Longitud de palabra"
+                value={wordLength}
+                options={WORD_LENGTH_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={(val) => {
+                  setWordLength(val)
+                  setCurrentWord(getRandomWord(val))
+                }}
+              />
+              <OptionPicker
+                id="word-interval"
+                label="Cambio de palabra"
+                value={wordInterval}
+                options={WORD_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={setWordInterval}
+              />
+            </>
+          )}
+
           {session.started && stimulusType === 'colors' && (
             <div className="therapistFeedback">
               <span className="therapistFeedbackLabel">Color actual</span>
@@ -248,6 +315,15 @@ export default function EyeTrackingGame() {
               </div>
             </div>
           )}
+
+          {session.started && stimulusType === 'words' && (
+            <div className="therapistFeedback">
+              <span className="therapistFeedbackLabel">Palabra actual</span>
+              <div className="therapistWordBadge">
+                <span className="therapistWordText">{currentWord}</span>
+              </div>
+            </div>
+          )}
         </>
       }
     >
@@ -257,6 +333,7 @@ export default function EyeTrackingGame() {
           color={currentColor}
           letter={currentLetter}
           letterSize={letterSize}
+          word={currentWord}
           isPaused={session.isPaused}
           stimulusType={stimulusType}
         />

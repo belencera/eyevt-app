@@ -39,8 +39,7 @@ export const STIMULUS_OPTIONS = [
     value: 'words',
     label: 'Palabras',
     iconType: 'words',
-    disabled: true,
-    badge: 'Pronto',
+    description: 'Palabras de 3 a 6 letras en mayúscula',
   },
   {
     value: 'animals',
@@ -89,3 +88,4 @@ export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
 }
 
 export * from './letters'
+export * from './words'

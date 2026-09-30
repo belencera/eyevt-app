@@ -276,6 +276,29 @@
   text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
 }
 
+.therapistWordBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  min-height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.15);
+}
+
+.therapistWordText {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
 /* Selector visual en cuadrícula de estímulo */
 .stimulusGridContainer {
   display: flex;
@@ -648,15 +671,12 @@
 
 .stimulusLetterChar {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-weight: 900;
+  font-weight: 600;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #f8fafc;
   display: inline-block;
   line-height: 1;
-  text-shadow:
-    0 0 10px rgba(56, 189, 248, 0.95),
-    0 0 24px rgba(56, 189, 248, 0.75),
-    0 0 48px rgba(56, 189, 248, 0.45);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
 /* Tamaños configurables del estímulo de letra */
@@ -677,14 +697,50 @@
 }
 
 .stimulusLetterPaused {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .stimulusLetterPaused .stimulusLetterChar {
-  text-shadow:
-    0 0 12px rgba(148, 163, 184, 0.5),
-    0 0 24px rgba(148, 163, 184, 0.25);
-  color: #cbd5e1;
+  color: #94a3b8;
+  text-shadow: none;
+}
+
+/* Estilos para el estímulo de palabra en mayúsculas (sin caja ni borde) */
+.stimulusWord {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  pointer-events: none;
+  will-change: left, top;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: opacity 0.15s ease;
+}
+
+.stimulusWordText {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(1.8rem, 3.2vw, 2.75rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f8fafc;
+  display: inline-block;
+  line-height: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.stimulusWordPaused {
+  opacity: 0.4;
+}
+
+.stimulusWordPaused .stimulusWordText {
+  color: #94a3b8;
+  text-shadow: none;
 }
 
 /* Barra flotante de controles cuando el juego está a pantalla completa */
