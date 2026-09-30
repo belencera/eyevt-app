@@ -1,6 +1,8 @@
 # EYEVT — Eye Visual Therapy
 
-Plataforma web clínica interactiva para terapia visual y rehabilitación optométrica digital. Diseñada para su uso por pacientes bajo la supervisión de un terapeuta visual.
+Plataforma web clínica interactiva para terapia visual y rehabilitación optométrica digital. Diseñada para su uso por pacientes bajo la supervisión de un especialista o terapeuta visual.
+
+> **"¡Elige un juego y entrena tu visión!"**
 
 ---
 
@@ -23,24 +25,38 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
 
 ## 🎯 Ejercicios Clínicos
 
-### 1. Seguimientos (`/games/eye-tracking`)
-- **Objetivo:** Estimulación de movimientos oculares suaves (*pursuits*) siguiendo un estímulo en movimiento continuo continuo dentro del área visual.
-- **Controles:**
+### 1. Fijación (`/games/fixation`)
+- **Objetivo:** Estimulación de la estabilidad foveal y entrenamiento de la capacidad del paciente para mantener la mirada fija en un punto central estable sin desviar los ojos ni mover la cabeza.
+- **Configuración:**
+  - Estímulo central elegible entre todos los disponibles (Punto, Colores, Letras, Palabras, Números, Flechas, Animales, Frutas).
+  - Velocidad de cambio / cadencia regulable (1 s a 10 s).
+  - Temporizador de sesión (1 a 5 min, o modo infinito).
+  - Panel superior flotante durante la sesión para pausar, reanudar o reiniciar.
+
+### 2. Seguimientos (`/games/eye-tracking`)
+- **Objetivo:** Estimulación de movimientos oculares suaves (*pursuits*) siguiendo un estímulo en movimiento continuo dentro del área visual.
+- **Configuración:**
   - Velocidad de desplazamiento regulable (8 a 60).
-  - Temporizador de sesión con cuenta atrás y modo infinito.
+  - Temporizador de sesión (1 a 5 min, o modo infinito).
   - Intervalos de rotación periódica del estímulo configurables (1 s a 5 s).
-  - Panel flotante de pausa/reinicio y feedback en tiempo real para el terapeuta.
+  - Panel superior flotante durante la sesión para control rápido (pausa, reanudación y parada).
 
-### 2. Sacádicos (`/games/sacades`)
+### 3. Sacádicos (`/games/sacades`)
 - **Objetivo:** Entrenamiento de movimientos sacádicos rápidos y precisos mediante fijaciones alternantes aleatorias.
-- **Controles:**
-  - Velocidad / cadencia entre saltos (12 a 48).
-  - Rotación automática de estímulo en cada salto (color, letra, palabra o animal diferente).
-  - Temporizador de sesión con barra de progreso.
+- **Configuración:**
+  - Cadencia y velocidad entre saltos (12 a 48).
+  - Rotación dinámica de estímulo en cada salto (color, letra, palabra, número, flecha o ilustración diferente).
+  - Temporizador de sesión con barra de progreso y control flotante.
 
-### 3. Periferia (`/games/periphery`)
+### 4. Periferia (`/games/periphery`)
 - **Objetivo:** Entrenamiento y ampliación del campo visual periférico manteniendo una fijación central estable.
-- **Estado:** Tarjeta y previsualización animada integrada en la plataforma principal; desarrollo de mecánicas en curso.
+- **Modos de Juego:**
+  - **Foco Central:** El paciente mantiene la mirada en el punto central mientras detecta estímulos intermitentes en la periferia.
+  - **Nombra y Pulsa:** Estimulación periférica interactiva donde el paciente debe tocar o hacer clic sobre el estímulo detectado, con contador de aciertos y feedback audiovisual.
+- **Configuración:**
+  - Distancia al centro / Excentricidad (Cercana, Media, Lejana o Mixta).
+  - Cadencia de aparición (1 s a 5 s).
+  - Duración de sesión y pantalla resumen de resultados al finalizar.
 
 ---
 
@@ -50,26 +66,22 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
 | :--- | :--- | :--- |
 | **Punto fijo** | Estímulo clásico celeste de alto contraste | Posición y velocidad |
 | **Colores** | Cambio dinámico entre 8 colores de alto contraste | Intervalo de cambio (1 a 5 s) |
-| **Letras** | Letras sueltas del abecedario español en mayúsculas (con Ñ) | Tamaño (Pequeña 28px, Mediana 44px, Grande 64px, Muy grande 88px) e intervalo |
-| **Palabras** | Bancos de 96 palabras cotidianas por longitud en mayúsculas | **Tamaño** (Pequeña 26px, Mediana 38px, Grande 54px, Muy grande 74px), **Longitud** (3, 4, 5, 6 letras o Mixto) e intervalo |
-| **Números** | Cifras numéricas aleatorias de 1 a 5 dígitos | **Tamaño** (Pequeño 26px, Mediano 38px, Grande 54px, Muy grande 74px), **Cifras** (1, 2, 3, 4, 5 o Mixto) e intervalo |
-| **Flechas** | Flechas cardinales en 4 direcciones (Arriba, Abajo, Izquierda, Derecha) | **Tamaño** (Pequeña 32px, Mediana 48px, Grande 68px, Muy grande 92px) e intervalo |
-| **Animales** | 28 ilustraciones vectoriales de alta definición | **Tamaño** (Pequeño 48px, Mediano 72px, Grande 96px, Muy grande 124px) e intervalo |
-| **Frutas** | 12 ilustraciones vectoriales en formato SVG | **Tamaño** (Pequeño 48px, Mediano 72px, Grande 96px, Muy grande 124px) e intervalo |
+| **Letras** | Letras sueltas del abecedario español en mayúsculas (con Ñ) | Tamaño (Pequeño, Mediano, Grande, Muy grande) e intervalo |
+| **Palabras** | Bancos de 96 palabras cotidianas por longitud en mayúsculas | **Tamaño** (Pequeño, Mediano, Grande, Muy grande), **Longitud** (3, 4, 5, 6 letras o Mixto) e intervalo |
+| **Números** | Cifras numéricas aleatorias de 1 a 5 dígitos | **Tamaño** (Pequeño, Mediano, Grande, Muy grande), **Cifras** (1, 2, 3, 4, 5 o Mixto) e intervalo |
+| **Flechas** | Flechas cardinales en 4 direcciones (↑, ↓, ←, →) | **Tamaño** (Pequeño, Mediano, Grande, Muy grande) e intervalo |
+| **Animales** | 28 ilustraciones vectoriales de alta definición | **Tamaño** (Pequeño, Mediano, Grande, Muy grande) e intervalo |
+| **Frutas** | 12 ilustraciones vectoriales en formato SVG | **Tamaño** (Pequeño, Mediano, Grande, Muy grande) e intervalo |
 
-> **Nota de diseño visual:** Las letras, palabras, números y flechas flotan limpios sobre el fondo oscuro en color marfil suave (`#f8fafc`) sin cajas, bordes ni neón perimetral, favoreciendo la legibilidad sin distracciones lumínicas.
+> **Diseño visual clínico:** Tipografías limpias flotando sobre fondo oscuro en color marfil suave (`#f8fafc`) sin elementos perimetrales estridentes, favoreciendo la legibilidad sin distracciones lumínicas ni fatiga visual.
 
 ---
 
-## 👨‍⚕️ Panel de Supervisión del Terapeuta
+## 🖥️ Interfaz y Experiencia de Usuario
 
-Tanto en *Seguimientos* como en *Sacádicos*, la interfaz incluye un indicador en tiempo real (`TherapistBadge`) que muestra al profesional exactamente qué debe verbalizar o identificar el paciente en cada momento:
-- Nombre del color activo.
-- Letra mayúscula activa.
-- Palabra exacta en visualización.
-- Número actual en visualización.
-- Dirección y símbolo de la flecha actual (↑ Arriba, ↓ Abajo, ← Izquierda, → Derecha).
-- Nombre y miniatura del animal o fruta actual.
+- **Dashboard modular de configuración:** Cada ejercicio cuenta con un panel inicial organizado en tarjetas accesibles (Estímulo, Ajustes específicos, Velocidad/Cadencia y Duración de sesión), completamente adaptable a pantallas de escritorio, tablets y móviles.
+- **Área de juego inmersiva:** Al pulsar "Empezar", la configuración se oculta y el paciente dispone de toda la pantalla con una barra flotante sutil de control para el terapeuta.
+- **Previsualizaciones dinámicas:** Las tarjetas del menú principal incorporan previsualizaciones animadas que reflejan la mecánica de cada ejercicio visual a una velocidad suave y continua.
 
 ---
 
@@ -78,26 +90,30 @@ Tanto en *Seguimientos* como en *Sacádicos*, la interfaz incluye un indicador e
 ```text
 eyevt/
 ├── app/
-│   ├── components/               # Componentes globales de la web
+│   ├── components/               # Componentes globales de la interfaz
 │   │   ├── Footer.js             # Pie de página responsive
-│   │   ├── GamePreviews.js       # Previsualizaciones animadas SVG/CSS de las cards
-│   │   └── previews.css          # Estilos de las previews
+│   │   ├── GamePreviews.js       # Previsualizaciones animadas SVG/CSS de las tarjetas
+│   │   └── previews.css          # Estilos y keyframes de las previsualizaciones
 │   ├── games/
-│   │   ├── _shared/              # Módulo compartido de ejercicios
-│   │   │   ├── components/       # Layouts y controles (GameShell, OptionPicker, StimulusGrid, TherapistBadge)
-│   │   │   ├── data/             # Bancos de palabras, alfabeto, animales, frutas y constantes
-│   │   │   ├── hooks/            # useGameSession y useStimulusManager
-│   │   │   ├── stimuli/          # Componentes de renderizado (Dot, Letter, Word, Animal, Fruit, Illustration)
-│   │   │   ├── utils/            # formatTime, iconos SVG
-│   │   │   └── index.js          # Barril de exportación central
-│   │   ├── eye-tracking/         # Juego de seguimientos
-│   │   └── sacades/              # Juego de sacádicos
+│   │   ├── _shared/              # Módulo compartido de ejercicios clínicos
+│   │   │   ├── components/       # Layout y controles (GameShell, OptionPicker, StimulusGrid, gameShell.css)
+│   │   │   ├── data/             # Bancos de palabras, números, letras, flechas, animales, frutas y constantes
+│   │   │   ├── hooks/            # Hooks de ciclo de vida (useGameSession, useStimulusManager)
+│   │   │   ├── stimuli/          # Componentes de renderizado de estímulos (Dot, Letter, Word, Number, Arrow, Animal, Fruit, Illustration)
+│   │   │   ├── utils/            # Formateadores (formatTime) e iconos SVG
+│   │   │   └── index.js          # Exportaciones centralizadas de _shared
+│   │   ├── eye-tracking/         # Ejercicio de Seguimientos Oculares
+│   │   ├── fixation/             # Ejercicio de Fijación Central Estable
+│   │   ├── periphery/            # Ejercicio de Campo Visual Periférico
+│   │   └── sacades/              # Ejercicio de Movimientos Sacádicos
+│   ├── favicon.ico
 │   ├── globals.css               # Estilos globales y tokens de diseño
-│   ├── layout.js                 # Layout raíz Next.js
+│   ├── layout.js                 # Layout raíz de Next.js
 │   └── page.js                   # Landing page con selector de ejercicios
 └── public/
-    ├── animals/                  # Catálogo de 28 imágenes de animales en alta resolución
-    └── fruits/                   # Directorio para subir las ilustraciones de frutas (SVG / PNG)
+    ├── animals/                  # Catálogo de 28 ilustraciones de animales
+    ├── fruits/                   # Catálogo de 12 ilustraciones vectoriales de frutas
+    └── logo.png                  # Logotipo de EYEVT
 ```
 
 ---
@@ -106,5 +122,5 @@ eyevt/
 
 - **Framework:** Next.js 16 (App Router con Turbopack)
 - **Librería UI:** React 19
-- **Estilos:** Vanilla CSS modular con variables de diseño, glassmorphism y animaciones fluidas
-- **Linter:** ESLint con configuración estricta para Next.js
+- **Estilos:** Vanilla CSS modular con tokens de diseño, glassmorphism y diseño responsivo
+- **Linter:** ESLint con configuración Next.js

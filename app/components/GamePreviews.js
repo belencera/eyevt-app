@@ -1,5 +1,29 @@
 import "./previews.css"
 
+export function FixationPreview() {
+  return (
+    <div className="card-preview fixation-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        {/* Retícula concéntrica sutil de fijación */}
+        <circle cx="100" cy="45" r="30" stroke="rgba(56, 189, 248, 0.15)" strokeWidth="1" strokeDasharray="3 3" />
+        <circle cx="100" cy="45" r="16" stroke="rgba(56, 189, 248, 0.25)" strokeWidth="1" strokeDasharray="2 2" />
+
+        {/* Ejes de mira central */}
+        <line x1="100" y1="22" x2="100" y2="35" stroke="rgba(148, 163, 184, 0.35)" strokeWidth="1" />
+        <line x1="100" y1="55" x2="100" y2="68" stroke="rgba(148, 163, 184, 0.35)" strokeWidth="1" />
+        <line x1="77" y1="45" x2="90" y2="45" stroke="rgba(148, 163, 184, 0.35)" strokeWidth="1" />
+        <line x1="110" y1="45" x2="123" y2="45" stroke="rgba(148, 163, 184, 0.35)" strokeWidth="1" />
+
+        {/* Halo respiratorio de enfoque */}
+        <circle cx="100" cy="45" r="9" className="fixation-halo" />
+
+        {/* Punto central de fijación */}
+        <circle cx="100" cy="45" r="5" fill="#38bdf8" className="fixation-center-dot" />
+      </svg>
+    </div>
+  )
+}
+
 export function TrackingPreview() {
   return (
     <div className="card-preview tracking-preview">

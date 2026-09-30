@@ -27,8 +27,8 @@ import {
 } from '../_shared'
 
 const HINTS = {
-  'name-and-tap': 'Nombra el estímulo central en voz alta y pulsa los puntos que aparezcan alrededor',
-  'central-focus': 'Mantén la mirada fija en el punto central e identifica lo que aparece en tu periferia',
+  'name-and-tap': 'Mantén la mirada fija en el punto central, nombra en voz alta los estímulos que aparezcan y pulsa los puntos que aparecen alrededor con el dedo o el ratón.',
+  'central-focus': 'Mantén la mirada fija en el punto central e identifica los estímulos que aparecen en tu campo periférico.',
 }
 
 export default function PeripheryGame() {

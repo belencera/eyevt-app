@@ -11,92 +11,78 @@ import {
   LETTER_SIZE_OPTIONS,
   WORD_SIZE_OPTIONS,
   WORD_LENGTH_OPTIONS,
-  ANIMAL_SIZE_OPTIONS,
-  FRUIT_SIZE_OPTIONS,
   NUMBER_SIZE_OPTIONS,
   NUMBER_DIGITS_OPTIONS,
   ARROW_SIZE_OPTIONS,
-  getRandomWord,
-  getRandomNumber,
+  ANIMAL_SIZE_OPTIONS,
+  FRUIT_SIZE_OPTIONS,
 } from '../_shared'
 
-const MIN = 2
-const MAX = 98
-
-function randomPosition() {
-  return {
-    x: Math.random() * (MAX - MIN) + MIN,
-    y: Math.random() * (MAX - MIN) + MIN,
-  }
-}
-
-/** Convierte velocidad del slider (12–48) en intervalo entre saltos (ms). */
-function speedToInterval(speed) {
-  return Math.round(1500 - speed * 25)
-}
-
 const HINTS = {
-  animals: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el animal cambie de posición y nómbralo en voz alta.',
-  fruits: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la fruta cambie de posición y nómbrala en voz alta.',
-  words: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la palabra cambie de posición y léela en voz alta.',
-  numbers: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el número cambie de posición y dilo en voz alta.',
-  arrows: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la flecha cambie de posición e indica su dirección en voz alta.',
-  letters: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la letra cambie de posición y léela en voz alta.',
-  colors: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el color cambie de posición y di el color en voz alta.',
-  classic: 'Mueve los ojos con precisión entre los diferentes puntos sin mover la cabeza.',
+  animals: 'Mantén la mirada fija en el centro y nombra al animal en voz alta cada vez que cambie.',
+  fruits: 'Mantén la mirada fija en el centro y nombra la fruta en voz alta cada vez que cambie.',
+  words: 'Mantén la mirada fija en el centro y lee la palabra en voz alta cada vez que cambie.',
+  numbers: 'Mantén la mirada fija en el centro y di el número en voz alta cada vez que cambie.',
+  arrows: 'Mantén la mirada fija en el centro e indica la dirección de la flecha en voz alta cada vez que cambie.',
+  letters: 'Mantén la mirada fija en el centro y nombra la letra en voz alta cada vez que cambie.',
+  colors: 'Mantén la mirada fija en el centro y di el color en voz alta cada vez que cambie.',
+  classic: 'Mantén la mirada fija en el punto central sin mover los ojos ni la cabeza.',
 }
 
-export default function SacadesGame() {
-  const [position, setPosition] = useState({ x: 50, y: 50 })
-  const [speed, setSpeed] = useState(28)
-  const intervalRef = useRef(null)
+// Punto fijo en el centro de la pantalla
+const CENTER_POSITION = { x: 50, y: 50 }
+
+export default function FixationGame() {
+  const [changeInterval, setChangeInterval] = useState(3) // segundos entre cambios de estímulo
 
   const stimulus = useStimulusManager('classic')
+  const stimulusRef = useRef(stimulus)
+  useEffect(() => {
+    stimulusRef.current = stimulus
+  }, [stimulus])
 
-  const clearJumpInterval = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
+  const intervalTimerRef = useRef(null)
+
+  const clearTimer = () => {
+    if (intervalTimerRef.current) {
+      clearInterval(intervalTimerRef.current)
+      intervalTimerRef.current = null
     }
   }
 
-  const jumpToRandom = () => {
-    setPosition(randomPosition())
-    stimulus.nextStimulus()
-  }
-
-  const startJumping = () => {
-    clearJumpInterval()
-    jumpToRandom()
-    intervalRef.current = setInterval(jumpToRandom, speedToInterval(speed))
-  }
-
-  const resetBall = () => {
-    clearJumpInterval()
-    stimulus.resetStimulus()
-    setPosition({ x: 50, y: 50 })
-  }
-
   const session = useGameSession({
-    onBeginPlay: startJumping,
-    onPause: clearJumpInterval,
-    onResume: startJumping,
-    onReset: resetBall,
-    onEnd: clearJumpInterval,
+    onReset: () => {
+      clearTimer()
+      stimulusRef.current.resetStimulus()
+    },
+    onFinish: () => {
+      clearTimer()
+    },
   })
 
+  // Control del intervalo de rotación del estímulo durante el ejercicio
   useEffect(() => {
-    return () => clearJumpInterval()
-  }, [])
+    if (session.isPlaying && !session.isPaused) {
+      clearTimer()
+      // En modo 'classic', el punto permanece fijo sin necesidad de rotación
+      if (stimulus.stimulusType !== 'classic') {
+        intervalTimerRef.current = setInterval(() => {
+          stimulusRef.current.nextStimulus()
+        }, changeInterval * 1000)
+      }
+    } else {
+      clearTimer()
+    }
+    return () => clearTimer()
+  }, [session.isPlaying, session.isPaused, changeInterval, stimulus.stimulusType])
 
-  const showDot = session.started && (session.isPlaying || session.isPaused)
-
+  // Controles específicos de tamaño/parámetros según el estímulo activo
   const renderExtraControls = () => {
     switch (stimulus.stimulusType) {
       case 'letters':
         return (
           <OptionPicker
-            id="sacade-letter-size"
+            id="letter-size"
             label="Tamaño de letra"
             value={stimulus.letterSize}
             options={LETTER_SIZE_OPTIONS}
@@ -108,7 +94,7 @@ export default function SacadesGame() {
         return (
           <>
             <OptionPicker
-              id="sacade-word-size"
+              id="word-size"
               label="Tamaño de palabra"
               value={stimulus.wordSize}
               options={WORD_SIZE_OPTIONS}
@@ -116,15 +102,12 @@ export default function SacadesGame() {
               onChange={stimulus.setWordSize}
             />
             <OptionPicker
-              id="sacade-word-length"
+              id="word-length"
               label="Longitud de palabra"
               value={stimulus.wordLength}
               options={WORD_LENGTH_OPTIONS}
               disabled={!session.isIdle}
-              onChange={(val) => {
-                stimulus.setWordLength(val)
-                stimulus.setCurrentWord(getRandomWord(val))
-              }}
+              onChange={stimulus.setWordLength}
             />
           </>
         )
@@ -132,7 +115,7 @@ export default function SacadesGame() {
         return (
           <>
             <OptionPicker
-              id="sacade-number-size"
+              id="number-size"
               label="Tamaño de número"
               value={stimulus.numberSize}
               options={NUMBER_SIZE_OPTIONS}
@@ -140,22 +123,19 @@ export default function SacadesGame() {
               onChange={stimulus.setNumberSize}
             />
             <OptionPicker
-              id="sacade-number-digits"
-              label="Cifras"
+              id="number-digits"
+              label="Cifras numéricas"
               value={stimulus.numberDigits}
               options={NUMBER_DIGITS_OPTIONS}
               disabled={!session.isIdle}
-              onChange={(val) => {
-                stimulus.setNumberDigits(val)
-                stimulus.setCurrentNumber(getRandomNumber(val))
-              }}
+              onChange={stimulus.setNumberDigits}
             />
           </>
         )
       case 'arrows':
         return (
           <OptionPicker
-            id="sacade-arrow-size"
+            id="arrow-size"
             label="Tamaño de flecha"
             value={stimulus.arrowSize}
             options={ARROW_SIZE_OPTIONS}
@@ -166,7 +146,7 @@ export default function SacadesGame() {
       case 'animals':
         return (
           <OptionPicker
-            id="sacade-animal-size"
+            id="animal-size"
             label="Tamaño de animal"
             value={stimulus.animalSize}
             options={ANIMAL_SIZE_OPTIONS}
@@ -177,7 +157,7 @@ export default function SacadesGame() {
       case 'fruits':
         return (
           <OptionPicker
-            id="sacade-fruit-size"
+            id="fruit-size"
             label="Tamaño de fruta"
             value={stimulus.fruitSize}
             options={FRUIT_SIZE_OPTIONS}
@@ -190,32 +170,49 @@ export default function SacadesGame() {
     }
   }
 
+  // Visibilidad del estímulo en pantalla
+  const showDot =
+    !session.isIdle ||
+    stimulus.stimulusType === 'classic' ||
+    stimulus.stimulusType === 'colors' ||
+    stimulus.stimulusType === 'letters' ||
+    stimulus.stimulusType === 'words' ||
+    stimulus.stimulusType === 'numbers' ||
+    stimulus.stimulusType === 'arrows' ||
+    stimulus.stimulusType === 'animals' ||
+    stimulus.stimulusType === 'fruits'
+
   return (
     <GameShell
-      title="Sacádicos"
+      title="Fijación"
       hint={HINTS[stimulus.stimulusType] || HINTS.classic}
       session={session}
       speedControl={{
-        id: 'sacade-speed',
-        label: 'Velocidad',
-        value: speed,
-        min: 12,
-        max: 48,
-        step: 2,
-        onChange: setSpeed,
+        id: 'change-interval',
+        label: 'Velocidad de cambio',
+        value: changeInterval,
+        min: 1,
+        max: 10,
+        step: 1,
+        unit: ' s',
+        disabled: !session.isIdle,
+        onChange: setChangeInterval,
       }}
       stimulusGrid={
         <StimulusGrid
           value={stimulus.stimulusType}
           disabled={!session.isIdle}
-          onChange={stimulus.handleStimulusChange}
+          onChange={(val) => {
+            clearTimer()
+            stimulus.handleStimulusChange(val)
+          }}
         />
       }
       extraControls={renderExtraControls()}
     >
       {showDot && (
         <StimulusDot
-          position={position}
+          position={CENTER_POSITION}
           color={stimulus.currentColor}
           letter={stimulus.currentLetter}
           letterSize={stimulus.letterSize}

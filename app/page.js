@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Footer from "./components/Footer"
-import { TrackingPreview, SaccadesPreview, PeripheryPreview } from "./components/GamePreviews"
+import { FixationPreview, TrackingPreview, SaccadesPreview, PeripheryPreview } from "./components/GamePreviews"
 
 export default function Home() {
   return (
@@ -16,7 +16,7 @@ export default function Home() {
         </div>
 
         <p className="description">
-          ¡Elige tu juego y entrena tu visión!
+          ¡Elige un juego y entrena tu visión!
         </p>
       </header>
 
@@ -24,22 +24,28 @@ export default function Home() {
 
         <div className="games-grid">
 
+          <Link href="/games/fixation" className="game-card">
+            <FixationPreview />
+            <h3>Fijación</h3>
+            <p>Entrena la estabilidad visual y la capacidad de mantener la mirada en un punto fijo central</p>
+          </Link>
+
           <Link href="/games/eye-tracking" className="game-card">
             <TrackingPreview />
             <h3>Seguimientos</h3>
-            <p>Seguimientos oculares, elije tu nivel y comienza</p>
+            <p>Mejora tus movimientos de seguimiento ocular con estímulos visuales personalizados</p>
           </Link>
 
           <Link href="/games/sacades" className="game-card">
             <SaccadesPreview />
             <h3>Sacádicos</h3>
-            <p>Entrena tus movimientos oculares rápidos y precisos</p>
+            <p>Entrena tus movimientos oculares rápidos y precisos entre distintos puntos de fijación</p>
           </Link>
 
           <Link href="/games/periphery" className="game-card">
             <PeripheryPreview />
             <h3>Periferia</h3>
-            <p>Amplía tu campo visual y entrena la atención periférica</p>
+            <p>Amplía tu campo visual y estimula la atención periférica manteniendo la fijación central</p>
           </Link>
 
         </div>

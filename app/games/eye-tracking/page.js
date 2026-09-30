@@ -52,14 +52,14 @@ function setVelocityMagnitude(vel, speed) {
 }
 
 const HINTS = {
-  animals: 'Sigue al animal y nómbralo en voz alta',
-  fruits: 'Sigue la fruta y nómbrala en voz alta',
-  words: 'Sigue la palabra y léela en voz alta',
-  numbers: 'Sigue el número y dilo en voz alta',
-  arrows: 'Sigue la flecha y di su dirección en voz alta',
-  letters: 'Sigue la letra y dila en voz alta',
-  colors: 'Sigue el punto y di el color en voz alta',
-  classic: 'Sigue el punto con la mirada sin mover la cabeza',
+  animals: 'Sigue los animales con la mirada sin mover la cabeza y nómbralo en voz alta cada vez que cambie.',
+  fruits: 'Sigue la fruta con la mirada sin mover la cabeza y nómbrala en voz alta cada vez que cambie.',
+  words: 'Sigue la palabra con la vista sin mover la cabeza y léela en voz alta cada vez que cambie.',
+  numbers: 'Sigue el número con la mirada sin mover la cabeza y dilo en voz alta cada vez que cambie.',
+  arrows: 'Sigue la flecha con los ojos sin mover la cabeza e indica su dirección en voz alta cada vez que cambie.',
+  letters: 'Sigue la letra con la mirada sin mover la cabeza y nómbrala en voz alta cada vez que cambie.',
+  colors: 'Sigue el punto con los ojos sin mover la cabeza y di el color activo en voz alta cada vez que cambie.',
+  classic: 'Sigue el punto con la mirada sin mover la cabeza.',
 }
 
 export default function EyeTrackingGame() {
