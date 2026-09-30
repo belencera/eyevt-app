@@ -63,7 +63,11 @@ export function GameShell({
           <Link href="/" className="dashBackBtn">← Inicio</Link>
           <div className="dashTitleBlock">
             <h1 className="dashTitle">{title}</h1>
-            {hint && <p className="dashHint">{hint}</p>}
+            {hint && (
+              <p className="dashHint">
+                <strong>Instrucciones:</strong> {hint}
+              </p>
+            )}
           </div>
         </div>
 

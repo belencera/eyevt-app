@@ -36,14 +36,14 @@ function speedToInterval(speed) {
 }
 
 const HINTS = {
-  animals: 'Salta la mirada y nombra al animal en voz alta',
-  fruits: 'Salta la mirada y nombra la fruta en voz alta',
-  words: 'Salta la mirada y lee la palabra en voz alta',
-  numbers: 'Salta la mirada y di el número en voz alta',
-  arrows: 'Salta la mirada y di la dirección en voz alta',
-  letters: 'Salta la mirada y di la letra en voz alta',
-  colors: 'Salta la mirada y di el color en voz alta',
-  classic: 'Salta la mirada de un punto a otro',
+  animals: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el animal cambie de posición y nómbralo en voz alta.',
+  fruits: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la fruta cambie de posición y nómbrala en voz alta.',
+  words: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la palabra cambie de posición y léela en voz alta.',
+  numbers: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el número cambie de posición y dilo en voz alta.',
+  arrows: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la flecha cambie de posición e indica su dirección en voz alta.',
+  letters: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la letra cambie de posición y léela en voz alta.',
+  colors: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el color cambie de posición y di el color en voz alta.',
+  classic: 'Mueve los ojos con precisión entre los diferentes puntos sin mover la cabeza.',
 }
 
 export default function SacadesGame() {

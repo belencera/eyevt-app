@@ -27,19 +27,19 @@ export default function Home() {
           <Link href="/games/eye-tracking" className="game-card">
             <TrackingPreview />
             <h3>Seguimientos</h3>
-            <p>Seguimientos oculares, elije tu nivel y comienza</p>
+            <p>Mejora movimientos de seguimiento ocular con diferentes estímulos visuales</p>
           </Link>
 
           <Link href="/games/sacades" className="game-card">
             <SaccadesPreview />
             <h3>Sacádicos</h3>
-            <p>Entrena tus movimientos oculares rápidos y precisos</p>
+            <p>Entrena movimientos oculares rápidos y precisos entre distintos puntos de fijación</p>
           </Link>
 
           <Link href="/games/periphery" className="game-card">
             <PeripheryPreview />
             <h3>Periferia</h3>
-            <p>Amplía tu campo visual y entrena la atención periférica</p>
+            <p>Amplía tu campo visual y estimula la atención periférica manteniendo la fijación central</p>
           </Link>
 
         </div>
