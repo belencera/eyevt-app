@@ -4,10 +4,10 @@
  */
 
 export const NUMBER_SIZE_OPTIONS = [
-  { value: 'sm', label: 'Pequeño (26px)' },
-  { value: 'md', label: 'Mediano (38px)' },
-  { value: 'lg', label: 'Grande (54px)' },
-  { value: 'xl', label: 'Muy grande (74px)' },
+  { value: 'sm', label: 'Pequeño' },
+  { value: 'md', label: 'Mediano' },
+  { value: 'lg', label: 'Grande' },
+  { value: 'xl', label: 'Muy grande' },
 ]
 
 export const NUMBER_DIGITS_OPTIONS = [

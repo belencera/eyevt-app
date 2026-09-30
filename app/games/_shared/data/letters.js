@@ -17,10 +17,10 @@ export const LETTER_SIZES = {
 }
 
 export const LETTER_SIZE_OPTIONS = [
-  { value: 'sm', label: 'Pequeña (28px)' },
-  { value: 'md', label: 'Mediana (44px)' },
-  { value: 'lg', label: 'Grande (64px)' },
-  { value: 'xl', label: 'Muy grande (88px)' },
+  { value: 'sm', label: 'Pequeña' },
+  { value: 'md', label: 'Mediana' },
+  { value: 'lg', label: 'Grande' },
+  { value: 'xl', label: 'Muy grande' },
 ]
 
 export const LETTER_INTERVAL_OPTIONS = [

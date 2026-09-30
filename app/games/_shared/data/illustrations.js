@@ -11,10 +11,10 @@ export const ILLUSTRATION_SIZES = {
 }
 
 export const ILLUSTRATION_SIZE_OPTIONS = [
-  { value: 'sm', label: 'Pequeño (48px)' },
-  { value: 'md', label: 'Mediano (72px)' },
-  { value: 'lg', label: 'Grande (96px)' },
-  { value: 'xl', label: 'Muy grande (124px)' },
+  { value: 'sm', label: 'Pequeño' },
+  { value: 'md', label: 'Mediano' },
+  { value: 'lg', label: 'Grande' },
+  { value: 'xl', label: 'Muy grande' },
 ]
 
 export const ILLUSTRATION_INTERVAL_OPTIONS = [

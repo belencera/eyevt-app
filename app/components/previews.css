@@ -19,11 +19,28 @@
   overflow: visible;
 }
 
+/* =========================================
+   1. SEGUIMIENTOS PREVIEW (Velocidad suave constante)
+   ========================================= */
 .svg-tracking-dot {
+  offset-path: path("M 25 45 Q 65 15, 100 45 T 175 45");
+  offset-rotate: 0deg;
   filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 14px rgba(56, 189, 248, 0.9));
+  animation: trackingMove 6.4s ease-in-out infinite;
 }
 
-/* SACADICOS ANIMATION (Fast Jumps) */
+@keyframes trackingMove {
+  0%, 100% {
+    offset-distance: 0%;
+  }
+  50% {
+    offset-distance: 100%;
+  }
+}
+
+/* =========================================
+   2. SACADICOS PREVIEW (Velocidad suave constante)
+   ========================================= */
 .saccade-target {
   position: absolute;
   width: 16px;
@@ -47,7 +64,7 @@
   box-shadow:
     0 0 10px #38bdf8,
     0 0 20px rgba(56, 189, 248, 0.85);
-  animation: saccadeJump 4s steps(1) infinite;
+  animation: saccadeJump 6s steps(1) infinite;
 }
 
 @keyframes saccadeJump {
@@ -73,14 +90,36 @@
   }
 }
 
-/* PERIFERIA ANIMATION */
+/* =========================================
+   3. PERIFERIA PREVIEW (Velocidad suave constante)
+   ========================================= */
 .svg-center-fixation {
   filter: drop-shadow(0 0 5px #f8fafc) drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
 }
 
+.svg-peripheral-wave {
+  fill: none;
+  stroke: #38bdf8;
+  transform-origin: 100px 45px;
+  animation: peripheralWave 4.8s infinite ease-out;
+}
+
+@keyframes peripheralWave {
+  0% {
+    transform: scale(0.16);
+    opacity: 0.85;
+    stroke-width: 2px;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+    stroke-width: 0.5px;
+  }
+}
+
 .svg-peripheral-dot {
   filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.85));
-  animation: peripheralPulse 3.2s infinite ease-in-out;
+  animation: peripheralPulse 6.4s infinite ease-in-out;
   transform-box: fill-box;
   transform-origin: center;
 }
@@ -90,15 +129,15 @@
 }
 
 .svg-peripheral-dot.dot-top {
-  animation-delay: 0.8s;
-}
-
-.svg-peripheral-dot.dot-right {
   animation-delay: 1.6s;
 }
 
+.svg-peripheral-dot.dot-right {
+  animation-delay: 3.2s;
+}
+
 .svg-peripheral-dot.dot-bottom {
-  animation-delay: 2.4s;
+  animation-delay: 4.8s;
 }
 
 @keyframes peripheralPulse {

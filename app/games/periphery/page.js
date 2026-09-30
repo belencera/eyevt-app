@@ -6,7 +6,6 @@ import {
   OptionPicker,
   StimulusDot,
   StimulusGrid,
-  TherapistBadge,
   useGameSession,
   useStimulusManager,
   PERIPHERY_MODES,
@@ -190,9 +189,24 @@ export default function PeripheryGame() {
       title="Periferia"
       hint={HINTS[mode]}
       session={shellSession}
-      speedControl={null}
-      isFullscreen={session.started || session.isCountingDown || showSummary}
-      extraControls={
+      speedContent={
+        <OptionPicker
+          id="periphery-cadence"
+          label="Cadencia de cambio"
+          value={cadence}
+          options={PERIPHERY_CADENCE_OPTIONS}
+          disabled={!session.isIdle}
+          onChange={setCadence}
+        />
+      }
+      stimulusGrid={
+        <StimulusGrid
+          value={stimulus.stimulusType}
+          disabled={!session.isIdle}
+          onChange={stimulus.handleStimulusChange}
+        />
+      }
+      gameControls={
         <>
           {/* Selector de modo interactivo en cuadrícula idéntica a estímulos */}
           <div className="modeGridContainer">
@@ -241,23 +255,11 @@ export default function PeripheryGame() {
             disabled={!session.isIdle}
             onChange={setDistance}
           />
-
-          {/* Cadencia de cambio de estímulo */}
-          <OptionPicker
-            id="periphery-cadence"
-            label="Cadencia de cambio"
-            value={cadence}
-            options={PERIPHERY_CADENCE_OPTIONS}
-            disabled={!session.isIdle}
-            onChange={setCadence}
-          />
-
-          {/* Cuadrícula de selección de estímulo */}
-          <StimulusGrid
-            value={stimulus.stimulusType}
-            disabled={!session.isIdle}
-            onChange={stimulus.handleStimulusChange}
-          />
+        </>
+      }
+      extraControls={
+        stimulus.stimulusType === 'classic' ? null : (
+          <>
 
           {stimulus.stimulusType === 'colors' && (
             <OptionPicker
@@ -362,28 +364,8 @@ export default function PeripheryGame() {
             />
           )}
 
-          {session.started && (
-            <>
-              {mode === 'name-and-tap' && (
-                <div className="therapistHitsBadge" title="Puntos periféricos tocados con éxito">
-                  <span className="therapistHitsLabel">Puntos pulsados</span>
-                  <span className="therapistHitsValue">{hits}</span>
-                </div>
-              )}
-
-              <TherapistBadge
-                stimulusType={stimulus.stimulusType}
-                color={stimulus.currentColor}
-                letter={stimulus.currentLetter}
-                word={stimulus.currentWord}
-                number={stimulus.currentNumber}
-                arrow={stimulus.currentArrow}
-                animal={stimulus.currentAnimal}
-                fruit={stimulus.currentFruit}
-              />
-            </>
-          )}
-        </>
+          </>
+        )
       }
     >
       {/* Contador flotante de aciertos visible en la pantalla de juego durante la partida */}

@@ -33,16 +33,19 @@ export function StimulusGrid({
   onChange,
   disabled = false,
   options = STIMULUS_OPTIONS,
+  showLabel = false,
 }) {
   return (
     <div className="stimulusGridContainer">
-      <span className="controlLabel" id="stimulus-grid-label">
-        Estímulo
-      </span>
+      {showLabel && (
+        <span className="controlLabel" id="stimulus-grid-label">
+          Estímulo
+        </span>
+      )}
       <div
         className="stimulusGrid"
         role="radiogroup"
-        aria-labelledby="stimulus-grid-label"
+        aria-label="Selecciona tipo de estímulo"
       >
         {options.map((opt) => {
           const isSelected = opt.value === value
