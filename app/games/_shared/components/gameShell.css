@@ -349,6 +349,100 @@
   letter-spacing: -0.01em;
 }
 
+/* Selector visual en cuadrícula de Modo de Juego (Periferia) - Idéntico a estímulos */
+.modeGridContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.modeCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(30, 41, 59, 0.75);
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: transform 0.14s ease, border-color 0.14s ease, background-color 0.14s ease, box-shadow 0.14s ease;
+  user-select: none;
+  text-align: center;
+}
+
+.modeCard:hover:not(:disabled) {
+  background: rgba(51, 65, 85, 0.85);
+  border-color: rgba(56, 189, 248, 0.45);
+  transform: translateY(-1px);
+}
+
+.modeCard:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.modeCardActive {
+  background: rgba(56, 189, 248, 0.14) !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.25), inset 0 0 10px rgba(56, 189, 248, 0.08);
+  color: #f8fafc;
+}
+
+.modeCardActive .modeCardLabel {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.modeCard:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  border-style: dashed;
+  border-color: rgba(148, 163, 184, 0.18);
+  transform: none;
+}
+
+.modeCardIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.modeCardIcon svg {
+  width: 20px;
+  height: 20px;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.7));
+  transition: transform 0.14s ease, filter 0.14s ease;
+}
+
+.modeCardActive .modeCardIcon svg {
+  color: #38bdf8;
+  filter: drop-shadow(0 0 10px #38bdf8);
+  transform: scale(1.06);
+}
+
+.modeCardLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #cbd5e1;
+  letter-spacing: -0.01em;
+  transition: color 0.14s ease;
+}
+
 /* Selector visual en cuadrícula de estímulo */
 .stimulusGridContainer {
   display: flex;
@@ -964,6 +1058,145 @@
   line-height: 1;
 }
 
+/* Estilos para el punto de fijación central en Periferia (Foco Central) */
+.centralFixationPoint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 10;
+}
+
+.centralFixationRing {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border: 1px dashed rgba(56, 189, 248, 0.45);
+  border-radius: 50%;
+  animation: centralRingBreathe 3s ease-in-out infinite;
+}
+
+.centralFixationDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #f8fafc;
+  box-shadow: 0 0 14px #ffffff, 0 0 28px rgba(56, 189, 248, 0.9);
+}
+
+@keyframes centralRingBreathe {
+  0%, 100% {
+    transform: scale(0.95);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.7;
+  }
+}
+
+/* Objetivo táctil periférico interactivo (Nombra y Pulsa) */
+.peripheralTapTarget {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 20;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease;
+}
+
+.peripheralTapTarget:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.peripheralTapTarget:active {
+  transform: translate(-50%, -50%) scale(0.92);
+}
+
+.peripheralTapCore {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 16px #38bdf8, 0 0 32px rgba(56, 189, 248, 0.7);
+  animation: peripheralTapPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes peripheralTapPulse {
+  0%, 100% {
+    transform: scale(0.92);
+    box-shadow: 0 0 14px #38bdf8, 0 0 26px rgba(56, 189, 248, 0.6);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 20px #38bdf8, 0 0 40px rgba(56, 189, 248, 0.95);
+  }
+}
+
+/* Efecto de destello de acierto al pulsar */
+.peripheralHitRipple {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  pointer-events: none;
+  animation: rippleHit 0.45s ease-out forwards;
+}
+
+@keyframes rippleHit {
+  0% {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    width: 70px;
+    height: 70px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.6);
+  }
+}
+
+/* Contador de toques en el badge del terapeuta */
+.therapistHitsBadge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.12);
+}
+
+.therapistHitsLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.therapistHitsValue {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #38bdf8;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
 /* Barra flotante de controles cuando el juego está a pantalla completa */
 .floatingGameBar {
   position: absolute;
@@ -987,6 +1220,173 @@
 .floatingGameBar:hover {
   background: rgba(15, 23, 42, 0.92);
   border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* Contador de aciertos flotante en pantalla durante el juego (Nombra y Pulsa) */
+.floatingHitsHud {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(56, 189, 248, 0.38);
+  border-radius: 999px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.2);
+  user-select: none;
+  pointer-events: none;
+  animation: optionMenuIn 0.25s ease-out;
+}
+
+.floatingHitsIcon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.floatingHitsLabel {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.floatingHitsValue {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #38bdf8;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  min-width: 24px;
+  text-align: right;
+  line-height: 1;
+}
+
+/* Pantalla de resultado final de aciertos estilo cuenta atrás (sencilla y directa) */
+.peripherySummaryOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 24px;
+  animation: summaryFadeIn 0.25s ease-out;
+  cursor: pointer;
+}
+
+@keyframes summaryFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.peripherySummarySimple {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.peripherySummaryScoreGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.peripherySummaryNumber {
+  font-size: clamp(6.5rem, 18vw, 12rem);
+  font-weight: 800;
+  line-height: 1;
+  color: #f8fafc;
+  text-shadow:
+    0 0 60px rgba(56, 189, 248, 0.55),
+    0 4px 24px rgba(0, 0, 0, 0.5);
+  font-variant-numeric: tabular-nums;
+  animation: countdownPulse 0.6s ease-out;
+}
+
+.peripherySummaryLabel {
+  font-size: clamp(1.2rem, 3.2vw, 1.8rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #38bdf8;
+  margin-top: -6px;
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+}
+
+.peripherySummaryMeta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  padding: 8px 22px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 999px;
+  font-size: 1.05rem;
+}
+
+.peripherySummaryMetaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.peripherySummaryMetaKey {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.peripherySummaryMetaVal {
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.peripherySummaryMetaDivider {
+  color: rgba(148, 163, 184, 0.35);
+  font-size: 0.85rem;
+}
+
+.peripherySummarySimpleBtn {
+  margin-top: 14px;
+  padding: 10px 26px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.14);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.peripherySummarySimpleBtn:hover {
+  background: #38bdf8;
+  color: #082f49;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.4);
+}
+
+.peripherySummarySimpleBtn:active {
+  transform: translateY(0);
 }
 
 .floatingBtn {

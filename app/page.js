@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Footer from "./components/Footer"
-import { TrackingPreview, SaccadesPreview } from "./components/GamePreviews"
+import { TrackingPreview, SaccadesPreview, PeripheryPreview } from "./components/GamePreviews"
 
 export default function Home() {
   return (
@@ -34,6 +34,12 @@ export default function Home() {
             <SaccadesPreview />
             <h3>Sacádicos</h3>
             <p>Entrena tus movimientos oculares rápidos y precisos</p>
+          </Link>
+
+          <Link href="/games/periphery" className="game-card">
+            <PeripheryPreview />
+            <h3>Periferia</h3>
+            <p>Amplía tu campo visual y entrena la atención periférica</p>
           </Link>
 
         </div>

@@ -72,3 +72,42 @@
     transform: translate(-50%, -50%);
   }
 }
+
+/* PERIFERIA ANIMATION */
+.svg-center-fixation {
+  filter: drop-shadow(0 0 5px #f8fafc) drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
+}
+
+.svg-peripheral-dot {
+  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.85));
+  animation: peripheralPulse 3.2s infinite ease-in-out;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.svg-peripheral-dot.dot-left {
+  animation-delay: 0s;
+}
+
+.svg-peripheral-dot.dot-top {
+  animation-delay: 0.8s;
+}
+
+.svg-peripheral-dot.dot-right {
+  animation-delay: 1.6s;
+}
+
+.svg-peripheral-dot.dot-bottom {
+  animation-delay: 2.4s;
+}
+
+@keyframes peripheralPulse {
+  0%, 15% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  35%, 100% {
+    opacity: 0.1;
+    transform: scale(0.8);
+  }
+}
