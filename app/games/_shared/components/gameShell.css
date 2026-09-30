@@ -1,6 +1,6 @@
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Layout raÃ­z
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ============================================================
+   Layout raíz
+   ============================================================ */
 .gameLayout {
   position: relative;
   width: 100vw;
@@ -9,16 +9,16 @@
   color: #f8fafc;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Dashboard de configuraciÃ³n (overlay sobre playArea)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ============================================================
+   Dashboard de configuración (overlay sobre playArea)
+   ============================================================ */
 .dashboard {
   position: absolute;
   inset: 0;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  padding: 22px 32px 18px;
+  padding: 22px 56px 18px;
   background: #080e1f;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -32,7 +32,7 @@
   transform: scale(0.98);
 }
 
-/* â”€â”€ Cabecera â”€â”€ */
+/* -- Cabecera -- */
 .dashHeader {
   display: flex;
   align-items: flex-start;
@@ -69,22 +69,22 @@
 }
 
 .dashTitle {
-  font-size: 1.35rem;
+  font-size: 1.55rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0;
 }
 
 .dashHint {
-  font-size: 0.82rem;
+  font-size: 0.94rem;
   color: #64748b;
   margin: 0;
   line-height: 1.4;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ============================================================
    Grid de tarjetas (2 columnas adaptable)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ============================================================ */
 .dashGrid {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
@@ -96,7 +96,7 @@
   grid-template-columns: 1fr 1fr;
 }
 
-/* â”€â”€ Tarjeta base â”€â”€ */
+/* -- Tarjeta base -- */
 .dashCard {
   background: rgba(13, 21, 37, 0.85);
   border: 1px solid rgba(148, 163, 184, 0.1);
@@ -111,7 +111,7 @@
   grid-column: 1 / -1;
 }
 
-/* â”€â”€ Cabecera de tarjeta â”€â”€ */
+/* -- Cabecera de tarjeta -- */
 .dashCardHead {
   display: flex;
   align-items: baseline;
@@ -159,9 +159,9 @@
   line-height: 1.4;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Selector visual en cuadrÃ­cula de estÃ­mulo
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ============================================================
+   Selector visual en cuadrícula de estímulo
+   ============================================================ */
 .stimulusGridContainer {
   display: flex;
   flex-direction: column;
@@ -256,9 +256,9 @@
   color: #94a3b8;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Iconos de estÃ­mulo
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ============================================================
+   Iconos de estímulo
+   ============================================================ */
 .stimulusIconDot {
   width: 14px;
   height: 14px;
@@ -318,9 +318,9 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ============================================================
    Selector de modo de juego (Periferia)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ============================================================ */
 .modeGridContainer {
   display: flex;
   flex-direction: column;
@@ -416,9 +416,9 @@
   transition: color 0.14s ease;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   OptionPicker (botones pÃ­ldora dentro de tarjetas)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ============================================================
+   OptionPicker (botones píldora dentro de tarjetas)
+   ============================================================ */
 .controlGroup {
   display: flex;
   flex-direction: column;
@@ -490,9 +490,9 @@
   transform: none;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Tarjeta Velocidad â€“ slider
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ============================================================
+   Tarjeta Velocidad - slider
+   ============================================================ */
 .speedSliderRow {
   display: flex;
   align-items: center;
@@ -524,9 +524,9 @@
   line-height: 1;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Tarjeta DuraciÃ³n â€“ fila de botones
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ============================================================
+   Tarjeta Duración - fila de botones
+   ============================================================ */
 .durationRow {
   display: flex;
   gap: 6px;
@@ -570,9 +570,9 @@
   cursor: not-allowed;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ============================================================
    Barra de acciones (inferior)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ============================================================ */
 .dashActions {
   display: flex;
   justify-content: flex-end;
@@ -691,9 +691,9 @@
   box-shadow: none;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ============================================================
    Indicador en tiempo real para el terapeuta
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ============================================================ */
 .therapistFeedback {
   display: flex;
   flex-direction: column;
@@ -765,7 +765,8 @@
   font-size: 0.95rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em;
 }
 
-/* Botones genÃ©ricos reutilizados por floating bar */
+/* Botones genéricos reutilizados por floating bar
+   ============================================================ */
 .btn {
   border: none; font-weight: 600; cursor: pointer;
   transition: transform 0.12s, opacity 0.12s, background 0.12s;
@@ -782,9 +783,9 @@
 .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .btn:not(:disabled):active { transform: scale(0.98); }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Ãrea de juego
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ============================================================
+   Área de juego
+   ============================================================ */
 .playArea {
   position: absolute;
   inset: 0;
@@ -829,7 +830,8 @@
   }
 }
 
-/* Estilos base del punto (cada juego puede ampliar) */
+/* Estilos base del punto (cada juego puede ampliar)
+   ============================================================ */
 .gameDot {
   position: absolute;
   width: 28px;
@@ -848,7 +850,8 @@
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
 }
 
-/* Estilos para el estÃƒÂ­mulo de letra suelta en mayÃƒÂºscula */
+/* Estilos para el estímulo de letra suelta en mayúscula
+   ============================================================ */
 .stimulusLetter {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -872,21 +875,26 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
-/* TamaÃƒÂ±os configurables del estÃƒÂ­mulo de letra */
+/* Tamaños configurables del estímulo de letra
+   ============================================================ */
 .stimulusLetter-sm .stimulusLetterChar {
-  font-size: 1.75rem; /* ~28px */
+  font-size: 1.75rem; /* ~28px
+   ============================================================ */
 }
 
 .stimulusLetter-md .stimulusLetterChar {
-  font-size: 2.75rem; /* ~44px */
+  font-size: 2.75rem; /* ~44px
+   ============================================================ */
 }
 
 .stimulusLetter-lg .stimulusLetterChar {
-  font-size: 4rem; /* ~64px */
+  font-size: 4rem; /* ~64px
+   ============================================================ */
 }
 
 .stimulusLetter-xl .stimulusLetterChar {
-  font-size: 5.5rem; /* ~88px */
+  font-size: 5.5rem; /* ~88px
+   ============================================================ */
 }
 
 .stimulusLetterPaused {
@@ -898,7 +906,8 @@
   text-shadow: none;
 }
 
-/* Estilos para el estÃƒÂ­mulo de palabra en mayÃƒÂºsculas (sin caja ni borde) */
+/* Estilos para el estímulo de palabra en mayúsculas (sin caja ni borde)
+   ============================================================ */
 .stimulusWord {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -926,21 +935,26 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
-/* TamaÃƒÂ±os configurables del estÃƒÂ­mulo de palabra */
+/* Tamaños configurables del estímulo de palabra
+   ============================================================ */
 .stimulusWord-sm .stimulusWordText {
-  font-size: 1.6rem; /* ~26px */
+  font-size: 1.6rem; /* ~26px
+   ============================================================ */
 }
 
 .stimulusWord-md .stimulusWordText {
-  font-size: 2.4rem; /* ~38px */
+  font-size: 2.4rem; /* ~38px
+   ============================================================ */
 }
 
 .stimulusWord-lg .stimulusWordText {
-  font-size: 3.4rem; /* ~54px */
+  font-size: 3.4rem; /* ~54px
+   ============================================================ */
 }
 
 .stimulusWord-xl .stimulusWordText {
-  font-size: 4.6rem; /* ~74px */
+  font-size: 4.6rem; /* ~74px
+   ============================================================ */
 }
 
 .stimulusWordPaused {
@@ -952,7 +966,8 @@
   text-shadow: none;
 }
 
-/* Estilos para el estÃƒÂ­mulo de animal o fruta ilustrada (SVG / PNG) */
+/* Estilos para el estímulo de animal o fruta ilustrada (SVG / PNG)
+   ============================================================ */
 .stimulusAnimal,
 .stimulusIllustration {
   position: absolute;
@@ -995,7 +1010,8 @@
   white-space: nowrap;
 }
 
-/* TamaÃƒÂ±os configurables del estÃƒÂ­mulo grÃƒÂ¡fico (animales y frutas) */
+/* Tamaños configurables del estímulo gráfico (animales y frutas)
+   ============================================================ */
 .stimulusAnimal-sm,
 .stimulusIllustration-sm {
   width: 48px;
@@ -1026,7 +1042,8 @@
   filter: grayscale(40%);
 }
 
-/* Estilos para el estÃƒÂ­mulo de flechas direccionales (mismo color que palabras #f8fafc) */
+/* Estilos para el estímulo de flechas direccionales (mismo color que palabras #f8fafc)
+   ============================================================ */
 .stimulusArrow {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -1049,7 +1066,8 @@
   display: block;
 }
 
-/* TamaÃƒÂ±os configurables del estÃƒÂ­mulo de flecha */
+/* Tamaños configurables del estímulo de flecha
+   ============================================================ */
 .stimulusArrow-sm {
   width: 32px;
   height: 32px;
@@ -1076,7 +1094,8 @@
   filter: none;
 }
 
-/* Badge de terapeuta para flecha */
+/* Badge de terapeuta para flecha
+   ============================================================ */
 .therapistArrowBadge {
   display: flex;
   align-items: center;
@@ -1090,7 +1109,8 @@
   line-height: 1;
 }
 
-/* Estilos para el punto de fijaciÃƒÂ³n central en Periferia (Foco Central) */
+/* Estilos para el punto de fijación central en Periferia (Foco Central)
+   ============================================================ */
 .centralFixationPoint {
   position: absolute;
   top: 50%;
@@ -1132,7 +1152,8 @@
   }
 }
 
-/* Objetivo tÃƒÂ¡ctil perifÃƒÂ©rico interactivo (Nombra y Pulsa) */
+/* Objetivo táctil periférico interactivo (Nombra y Pulsa)
+   ============================================================ */
 .peripheralTapTarget {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -1178,7 +1199,8 @@
   }
 }
 
-/* Efecto de destello de acierto al pulsar */
+/* Efecto de destello de acierto al pulsar
+   ============================================================ */
 .peripheralHitRipple {
   position: absolute;
   border-radius: 50%;
@@ -1204,7 +1226,8 @@
 
 
 
-/* Barra flotante de controles cuando el juego estÃƒÂ¡ a pantalla completa */
+/* Barra flotante de controles cuando el juego está a pantalla completa
+   ============================================================ */
 .floatingGameBar {
   position: absolute;
   top: 18px;
@@ -1229,7 +1252,8 @@
   border-color: rgba(56, 189, 248, 0.4);
 }
 
-/* Contador de aciertos flotante en pantalla durante el juego (Nombra y Pulsa) */
+/* Contador de aciertos flotante en pantalla durante el juego (Nombra y Pulsa)
+   ============================================================ */
 .floatingHitsHud {
   position: absolute;
   top: 18px;
@@ -1274,7 +1298,8 @@
   line-height: 1;
 }
 
-/* Pantalla de resultado final de aciertos estilo cuenta atrÃƒÂ¡s (sencilla y directa) */
+/* Pantalla de resultado final de aciertos estilo cuenta atrás (sencilla y directa)
+   ============================================================ */
 .peripherySummaryOverlay {
   position: absolute;
   inset: 0;
@@ -1464,7 +1489,7 @@
 
 @media (max-width: 860px) {
   .dashboard {
-    padding: 16px 16px 24px;
+    padding: 16px 24px 24px;
     height: 100%;
   }
 
