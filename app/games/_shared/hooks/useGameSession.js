@@ -83,28 +83,22 @@ export function useGameSession(callbacks = {}) {
   const beginPlaying = useCallback(() => {
     setCountdown(null)
     setStarted(true)
+    setRunning(true)
+    setPaused(false)
+    callbacksRef.current.onBeginPlay?.()
 
-    // Esperar a que el menú lateral termine de ocultarse (transición CSS de 300ms)
-    // para que la pantalla de juego esté al 100% de ancho antes de mover el estímulo
-    clearMenuTransitionTimer()
-    menuTransitionTimeoutRef.current = setTimeout(() => {
-      setRunning(true)
-      setPaused(false)
-      callbacksRef.current.onBeginPlay?.()
-
-      if (durationSetting > 0) {
-        startDurationTimer(durationSetting)
-      } else {
-        setTimeLeft(null)
-      }
-    }, 320)
-  }, [clearMenuTransitionTimer, durationSetting, startDurationTimer])
+    if (durationSetting > 0) {
+      startDurationTimer(durationSetting)
+    } else {
+      setTimeLeft(null)
+    }
+  }, [durationSetting, startDurationTimer])
 
   const handleStart = useCallback(() => {
     clearTimers()
     setRunning(false)
     setPaused(false)
-    setStarted(false)
+    setStarted(true)
     setTimeLeft(null)
 
     setCountdown(COUNTDOWN_START)

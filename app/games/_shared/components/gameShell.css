@@ -1055,25 +1055,51 @@
   letter-spacing: -0.02em;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 860px) {
   .gameLayout {
     flex-direction: column;
   }
 
-  .configPanel {
-    flex: 0 0 auto;
-    max-width: none;
+  /* Estado inicial (configuración del juego): el menú ocupa toda la pantalla disponible */
+  .gameLayout:not(.gameLayoutFullscreen) .configPanel {
+    flex: 1 1 100%;
     width: 100%;
-    max-height: 42vh;
+    max-width: none;
+    height: 100%;
+    max-height: 100vh;
     border-right: none;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.25s ease;
+    border-bottom: none;
+    padding: 20px 20px 36px;
+    overflow-y: auto;
   }
 
-  .configPanelHidden {
-    max-height: 0 !important;
-    padding: 0 !important;
-    border-bottom: none !important;
+  /* Inicialmente no se muestra la zona de juego cuando el espacio es pequeño */
+  .gameLayout:not(.gameLayoutFullscreen) .playArea {
+    display: none !important;
+  }
+
+  /* Centrado ergonómico de los controles para pantallas medianas/tablets */
+  .gameLayout:not(.gameLayoutFullscreen) .gameBack,
+  .gameLayout:not(.gameLayoutFullscreen) .gameTitle,
+  .gameLayout:not(.gameLayoutFullscreen) .gameHint,
+  .gameLayout:not(.gameLayoutFullscreen) .gameControls {
+    width: 100%;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Estado activo (juego iniciado): el menú se oculta por completo y la zona de juego toma el 100% */
+  .gameLayoutFullscreen .configPanel {
+    display: none !important;
+  }
+
+  .gameLayoutFullscreen .playArea {
+    display: block !important;
+    flex: 1 1 100%;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
   }
 
   .gameActions {
@@ -1083,10 +1109,5 @@
   .gameActions .btnIcon {
     flex: 1;
     max-width: none;
-  }
-
-  .playArea {
-    flex: 1;
-    min-height: 50vh;
   }
 }
