@@ -13,6 +13,7 @@ import {
   WORD_SIZE_OPTIONS,
   WORD_LENGTH_OPTIONS,
   ANIMAL_SIZE_OPTIONS,
+  FRUIT_SIZE_OPTIONS,
   getRandomWord,
 } from '../_shared'
 
@@ -33,6 +34,7 @@ function speedToInterval(speed) {
 
 const HINTS = {
   animals: 'Salta la mirada y nombra al animal en voz alta',
+  fruits: 'Salta la mirada y nombra la fruta en voz alta',
   words: 'Salta la mirada y lee la palabra en voz alta',
   letters: 'Salta la mirada y di la letra en voz alta',
   colors: 'Salta la mirada y di el color en voz alta',
@@ -152,6 +154,17 @@ export default function SacadesGame() {
             />
           )}
 
+          {stimulus.stimulusType === 'fruits' && (
+            <OptionPicker
+              id="sacade-fruit-size"
+              label="Tamaño de fruta"
+              value={stimulus.fruitSize}
+              options={FRUIT_SIZE_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={stimulus.setFruitSize}
+            />
+          )}
+
           {session.started && (
             <TherapistBadge
               stimulusType={stimulus.stimulusType}
@@ -159,6 +172,7 @@ export default function SacadesGame() {
               letter={stimulus.currentLetter}
               word={stimulus.currentWord}
               animal={stimulus.currentAnimal}
+              fruit={stimulus.currentFruit}
             />
           )}
         </>
@@ -174,6 +188,8 @@ export default function SacadesGame() {
           wordSize={stimulus.wordSize}
           animal={stimulus.currentAnimal}
           animalSize={stimulus.animalSize}
+          fruit={stimulus.currentFruit}
+          fruitSize={stimulus.fruitSize}
           isPaused={session.isPaused}
           stimulusType={stimulus.stimulusType}
         />

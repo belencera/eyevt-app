@@ -6,11 +6,12 @@ import {
   getRandomLetter,
   getRandomWord,
   getRandomAnimal,
+  getRandomFruit,
 } from '../data/constants'
 
 /**
  * Hook modular para gestionar los estados, configuraciones y generación
- * aleatoria de estímulos (colores, letras, palabras, animales).
+ * aleatoria de estímulos (colores, letras, palabras, animales, frutas).
  */
 export function useStimulusManager(initialType = 'classic') {
   const [stimulusType, setStimulusType] = useState(initialType)
@@ -35,6 +36,11 @@ export function useStimulusManager(initialType = 'classic') {
   const [animalInterval, setAnimalInterval] = useState(3)
   const [currentAnimal, setCurrentAnimal] = useState(() => getRandomAnimal())
 
+  // Opciones de frutas
+  const [fruitSize, setFruitSize] = useState('md')
+  const [fruitInterval, setFruitInterval] = useState(3)
+  const [currentFruit, setCurrentFruit] = useState(() => getRandomFruit())
+
   // Refs para acceso síncrono libre de stale-closures en bucles de animación o intervalos
   const stimulusTypeRef = useRef(stimulusType)
   const colorIntervalRef = useRef(colorInterval)
@@ -46,6 +52,8 @@ export function useStimulusManager(initialType = 'classic') {
   const currentWordRef = useRef(currentWord)
   const animalIntervalRef = useRef(animalInterval)
   const currentAnimalRef = useRef(currentAnimal)
+  const fruitIntervalRef = useRef(fruitInterval)
+  const currentFruitRef = useRef(currentFruit)
 
   useEffect(() => {
     stimulusTypeRef.current = stimulusType
@@ -58,6 +66,8 @@ export function useStimulusManager(initialType = 'classic') {
     currentWordRef.current = currentWord
     animalIntervalRef.current = animalInterval
     currentAnimalRef.current = currentAnimal
+    fruitIntervalRef.current = fruitInterval
+    currentFruitRef.current = currentFruit
   }, [
     stimulusType,
     colorInterval,
@@ -69,6 +79,8 @@ export function useStimulusManager(initialType = 'classic') {
     currentWord,
     animalInterval,
     currentAnimal,
+    fruitInterval,
+    currentFruit,
   ])
 
   // Generar siguiente elemento según el estímulo activo evitando repeticiones
@@ -103,6 +115,13 @@ export function useStimulusManager(initialType = 'classic') {
       return next
     }
 
+    if (type === 'fruits') {
+      const next = getRandomFruit(currentFruitRef.current)
+      currentFruitRef.current = next
+      setCurrentFruit(next)
+      return next
+    }
+
     return null
   }, [])
 
@@ -131,6 +150,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomAnimal()
       currentAnimalRef.current = next
       setCurrentAnimal(next)
+    } else if (newType === 'fruits') {
+      const next = getRandomFruit()
+      currentFruitRef.current = next
+      setCurrentFruit(next)
     }
   }, [])
 
@@ -157,6 +180,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomAnimal(currentAnimalRef.current)
       currentAnimalRef.current = next
       setCurrentAnimal(next)
+    } else if (type === 'fruits') {
+      const next = getRandomFruit(currentFruitRef.current)
+      currentFruitRef.current = next
+      setCurrentFruit(next)
     }
   }, [])
 
@@ -199,6 +226,14 @@ export function useStimulusManager(initialType = 'classic') {
     animalInterval,
     setAnimalInterval,
 
+    // Frutas
+    currentFruit,
+    setCurrentFruit,
+    fruitSize,
+    setFruitSize,
+    fruitInterval,
+    setFruitInterval,
+
     // Refs para animaciones y timers
     refs: {
       stimulusTypeRef,
@@ -211,6 +246,8 @@ export function useStimulusManager(initialType = 'classic') {
       currentWordRef,
       animalIntervalRef,
       currentAnimalRef,
+      fruitIntervalRef,
+      currentFruitRef,
     },
   }
 }

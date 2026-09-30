@@ -14,6 +14,7 @@ export const STIMULUS_TYPES = {
   LETTERS: 'letters',
   WORDS: 'words',
   ANIMALS: 'animals',
+  FRUITS: 'fruits',
 }
 
 export const STIMULUS_OPTIONS = [
@@ -46,6 +47,12 @@ export const STIMULUS_OPTIONS = [
     label: 'Animales',
     iconType: 'animals',
     description: 'Animales ilustrados aleatorios',
+  },
+  {
+    value: 'fruits',
+    label: 'Frutas',
+    iconType: 'fruits',
+    description: 'Frutas ilustradas aleatorias',
   },
 ]
 
@@ -86,6 +93,8 @@ export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
   return pool[idx]
 }
 
+export * from './illustrations'
 export * from './letters'
 export * from './words'
 export * from './animals'
+export * from './fruits'

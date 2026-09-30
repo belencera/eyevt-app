@@ -49,6 +49,7 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
 | **Letras** | Letras sueltas del abecedario español en mayúsculas (con Ñ) | Tamaño (Pequeña 28px, Mediana 44px, Grande 64px, Muy grande 88px) e intervalo |
 | **Palabras** | Bancos de 96 palabras cotidianas por longitud en mayúsculas | **Tamaño** (Pequeña 26px, Mediana 38px, Grande 54px, Muy grande 74px), **Longitud** (3, 4, 5, 6 letras o Mixto) e intervalo |
 | **Animales** | 28 ilustraciones vectoriales de alta definición | **Tamaño** (Pequeño 48px, Mediano 72px, Grande 96px, Muy grande 124px) e intervalo |
+| **Frutas** | 12 ilustraciones vectoriales en formato SVG | **Tamaño** (Pequeño 48px, Mediano 72px, Grande 96px, Muy grande 124px) e intervalo |
 
 > **Nota de diseño visual:** Las letras y palabras flotan limpias sobre el fondo oscuro sin cajas, bordes ni neón perimetral, favoreciendo la legibilidad sin distracciones lumínicas.
 
@@ -60,7 +61,7 @@ Tanto en *Seguimientos* como en *Sacádicos*, la interfaz incluye un indicador e
 - Nombre del color activo.
 - Letra mayúscula activa.
 - Palabra exacta en visualización.
-- Nombre y miniatura del animal actual.
+- Nombre y miniatura del animal o fruta actual.
 
 ---
 
@@ -76,9 +77,9 @@ eyevt/
 │   ├── games/
 │   │   ├── _shared/              # Módulo compartido de ejercicios
 │   │   │   ├── components/       # Layouts y controles (GameShell, OptionPicker, StimulusGrid, TherapistBadge)
-│   │   │   ├── data/             # Bancos de palabras, alfabeto, animales y constantes
+│   │   │   ├── data/             # Bancos de palabras, alfabeto, animales, frutas y constantes
 │   │   │   ├── hooks/            # useGameSession y useStimulusManager
-│   │   │   ├── stimuli/          # Componentes de renderizado de estímulos (Dot, Letter, Word, Animal)
+│   │   │   ├── stimuli/          # Componentes de renderizado (Dot, Letter, Word, Animal, Fruit, Illustration)
 │   │   │   ├── utils/            # formatTime, iconos SVG
 │   │   │   └── index.js          # Barril de exportación central
 │   │   ├── eye-tracking/         # Juego de seguimientos
@@ -87,7 +88,8 @@ eyevt/
 │   ├── layout.js                 # Layout raíz Next.js
 │   └── page.js                   # Landing page con selector de ejercicios
 └── public/
-    └── animals/                  # Catálogo de 28 imágenes de animales en alta resolución
+    ├── animals/                  # Catálogo de 28 imágenes de animales en alta resolución
+    └── fruits/                   # Directorio para subir las ilustraciones de frutas (SVG / PNG)
 ```
 
 ---

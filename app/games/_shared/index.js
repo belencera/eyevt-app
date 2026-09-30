@@ -14,12 +14,14 @@ export { StimulusDot } from './stimuli/StimulusDot'
 export { StimulusLetter } from './stimuli/StimulusLetter'
 export { StimulusWord } from './stimuli/StimulusWord'
 export { StimulusAnimal } from './stimuli/StimulusAnimal'
+export { StimulusFruit } from './stimuli/StimulusFruit'
+export { StimulusIllustration } from './stimuli/StimulusIllustration'
 
 // Hooks
 export { useGameSession } from './hooks/useGameSession'
 export { useStimulusManager } from './hooks/useStimulusManager'
 
-// Constantes, opciones y catálogos
+// Constantes, opciones y catálogos (incluye animales, frutas, letras, palabras)
 export * from './data/constants'
 
 // Utilidades

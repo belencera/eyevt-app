@@ -2,7 +2,7 @@
 
 import { StimulusLetter } from './StimulusLetter'
 import { StimulusWord } from './StimulusWord'
-import { StimulusAnimal } from './StimulusAnimal'
+import { StimulusIllustration } from './StimulusIllustration'
 
 /**
  * Componente despachador de estímulo visual.
@@ -13,6 +13,7 @@ import { StimulusAnimal } from './StimulusAnimal'
  * - Letras sueltas en mayúscula con selección de tamaño ('letters')
  * - Palabras de 3 a 6 letras en mayúscula con selección de tamaño ('words')
  * - Animales ilustrados con selección de tamaño ('animals')
+ * - Frutas ilustradas con selección de tamaño ('fruits')
  */
 export function StimulusDot({
   position,
@@ -23,6 +24,8 @@ export function StimulusDot({
   wordSize = 'md',
   animal,
   animalSize = 'md',
+  fruit,
+  fruitSize = 'md',
   isPaused = false,
   stimulusType = 'colors',
 }) {
@@ -50,11 +53,24 @@ export function StimulusDot({
 
   if (stimulusType === 'animals') {
     return (
-      <StimulusAnimal
+      <StimulusIllustration
         position={position}
-        animal={animal}
+        item={animal}
         size={animalSize}
         isPaused={isPaused}
+        category="animals"
+      />
+    )
+  }
+
+  if (stimulusType === 'fruits') {
+    return (
+      <StimulusIllustration
+        position={position}
+        item={fruit}
+        size={fruitSize}
+        isPaused={isPaused}
+        category="fruits"
       />
     )
   }

@@ -17,6 +17,8 @@ import {
   WORD_INTERVAL_OPTIONS,
   ANIMAL_SIZE_OPTIONS,
   ANIMAL_INTERVAL_OPTIONS,
+  FRUIT_SIZE_OPTIONS,
+  FRUIT_INTERVAL_OPTIONS,
   getRandomWord,
 } from '../_shared'
 
@@ -46,6 +48,7 @@ function setVelocityMagnitude(vel, speed) {
 
 const HINTS = {
   animals: 'Sigue al animal y nómbralo en voz alta',
+  fruits: 'Sigue la fruta y nómbrala en voz alta',
   words: 'Sigue la palabra y léela en voz alta',
   letters: 'Sigue la letra y dila en voz alta',
   colors: 'Sigue el punto y di el color en voz alta',
@@ -130,6 +133,8 @@ export default function EyeTrackingGame() {
         targetInterval = stim.refs.wordIntervalRef.current
       } else if (type === 'animals') {
         targetInterval = stim.refs.animalIntervalRef.current
+      } else if (type === 'fruits') {
+        targetInterval = stim.refs.fruitIntervalRef.current
       }
 
       if (targetInterval) {
@@ -259,6 +264,27 @@ export default function EyeTrackingGame() {
             </>
           )}
 
+          {stimulus.stimulusType === 'fruits' && (
+            <>
+              <OptionPicker
+                id="fruit-size"
+                label="Tamaño de fruta"
+                value={stimulus.fruitSize}
+                options={FRUIT_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setFruitSize}
+              />
+              <OptionPicker
+                id="fruit-interval"
+                label="Cambio de fruta"
+                value={stimulus.fruitInterval}
+                options={FRUIT_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={stimulus.setFruitInterval}
+              />
+            </>
+          )}
+
           {session.started && (
             <TherapistBadge
               stimulusType={stimulus.stimulusType}
@@ -266,6 +292,7 @@ export default function EyeTrackingGame() {
               letter={stimulus.currentLetter}
               word={stimulus.currentWord}
               animal={stimulus.currentAnimal}
+              fruit={stimulus.currentFruit}
             />
           )}
         </>
@@ -281,6 +308,8 @@ export default function EyeTrackingGame() {
           wordSize={stimulus.wordSize}
           animal={stimulus.currentAnimal}
           animalSize={stimulus.animalSize}
+          fruit={stimulus.currentFruit}
+          fruitSize={stimulus.fruitSize}
           isPaused={session.isPaused}
           stimulusType={stimulus.stimulusType}
         />

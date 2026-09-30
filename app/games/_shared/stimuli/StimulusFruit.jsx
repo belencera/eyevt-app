@@ -3,22 +3,22 @@
 import { StimulusIllustration } from './StimulusIllustration'
 
 /**
- * Componente modular para renderizar el estímulo de animal ilustrado.
+ * Componente modular para renderizar el estímulo de fruta ilustrada.
  * Reutiliza la lógica unificada de StimulusIllustration.
  */
-export function StimulusAnimal({
-  animal,
+export function StimulusFruit({
+  fruit,
   size = 'md',
   position,
   isPaused = false,
 }) {
   return (
     <StimulusIllustration
-      item={animal}
+      item={fruit}
       size={size}
       position={position}
       isPaused={isPaused}
-      category="animals"
+      category="fruits"
     />
   )
 }

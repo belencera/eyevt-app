@@ -10,6 +10,7 @@ export function TherapistBadge({
   letter,
   word,
   animal,
+  fruit,
 }) {
   if (stimulusType === 'colors' && color) {
     return (
@@ -56,12 +57,39 @@ export function TherapistBadge({
       <div className="therapistFeedback">
         <span className="therapistFeedbackLabel">Animal actual</span>
         <div className="therapistAnimalBadge">
-          <img
-            src={animal.src}
-            alt={animal.name}
-            className="therapistAnimalThumb"
-          />
+          {animal.src ? (
+            <img
+              src={animal.src}
+              alt={animal.name}
+              className="therapistAnimalThumb"
+            />
+          ) : (
+            <span>🦁</span>
+          )}
           <span className="therapistAnimalName">{animal.name}</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (stimulusType === 'fruits' && fruit) {
+    return (
+      <div className="therapistFeedback">
+        <span className="therapistFeedbackLabel">Fruta actual</span>
+        <div className="therapistAnimalBadge therapistFruitBadge">
+          {fruit.src ? (
+            <img
+              src={fruit.src}
+              alt={fruit.name}
+              className="therapistAnimalThumb"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none'
+              }}
+            />
+          ) : (
+            <span>🍓</span>
+          )}
+          <span className="therapistAnimalName">{fruit.name}</span>
         </div>
       </div>
     )

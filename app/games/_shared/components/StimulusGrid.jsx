@@ -13,7 +13,9 @@ function StimulusIcon({ type }) {
     case 'words':
       return <span className="stimulusIconWords" aria-hidden>ABC</span>
     case 'animals':
-      return <span className="stimulusIconAnimals" aria-hidden>🐾</span>
+      return <span className="stimulusIconAnimals" aria-hidden>🦁</span>
+    case 'fruits':
+      return <span className="stimulusIconFruits" aria-hidden>🍓</span>
     default:
       return null
   }
