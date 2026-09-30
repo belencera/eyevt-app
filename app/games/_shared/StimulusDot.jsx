@@ -2,6 +2,7 @@
 
 import { StimulusLetter } from './StimulusLetter'
 import { StimulusWord } from './StimulusWord'
+import { StimulusAnimal } from './StimulusAnimal'
 
 /**
  * Componente de estímulo visual.
@@ -11,7 +12,7 @@ import { StimulusWord } from './StimulusWord'
  * - Punto dinámico de colores
  * - Letras sueltas en mayúscula con selección de tamaño
  * - Palabras de 3 a 6 letras en mayúscula
- * Diseñado para extenderse fácilmente a animales, etc.
+ * - Animales ilustrados con selección de tamaño
  */
 export function StimulusDot({
   position,
@@ -19,6 +20,8 @@ export function StimulusDot({
   letter = 'A',
   letterSize = 'md',
   word = 'SOL',
+  animal,
+  animalSize = 'md',
   isPaused = false,
   stimulusType = 'colors',
 }) {
@@ -38,6 +41,17 @@ export function StimulusDot({
       <StimulusWord
         position={position}
         word={word}
+        isPaused={isPaused}
+      />
+    )
+  }
+
+  if (stimulusType === 'animals') {
+    return (
+      <StimulusAnimal
+        position={position}
+        animal={animal}
+        size={animalSize}
         isPaused={isPaused}
       />
     )

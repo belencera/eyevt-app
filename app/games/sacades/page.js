@@ -12,6 +12,8 @@ import {
   getRandomLetter,
   WORD_LENGTH_OPTIONS,
   getRandomWord,
+  ANIMAL_SIZE_OPTIONS,
+  getRandomAnimal,
 } from '../_shared/constants'
 
 const MIN = 2
@@ -38,11 +40,14 @@ export default function SacadesGame() {
   const [currentLetter, setCurrentLetter] = useState('A')
   const [wordLength, setWordLength] = useState(4)
   const [currentWord, setCurrentWord] = useState('CASA')
+  const [animalSize, setAnimalSize] = useState('md')
+  const [currentAnimal, setCurrentAnimal] = useState(() => getRandomAnimal())
 
   const intervalRef = useRef(null)
   const currentColorRef = useRef(currentColor)
   const currentLetterRef = useRef(currentLetter)
   const currentWordRef = useRef(currentWord)
+  const currentAnimalRef = useRef(currentAnimal)
   const stimulusTypeRef = useRef(stimulusType)
   const wordLengthRef = useRef(wordLength)
 
@@ -51,8 +56,9 @@ export default function SacadesGame() {
     currentColorRef.current = currentColor
     currentLetterRef.current = currentLetter
     currentWordRef.current = currentWord
+    currentAnimalRef.current = currentAnimal
     wordLengthRef.current = wordLength
-  }, [stimulusType, currentColor, currentLetter, currentWord, wordLength])
+  }, [stimulusType, currentColor, currentLetter, currentWord, currentAnimal, wordLength])
 
   const clearJumpInterval = () => {
     if (intervalRef.current) {
@@ -64,7 +70,7 @@ export default function SacadesGame() {
   const jumpToRandom = () => {
     setPosition(randomPosition())
 
-    // En sacádicos, cada vez que cambia de posición sale un color, letra o palabra aleatoria
+    // En sacádicos, cada vez que cambia de posición sale un color, letra, palabra o animal aleatorio
     if (stimulusTypeRef.current === 'colors') {
       const nextColor = getRandomColor(currentColorRef.current)
       currentColorRef.current = nextColor
@@ -77,6 +83,10 @@ export default function SacadesGame() {
       const nextWord = getRandomWord(wordLengthRef.current, currentWordRef.current)
       currentWordRef.current = nextWord
       setCurrentWord(nextWord)
+    } else if (stimulusTypeRef.current === 'animals') {
+      const nextAnimal = getRandomAnimal(currentAnimalRef.current)
+      currentAnimalRef.current = nextAnimal
+      setCurrentAnimal(nextAnimal)
     }
   }
 
@@ -109,6 +119,13 @@ export default function SacadesGame() {
     currentWordRef.current = initWord
     setCurrentWord(initWord)
 
+    const initAnimal =
+      stimulusType === 'animals'
+        ? getRandomAnimal(currentAnimalRef.current)
+        : currentAnimalRef.current
+    currentAnimalRef.current = initAnimal
+    setCurrentAnimal(initAnimal)
+
     setPosition({ x: 50, y: 50 })
   }
 
@@ -126,6 +143,10 @@ export default function SacadesGame() {
       const nextWord = getRandomWord(wordLength)
       currentWordRef.current = nextWord
       setCurrentWord(nextWord)
+    } else if (type === 'animals') {
+      const nextAnimal = getRandomAnimal()
+      currentAnimalRef.current = nextAnimal
+      setCurrentAnimal(nextAnimal)
     }
   }
 
@@ -148,7 +169,9 @@ export default function SacadesGame() {
     <GameShell
       title="Sacádicos"
       hint={
-        stimulusType === 'words'
+        stimulusType === 'animals'
+          ? 'Salta la mirada y nombra al animal en voz alta'
+          : stimulusType === 'words'
           ? 'Salta la mirada y lee la palabra en voz alta'
           : stimulusType === 'letters'
           ? 'Salta la mirada y di la letra en voz alta'
@@ -199,6 +222,17 @@ export default function SacadesGame() {
             />
           )}
 
+          {stimulusType === 'animals' && (
+            <OptionPicker
+              id="sacade-animal-size"
+              label="Tamaño de animal"
+              value={animalSize}
+              options={ANIMAL_SIZE_OPTIONS}
+              disabled={!session.isIdle}
+              onChange={setAnimalSize}
+            />
+          )}
+
           {session.started && stimulusType === 'colors' && (
             <div className="therapistFeedback">
               <span className="therapistFeedbackLabel">Color actual</span>
@@ -232,6 +266,22 @@ export default function SacadesGame() {
               </div>
             </div>
           )}
+
+          {session.started && stimulusType === 'animals' && (
+            <div className="therapistFeedback">
+              <span className="therapistFeedbackLabel">Animal actual</span>
+              <div className="therapistAnimalBadge">
+                {currentAnimal && (
+                  <img
+                    src={currentAnimal.src}
+                    alt={currentAnimal.name}
+                    className="therapistAnimalThumb"
+                  />
+                )}
+                <span className="therapistAnimalName">{currentAnimal?.name}</span>
+              </div>
+            </div>
+          )}
         </>
       }
     >
@@ -242,6 +292,8 @@ export default function SacadesGame() {
           letter={currentLetter}
           letterSize={letterSize}
           word={currentWord}
+          animal={currentAnimal}
+          animalSize={animalSize}
           isPaused={session.isPaused}
           stimulusType={stimulusType}
         />

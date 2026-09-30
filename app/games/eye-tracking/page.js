@@ -15,6 +15,9 @@ import {
   WORD_LENGTH_OPTIONS,
   WORD_INTERVAL_OPTIONS,
   getRandomWord,
+  ANIMAL_SIZE_OPTIONS,
+  ANIMAL_INTERVAL_OPTIONS,
+  getRandomAnimal,
 } from '../_shared/constants'
 
 const MIN = 2
@@ -53,20 +56,26 @@ export default function EyeTrackingGame() {
   const [wordLength, setWordLength] = useState(4)
   const [wordInterval, setWordInterval] = useState(3)
   const [currentWord, setCurrentWord] = useState('CASA')
+  const [animalSize, setAnimalSize] = useState('md')
+  const [animalInterval, setAnimalInterval] = useState(3)
+  const [currentAnimal, setCurrentAnimal] = useState(() => getRandomAnimal())
 
   const positionRef = useRef({ x: 50, y: 50 })
   const velocityRef = useRef(randomVelocity(28))
   const colorTimerRef = useRef(0)
   const letterTimerRef = useRef(0)
   const wordTimerRef = useRef(0)
+  const animalTimerRef = useRef(0)
   const currentColorRef = useRef(currentColor)
   const currentLetterRef = useRef(currentLetter)
   const currentWordRef = useRef(currentWord)
+  const currentAnimalRef = useRef(currentAnimal)
   const stimulusTypeRef = useRef(stimulusType)
   const colorIntervalRef = useRef(colorInterval)
   const letterIntervalRef = useRef(letterInterval)
   const wordIntervalRef = useRef(wordInterval)
   const wordLengthRef = useRef(wordLength)
+  const animalIntervalRef = useRef(animalInterval)
 
   useEffect(() => {
     stimulusTypeRef.current = stimulusType
@@ -77,6 +86,8 @@ export default function EyeTrackingGame() {
     wordIntervalRef.current = wordInterval
     wordLengthRef.current = wordLength
     currentWordRef.current = currentWord
+    animalIntervalRef.current = animalInterval
+    currentAnimalRef.current = currentAnimal
   }, [
     stimulusType,
     colorInterval,
@@ -86,6 +97,8 @@ export default function EyeTrackingGame() {
     wordInterval,
     wordLength,
     currentWord,
+    animalInterval,
+    currentAnimal,
   ])
 
   const resetBall = () => {
@@ -94,6 +107,7 @@ export default function EyeTrackingGame() {
     colorTimerRef.current = 0
     letterTimerRef.current = 0
     wordTimerRef.current = 0
+    animalTimerRef.current = 0
 
     const nextColor =
       stimulusType === 'colors'
@@ -110,9 +124,15 @@ export default function EyeTrackingGame() {
         ? getRandomWord(wordLengthRef.current, currentWordRef.current)
         : currentWordRef.current
 
+    const nextAnimal =
+      stimulusType === 'animals'
+        ? getRandomAnimal(currentAnimalRef.current)
+        : currentAnimalRef.current
+
     setCurrentColor(nextColor)
     setCurrentLetter(nextLetter)
     setCurrentWord(nextWord)
+    setCurrentAnimal(nextAnimal)
     setPosition({ x: 50, y: 50 })
   }
 
@@ -136,6 +156,8 @@ export default function EyeTrackingGame() {
       setCurrentLetter(getRandomLetter())
     } else if (type === 'words') {
       setCurrentWord(getRandomWord(wordLength))
+    } else if (type === 'animals') {
+      setCurrentAnimal(getRandomAnimal())
     }
   }
 
@@ -194,6 +216,16 @@ export default function EyeTrackingGame() {
         }
       }
 
+      // En modo animales, cambiar el animal periódicamente
+      if (stimulusTypeRef.current === 'animals') {
+        animalTimerRef.current += dt
+        if (animalTimerRef.current >= animalIntervalRef.current) {
+          animalTimerRef.current = 0
+          const nextAnimal = getRandomAnimal(currentAnimalRef.current)
+          setCurrentAnimal(nextAnimal)
+        }
+      }
+
       setPosition({ x: pos.x, y: pos.y })
       frameId = requestAnimationFrame(tick)
     }
@@ -209,7 +241,9 @@ export default function EyeTrackingGame() {
     <GameShell
       title="Seguimientos"
       hint={
-        stimulusType === 'words'
+        stimulusType === 'animals'
+          ? 'Sigue al animal y nómbralo en voz alta'
+          : stimulusType === 'words'
           ? 'Sigue la palabra y léela en voz alta'
           : stimulusType === 'letters'
           ? 'Sigue la letra y dila en voz alta'
@@ -291,6 +325,27 @@ export default function EyeTrackingGame() {
             </>
           )}
 
+          {stimulusType === 'animals' && (
+            <>
+              <OptionPicker
+                id="animal-size"
+                label="Tamaño de animal"
+                value={animalSize}
+                options={ANIMAL_SIZE_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={setAnimalSize}
+              />
+              <OptionPicker
+                id="animal-interval"
+                label="Cambio de animal"
+                value={animalInterval}
+                options={ANIMAL_INTERVAL_OPTIONS}
+                disabled={!session.isIdle}
+                onChange={setAnimalInterval}
+              />
+            </>
+          )}
+
           {session.started && stimulusType === 'colors' && (
             <div className="therapistFeedback">
               <span className="therapistFeedbackLabel">Color actual</span>
@@ -324,6 +379,22 @@ export default function EyeTrackingGame() {
               </div>
             </div>
           )}
+
+          {session.started && stimulusType === 'animals' && (
+            <div className="therapistFeedback">
+              <span className="therapistFeedbackLabel">Animal actual</span>
+              <div className="therapistAnimalBadge">
+                {currentAnimal && (
+                  <img
+                    src={currentAnimal.src}
+                    alt={currentAnimal.name}
+                    className="therapistAnimalThumb"
+                  />
+                )}
+                <span className="therapistAnimalName">{currentAnimal?.name}</span>
+              </div>
+            </div>
+          )}
         </>
       }
     >
@@ -334,6 +405,8 @@ export default function EyeTrackingGame() {
           letter={currentLetter}
           letterSize={letterSize}
           word={currentWord}
+          animal={currentAnimal}
+          animalSize={animalSize}
           isPaused={session.isPaused}
           stimulusType={stimulusType}
         />

@@ -45,8 +45,7 @@ export const STIMULUS_OPTIONS = [
     value: 'animals',
     label: 'Animales',
     iconType: 'animals',
-    disabled: true,
-    badge: 'Pronto',
+    description: 'Animales ilustrados aleatorios',
   },
 ]
 
@@ -89,3 +88,4 @@ export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
 
 export * from './letters'
 export * from './words'
+export * from './animals'
