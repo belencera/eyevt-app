@@ -292,21 +292,8 @@ export default function PeripheryGame() {
               {/* Estímulo central cambiante en el centro exacto (50%, 50%) para nombrar en alto */}
               <StimulusDot
                 position={{ x: 50, y: 50 }}
-                color={stimulus.currentColor}
-                letter={stimulus.currentLetter}
-                letterSize={stimulus.letterSize}
-                word={stimulus.currentWord}
-                wordSize={stimulus.wordSize}
-                number={stimulus.currentNumber}
-                numberSize={stimulus.numberSize}
-                arrow={stimulus.currentArrow}
-                arrowSize={stimulus.arrowSize}
-                animal={stimulus.currentAnimal}
-                animalSize={stimulus.animalSize}
-                fruit={stimulus.currentFruit}
-                fruitSize={stimulus.fruitSize}
+                stimulus={stimulus}
                 isPaused={session.isPaused}
-                stimulusType={stimulus.stimulusType}
               />
 
               {/* Punto táctil periférico interactivo: SOLO se mueve cuando el paciente lo pulsa */}
@@ -350,21 +337,8 @@ export default function PeripheryGame() {
               {/* Estímulo rotatorio en la periferia para identificar con visión periférica */}
               <StimulusDot
                 position={peripheralPos}
-                color={stimulus.currentColor}
-                letter={stimulus.currentLetter}
-                letterSize={stimulus.letterSize}
-                word={stimulus.currentWord}
-                wordSize={stimulus.wordSize}
-                number={stimulus.currentNumber}
-                numberSize={stimulus.numberSize}
-                arrow={stimulus.currentArrow}
-                arrowSize={stimulus.arrowSize}
-                animal={stimulus.currentAnimal}
-                animalSize={stimulus.animalSize}
-                fruit={stimulus.currentFruit}
-                fruitSize={stimulus.fruitSize}
+                stimulus={stimulus}
                 isPaused={session.isPaused}
-                stimulusType={stimulus.stimulusType}
               />
             </>
           )}

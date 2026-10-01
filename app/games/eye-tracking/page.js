@@ -182,21 +182,8 @@ export default function EyeTrackingGame() {
       {showDot && (
         <StimulusDot
           position={position}
-          color={stimulus.currentColor}
-          letter={stimulus.currentLetter}
-          letterSize={stimulus.letterSize}
-          word={stimulus.currentWord}
-          wordSize={stimulus.wordSize}
-          number={stimulus.currentNumber}
-          numberSize={stimulus.numberSize}
-          arrow={stimulus.currentArrow}
-          arrowSize={stimulus.arrowSize}
-          animal={stimulus.currentAnimal}
-          animalSize={stimulus.animalSize}
-          fruit={stimulus.currentFruit}
-          fruitSize={stimulus.fruitSize}
+          stimulus={stimulus}
           isPaused={session.isPaused}
-          stimulusType={stimulus.stimulusType}
         />
       )}
     </GameShell>
