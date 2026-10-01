@@ -1,6 +1,6 @@
 /**
  * Configuración y catálogo modular de frutas para terapia visual.
- * 12 ilustraciones vectoriales en formato SVG alojadas en /fruits/.
+ * 11 ilustraciones vectoriales en formato SVG alojadas en /fruits/.
  */
 
 import {
@@ -13,18 +13,17 @@ export const FRUIT_SIZE_OPTIONS = ILLUSTRATION_SIZE_OPTIONS
 export const FRUIT_INTERVAL_OPTIONS = ILLUSTRATION_INTERVAL_OPTIONS
 
 export const FRUITS_LIST = [
-  { id: 'uvas', name: 'Uvas', src: '/fruits/1F347.svg' },
-  { id: 'sandia', name: 'Sandía', src: '/fruits/1F349.svg' },
-  { id: 'naranja', name: 'Naranja', src: '/fruits/1F34A.svg' },
-  { id: 'limon', name: 'Limón', src: '/fruits/1F34B.svg' },
-  { id: 'platano', name: 'Plátano', src: '/fruits/1F34C.svg' },
-  { id: 'manzana', name: 'Manzana', src: '/fruits/1F34E.svg' },
-  { id: 'pera', name: 'Pera', src: '/fruits/1F350.svg' },
-  { id: 'cerezas', name: 'Cerezas', src: '/fruits/1F352.svg' },
-  { id: 'fresa', name: 'Fresa', src: '/fruits/1F353.svg' },
-  { id: 'aguacate', name: 'Aguacate', src: '/fruits/1F951.svg' },
-  { id: 'kiwi', name: 'Kiwi', src: '/fruits/1F95D.svg' },
-  { id: 'coco', name: 'Coco', src: '/fruits/1F965.svg' },
+  { id: 'banana', name: 'Plátano', src: '/fruits/banana.svg' },
+  { id: 'cherries', name: 'Cerezas', src: '/fruits/cherries.svg' },
+  { id: 'grapes', name: 'Uvas', src: '/fruits/grapes.svg' },
+  { id: 'kiwi-fruit', name: 'Kiwi', src: '/fruits/kiwi-fruit.svg' },
+  { id: 'lemon', name: 'Limón', src: '/fruits/lemon.svg' },
+  { id: 'pear', name: 'Pera', src: '/fruits/pear.svg' },
+  { id: 'pineapple', name: 'Piña', src: '/fruits/pineapple.svg' },
+  { id: 'red-apple', name: 'Manzana', src: '/fruits/red-apple.svg' },
+  { id: 'strawberry', name: 'Fresa', src: '/fruits/strawberry.svg' },
+  { id: 'tangerine', name: 'Mandarina', src: '/fruits/tangerine.svg' },
+  { id: 'watermelon', name: 'Sandía', src: '/fruits/watermelon.svg' },
 ]
 
 /**

@@ -17,9 +17,31 @@ function StimulusIcon({ type }) {
     case 'arrows':
       return <span className="stimulusIconArrows" aria-hidden>➜</span>
     case 'animals':
-      return <span className="stimulusIconAnimals" aria-hidden>🦁</span>
+      return (
+        <span className="stimulusIconAnimals" aria-hidden>
+          <img
+            src="/animals/lion.svg"
+            alt=""
+            width={22}
+            height={22}
+            className="stimulusIconImg"
+            draggable={false}
+          />
+        </span>
+      )
     case 'fruits':
-      return <span className="stimulusIconFruits" aria-hidden>🍓</span>
+      return (
+        <span className="stimulusIconFruits" aria-hidden>
+          <img
+            src="/fruits/strawberry.svg"
+            alt=""
+            width={22}
+            height={22}
+            className="stimulusIconImg"
+            draggable={false}
+          />
+        </span>
+      )
     default:
       return null
   }

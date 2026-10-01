@@ -26,6 +26,7 @@ export function GameShell({
   speedContent,
   extraControls,
   gameControls,
+  fullWidthDuration = true,
   isFullscreen,
   children,
 }) {
@@ -104,6 +105,34 @@ export function GameShell({
             )}
           </div>
 
+          {/* Tarjeta: Duración */}
+          <div
+            className={`dashCard dashCardDuration ${!hasSpeedCard && fullWidthDuration ? 'dashCardFull' : ''}`}
+          >
+            <div className="dashCardHead">
+              <span className="dashCardLabel">Duración</span>
+              <span className="dashCardSub">Tiempo total</span>
+            </div>
+            <div className="durationRow">
+              {DURATION_OPTIONS.map((opt) => {
+                const isSelected = opt.value === durationSetting
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={isSelected}
+                    className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+                    disabled={!isIdle}
+                    onClick={() => setDurationSetting(opt.value)}
+                  >
+                    {opt.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           {/* Tarjeta: Velocidad / Cadencia */}
           {hasSpeedCard && (
             <div className="dashCard dashCardSpeed">
@@ -138,34 +167,6 @@ export function GameShell({
               )}
             </div>
           )}
-
-          {/* Tarjeta: Duración */}
-          <div
-            className={`dashCard dashCardDuration ${!hasSpeedCard ? 'dashCardFull' : ''}`}
-          >
-            <div className="dashCardHead">
-              <span className="dashCardLabel">Duración</span>
-              <span className="dashCardSub">Tiempo total</span>
-            </div>
-            <div className="durationRow">
-              {DURATION_OPTIONS.map((opt) => {
-                const isSelected = opt.value === durationSetting
-                return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={isSelected}
-                    className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
-                    disabled={!isIdle}
-                    onClick={() => setDurationSetting(opt.value)}
-                  >
-                    {opt.label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
         </div>
 
         {/* Barra de acciones inferior */}
