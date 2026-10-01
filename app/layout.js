@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "EYEVT",
-  description: "Eye Visual Therapy",
+  description: "Eye Visual Training",
 };
 
 export default function RootLayout({ children }) {

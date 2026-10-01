@@ -177,3 +177,187 @@
     transform: scale(0.8);
   }
 }
+
+/* =========================================
+   ELEMENTOS ÓPTICOS COMUNES DE BINOCULARIDAD (Estilo fino)
+   ========================================= */
+.optic-eye {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.25));
+}
+
+/* =========================================
+   4. CONVERGENCIA PREVIEW (Estilo fino)
+   ========================================= */
+.conv-ray {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.45));
+}
+
+.conv-ray-left {
+  transform-origin: 76px 60px;
+  animation: convRayLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.conv-ray-right {
+  transform-origin: 124px 60px;
+  animation: convRayRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes convRayLeft {
+  0% { transform: rotate(-44deg); }
+  68%, 76% { transform: rotate(0deg); }
+  84%, 100% { transform: rotate(-44deg); }
+}
+
+@keyframes convRayRight {
+  0% { transform: rotate(44deg); }
+  68%, 76% { transform: rotate(0deg); }
+  84%, 100% { transform: rotate(44deg); }
+}
+
+.conv-pupil-left {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: convPupilLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.conv-pupil-right {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: convPupilRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes convPupilLeft {
+  0% { transform: translateX(0); }
+  68%, 76% { transform: translateX(2px); }
+  84%, 100% { transform: translateX(0); }
+}
+
+@keyframes convPupilRight {
+  0% { transform: translateX(0); }
+  68%, 76% { transform: translateX(-2px); }
+  84%, 100% { transform: translateX(0); }
+}
+
+/* =========================================
+   5. DIVERGENCIA PREVIEW (De dentro hacia fuera)
+   ========================================= */
+.div-ray {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.45));
+}
+
+.div-ray-left {
+  transform-origin: 76px 60px;
+  animation: divRayLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.div-ray-right {
+  transform-origin: 124px 60px;
+  animation: divRayRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes divRayLeft {
+  0%, 8% { transform: rotate(0deg); }
+  68%, 76% { transform: rotate(-44deg); }
+  84%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes divRayRight {
+  0%, 8% { transform: rotate(0deg); }
+  68%, 76% { transform: rotate(44deg); }
+  84%, 100% { transform: rotate(0deg); }
+}
+
+.div-pupil-left {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: divPupilLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.div-pupil-right {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: divPupilRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes divPupilLeft {
+  0%, 8% { transform: translateX(1.5px); }
+  68%, 76% { transform: translateX(-2px); }
+  84%, 100% { transform: translateX(1.5px); }
+}
+
+@keyframes divPupilRight {
+  0%, 8% { transform: translateX(-1.5px); }
+  68%, 76% { transform: translateX(2px); }
+  84%, 100% { transform: translateX(-1.5px); }
+}
+
+/* =========================================
+   6. FLEXIBILIDAD PREVIEW (Estilo fino oscilante)
+   ========================================= */
+.flex-ray {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.45));
+}
+
+.flex-ray-left {
+  transform-origin: 76px 60px;
+  animation: flexRayLeft 4.4s ease-in-out infinite;
+}
+
+.flex-ray-right {
+  transform-origin: 124px 60px;
+  animation: flexRayRight 4.4s ease-in-out infinite;
+}
+
+@keyframes flexRayLeft {
+  0%, 100% { transform: rotate(22deg); }
+  50% { transform: rotate(-22deg); }
+}
+
+@keyframes flexRayRight {
+  0%, 100% { transform: rotate(-22deg); }
+  50% { transform: rotate(22deg); }
+}
+
+.flex-pupil-left {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: flexPupilLeft 4.4s ease-in-out infinite;
+}
+
+.flex-pupil-right {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: flexPupilRight 4.4s ease-in-out infinite;
+}
+
+@keyframes flexPupilLeft {
+  0%, 100% { transform: translateX(2px); }
+  50% { transform: translateX(-2px); }
+}
+
+@keyframes flexPupilRight {
+  0%, 100% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+}
+
+/* =========================================
+   7. MEMORIA VISUAL PREVIEW (Secuencia de nodos)
+   ========================================= */
+.memory-node {
+  stroke: rgba(56, 189, 248, 0.4);
+  stroke-width: 1.5;
+  fill: rgba(15, 23, 42, 0.6);
+  transition: all 0.3s ease;
+  animation: memorySequence 4.8s infinite ease-in-out;
+}
+
+.memory-node.node-1 { animation-delay: 0s; }
+.memory-node.node-2 { animation-delay: 1.2s; }
+.memory-node.node-3 { animation-delay: 2.4s; }
+.memory-node.node-4 { animation-delay: 3.6s; }
+
+@keyframes memorySequence {
+  0%, 15% {
+    fill: #38bdf8;
+    filter: drop-shadow(0 0 6px #38bdf8);
+  }
+  30%, 100% {
+    fill: rgba(15, 23, 42, 0.6);
+    filter: none;
+  }
+}
+
