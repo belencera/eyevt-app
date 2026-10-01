@@ -135,6 +135,61 @@ export const STIMULI_PAIRS = [
       </div>
     ),
   },
+  {
+    id: 'monkey-banana',
+    name: 'Mono · Plátano',
+    category: 'fusion-plana',
+    renderLeft: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/monkey.svg"
+          alt="Mono"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(180, 110, 60, 0.45))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderRight: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/banana.svg"
+          alt="Plátano"
+          width={Math.round(size * 0.9)}
+          height={Math.round(size * 0.9)}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.5))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderPreview: (size = 46) => (
+      <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/monkey.svg"
+          alt="Mono"
+          width={size}
+          height={size}
+          style={{ position: 'absolute', inset: 0, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(180, 110, 60, 0.4))' }}
+          draggable={false}
+        />
+        <img
+          src="/vergence/banana.svg"
+          alt="Plátano"
+          width={Math.round(size * 0.62)}
+          height={Math.round(size * 0.62)}
+          style={{
+            position: 'absolute',
+            bottom: '2px',
+            left: '2px',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 0 4px rgba(250, 204, 21, 0.6))',
+          }}
+          draggable={false}
+        />
+      </div>
+    ),
+  },
 ]
 
 export const CONVERGENCE_MODES = [
