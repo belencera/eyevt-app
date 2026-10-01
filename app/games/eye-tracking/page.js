@@ -3,28 +3,12 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   GameShell,
-  OptionPicker,
   StimulusDot,
   StimulusGrid,
+  StimulusExtraControls,
+  hasStimulusExtras,
   useGameSession,
   useStimulusManager,
-  COLOR_INTERVAL_OPTIONS,
-  LETTER_SIZE_OPTIONS,
-  LETTER_INTERVAL_OPTIONS,
-  WORD_SIZE_OPTIONS,
-  WORD_LENGTH_OPTIONS,
-  WORD_INTERVAL_OPTIONS,
-  ANIMAL_SIZE_OPTIONS,
-  ANIMAL_INTERVAL_OPTIONS,
-  FRUIT_SIZE_OPTIONS,
-  FRUIT_INTERVAL_OPTIONS,
-  NUMBER_SIZE_OPTIONS,
-  NUMBER_DIGITS_OPTIONS,
-  NUMBER_INTERVAL_OPTIONS,
-  ARROW_SIZE_OPTIONS,
-  ARROW_INTERVAL_OPTIONS,
-  getRandomWord,
-  getRandomNumber,
 } from '../_shared'
 
 const MIN = 2
@@ -166,172 +150,6 @@ export default function EyeTrackingGame() {
 
   const showDot = session.started && (session.isPlaying || session.isPaused)
 
-  const renderExtraControls = () => {
-    switch (stimulus.stimulusType) {
-      case 'colors':
-        return (
-          <OptionPicker
-            id="color-interval"
-            label="Cambio de color"
-            value={stimulus.colorInterval}
-            options={COLOR_INTERVAL_OPTIONS}
-            disabled={!session.isIdle}
-            onChange={stimulus.setColorInterval}
-          />
-        )
-      case 'letters':
-        return (
-          <>
-            <OptionPicker
-              id="letter-size"
-              label="Tamaño de letra"
-              value={stimulus.letterSize}
-              options={LETTER_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setLetterSize}
-            />
-            <OptionPicker
-              id="letter-interval"
-              label="Cambio de letra"
-              value={stimulus.letterInterval}
-              options={LETTER_INTERVAL_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setLetterInterval}
-            />
-          </>
-        )
-      case 'words':
-        return (
-          <>
-            <OptionPicker
-              id="word-size"
-              label="Tamaño de palabra"
-              value={stimulus.wordSize}
-              options={WORD_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setWordSize}
-            />
-            <OptionPicker
-              id="word-length"
-              label="Longitud de palabra"
-              value={stimulus.wordLength}
-              options={WORD_LENGTH_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={(val) => {
-                stimulus.setWordLength(val)
-                stimulus.setCurrentWord(getRandomWord(val))
-              }}
-            />
-            <OptionPicker
-              id="word-interval"
-              label="Cambio de palabra"
-              value={stimulus.wordInterval}
-              options={WORD_INTERVAL_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setWordInterval}
-            />
-          </>
-        )
-      case 'numbers':
-        return (
-          <>
-            <OptionPicker
-              id="number-size"
-              label="Tamaño de número"
-              value={stimulus.numberSize}
-              options={NUMBER_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setNumberSize}
-            />
-            <OptionPicker
-              id="number-digits"
-              label="Cifras de número"
-              value={stimulus.numberDigits}
-              options={NUMBER_DIGITS_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={(val) => {
-                stimulus.setNumberDigits(val)
-                stimulus.setCurrentNumber(getRandomNumber(val))
-              }}
-            />
-            <OptionPicker
-              id="number-interval"
-              label="Cambio de número"
-              value={stimulus.numberInterval}
-              options={NUMBER_INTERVAL_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setNumberInterval}
-            />
-          </>
-        )
-      case 'arrows':
-        return (
-          <>
-            <OptionPicker
-              id="arrow-size"
-              label="Tamaño de flecha"
-              value={stimulus.arrowSize}
-              options={ARROW_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setArrowSize}
-            />
-            <OptionPicker
-              id="arrow-interval"
-              label="Cambio de flecha"
-              value={stimulus.arrowInterval}
-              options={ARROW_INTERVAL_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setArrowInterval}
-            />
-          </>
-        )
-      case 'animals':
-        return (
-          <>
-            <OptionPicker
-              id="animal-size"
-              label="Tamaño de animal"
-              value={stimulus.animalSize}
-              options={ANIMAL_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setAnimalSize}
-            />
-            <OptionPicker
-              id="animal-interval"
-              label="Cambio de animal"
-              value={stimulus.animalInterval}
-              options={ANIMAL_INTERVAL_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setAnimalInterval}
-            />
-          </>
-        )
-      case 'fruits':
-        return (
-          <>
-            <OptionPicker
-              id="fruit-size"
-              label="Tamaño de fruta"
-              value={stimulus.fruitSize}
-              options={FRUIT_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setFruitSize}
-            />
-            <OptionPicker
-              id="fruit-interval"
-              label="Cambio de fruta"
-              value={stimulus.fruitInterval}
-              options={FRUIT_INTERVAL_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setFruitInterval}
-            />
-          </>
-        )
-      default:
-        return null
-    }
-  }
-
   return (
     <GameShell
       title="Seguimientos"
@@ -355,26 +173,17 @@ export default function EyeTrackingGame() {
           }}
         />
       }
-      extraControls={renderExtraControls()}
+      extraControls={
+        hasStimulusExtras(stimulus.stimulusType, true)
+          ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="tracking" showIntervals />
+          : null
+      }
     >
       {showDot && (
         <StimulusDot
           position={position}
-          color={stimulus.currentColor}
-          letter={stimulus.currentLetter}
-          letterSize={stimulus.letterSize}
-          word={stimulus.currentWord}
-          wordSize={stimulus.wordSize}
-          number={stimulus.currentNumber}
-          numberSize={stimulus.numberSize}
-          arrow={stimulus.currentArrow}
-          arrowSize={stimulus.arrowSize}
-          animal={stimulus.currentAnimal}
-          animalSize={stimulus.animalSize}
-          fruit={stimulus.currentFruit}
-          fruitSize={stimulus.fruitSize}
+          stimulus={stimulus}
           isPaused={session.isPaused}
-          stimulusType={stimulus.stimulusType}
         />
       )}
     </GameShell>

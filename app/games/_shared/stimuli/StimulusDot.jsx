@@ -21,6 +21,9 @@ import { StimulusIllustration } from './StimulusIllustration'
  */
 export function StimulusDot({
   position,
+  stimulus,
+  isPaused = false,
+  // Fallbacks retrocompatibles para props individuales
   color,
   letter = 'A',
   letterSize = 'md',
@@ -34,78 +37,92 @@ export function StimulusDot({
   animalSize = 'md',
   fruit,
   fruitSize = 'md',
-  isPaused = false,
   stimulusType = 'colors',
 }) {
-  if (stimulusType === 'letters') {
+  const type = stimulus?.stimulusType ?? stimulusType
+  const activeColor = stimulus?.currentColor ?? color
+  const activeLetter = stimulus?.currentLetter ?? letter
+  const activeLetterSize = stimulus?.letterSize ?? letterSize
+  const activeWord = stimulus?.currentWord ?? word
+  const activeWordSize = stimulus?.wordSize ?? wordSize
+  const activeNumber = stimulus?.currentNumber ?? number
+  const activeNumberSize = stimulus?.numberSize ?? numberSize
+  const activeArrow = stimulus?.currentArrow ?? arrow
+  const activeArrowSize = stimulus?.arrowSize ?? arrowSize
+  const activeAnimal = stimulus?.currentAnimal ?? animal
+  const activeAnimalSize = stimulus?.animalSize ?? animalSize
+  const activeFruit = stimulus?.currentFruit ?? fruit
+  const activeFruitSize = stimulus?.fruitSize ?? fruitSize
+
+  if (type === 'letters') {
     return (
       <StimulusLetter
         position={position}
-        letter={letter}
-        size={letterSize}
+        letter={activeLetter}
+        size={activeLetterSize}
         isPaused={isPaused}
       />
     )
   }
 
-  if (stimulusType === 'words') {
+  if (type === 'words') {
     return (
       <StimulusWord
         position={position}
-        word={word}
-        size={wordSize}
+        word={activeWord}
+        size={activeWordSize}
         isPaused={isPaused}
       />
     )
   }
 
-  if (stimulusType === 'numbers') {
+  if (type === 'numbers') {
     return (
       <StimulusNumber
         position={position}
-        number={number}
-        size={numberSize}
+        number={activeNumber}
+        size={activeNumberSize}
         isPaused={isPaused}
       />
     )
   }
 
-  if (stimulusType === 'arrows') {
+  if (type === 'arrows') {
     return (
       <StimulusArrow
         position={position}
-        arrow={arrow}
-        size={arrowSize}
+        arrow={activeArrow}
+        size={activeArrowSize}
         isPaused={isPaused}
       />
     )
   }
 
-  if (stimulusType === 'animals') {
+  if (type === 'animals') {
     return (
       <StimulusIllustration
         position={position}
-        item={animal}
-        size={animalSize}
+        item={activeAnimal}
+        size={activeAnimalSize}
         isPaused={isPaused}
         category="animals"
       />
     )
   }
 
-  if (stimulusType === 'fruits') {
+  if (type === 'fruits') {
     return (
       <StimulusIllustration
         position={position}
-        item={fruit}
-        size={fruitSize}
+        item={activeFruit}
+        size={activeFruitSize}
         isPaused={isPaused}
         category="fruits"
       />
     )
   }
 
-  const hex = color?.hex || '#38bdf8'
+  const hex = activeColor?.hex || '#38bdf8'
 
   return (
     <div
@@ -118,7 +135,7 @@ export function StimulusDot({
           ? `0 0 16px ${hex}66`
           : `0 0 24px ${hex}, 0 0 48px ${hex}55`,
       }}
-      aria-label={`Estímulo ${color?.name || ''}`}
+      aria-label={`Estímulo ${activeColor?.name || ''}`}
     />
   )
 }
