@@ -58,6 +58,22 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
   - Cadencia de aparición (1 s a 5 s).
   - Duración de sesión y pantalla resumen de resultados al finalizar.
 
+### 5. Convergencia (`/games/convergence`)
+- **Categoría:** Binocularidad
+- **Objetivo:** Control de vergencias frente a estímulos con demanda convergente y control antisupresión.
+
+### 6. Divergencia (`/games/divergence`)
+- **Categoría:** Binocularidad
+- **Objetivo:** Control de vergencias frente a estímulos con diferentes demandas divergentes.
+
+### 7. Flexibilidad (`/games/vergence-flexibility`)
+- **Categoría:** Binocularidad
+- **Objetivo:** Alternancia entre demandas de convergencia y divergencia con distintos niveles de dificultad.
+
+### 8. Memoria visual (`/games/visual-memory`)
+- **Categoría:** Percepción Visual
+- **Objetivo:** Reconocimiento y memorización de distintos patrones visuales fijos.
+
 ---
 
 ## 🎨 Tipos de Estímulos Visuales
@@ -94,6 +110,8 @@ eyevt/
 │   │   ├── Footer.js             # Pie de página responsive
 │   │   ├── GamePreviews.js       # Previsualizaciones animadas SVG/CSS de las tarjetas
 │   │   └── previews.css          # Estilos y keyframes de las previsualizaciones
+│   ├── data/
+│   │   └── categories.js         # Catálogo de categorías clínicas y configuración de ejercicios
 │   ├── games/
 │   │   ├── _shared/              # Módulo compartido de ejercicios clínicos
 │   │   │   ├── components/       # Layout y controles (GameShell, OptionPicker, StimulusGrid, gameShell.css)
@@ -102,10 +120,14 @@ eyevt/
 │   │   │   ├── stimuli/          # Componentes de renderizado de estímulos (Dot, Letter, Word, Number, Arrow, Animal, Fruit, Illustration)
 │   │   │   ├── utils/            # Formateadores (formatTime) e iconos SVG
 │   │   │   └── index.js          # Exportaciones centralizadas de _shared
+│   │   ├── convergence/          # Ejercicio de Convergencia
+│   │   ├── divergence/           # Ejercicio de Divergencia
 │   │   ├── eye-tracking/         # Ejercicio de Seguimientos Oculares
 │   │   ├── fixation/             # Ejercicio de Fijación Central Estable
 │   │   ├── periphery/            # Ejercicio de Campo Visual Periférico
-│   │   └── sacades/              # Ejercicio de Movimientos Sacádicos
+│   │   ├── sacades/              # Ejercicio de Movimientos Sacádicos
+│   │   ├── vergence-flexibility/ # Ejercicio de Flexibilidad de Vergencias
+│   │   └── visual-memory/        # Ejercicio de Memoria Visual
 │   ├── favicon.ico
 │   ├── globals.css               # Estilos globales y tokens de diseño
 │   ├── layout.js                 # Layout raíz de Next.js
