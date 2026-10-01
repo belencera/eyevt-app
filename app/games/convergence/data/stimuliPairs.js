@@ -190,6 +190,169 @@ export const STIMULI_PAIRS = [
       </div>
     ),
   },
+  {
+    id: 'ball-goal',
+    name: 'Balón · Portería',
+    category: 'fusion-plana',
+    renderLeft: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/soccer-ball.svg"
+          alt="Balón"
+          width={Math.round(size * 0.85)}
+          height={Math.round(size * 0.85)}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderRight: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/goal-net.svg"
+          alt="Portería"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(56, 189, 248, 0.4))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderPreview: (size = 46) => (
+      <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/goal-net.svg"
+          alt="Portería"
+          width={size}
+          height={size}
+          style={{ position: 'absolute', inset: 0, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(56, 189, 248, 0.35))' }}
+          draggable={false}
+        />
+        <img
+          src="/vergence/soccer-ball.svg"
+          alt="Balón"
+          width={Math.round(size * 0.58)}
+          height={Math.round(size * 0.58)}
+          style={{
+            position: 'absolute',
+            bottom: '4px',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 0 4px rgba(255, 255, 255, 0.6))',
+          }}
+          draggable={false}
+        />
+      </div>
+    ),
+  },
+  {
+    id: 'car-road',
+    name: 'Coche · Carretera',
+    category: 'fusion-plana',
+    renderLeft: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/automobile.svg"
+          alt="Coche"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(241, 87, 68, 0.45))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderRight: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/motorway.svg"
+          alt="Carretera"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(56, 189, 248, 0.4))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderPreview: (size = 46) => (
+      <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/motorway.svg"
+          alt="Carretera"
+          width={size}
+          height={size}
+          style={{ position: 'absolute', inset: 0, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(56, 189, 248, 0.35))' }}
+          draggable={false}
+        />
+        <img
+          src="/vergence/automobile.svg"
+          alt="Coche"
+          width={Math.round(size * 0.72)}
+          height={Math.round(size * 0.72)}
+          style={{
+            position: 'absolute',
+            bottom: '3px',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 0 4px rgba(241, 87, 68, 0.55))',
+          }}
+          draggable={false}
+        />
+      </div>
+    ),
+  },
+  {
+    id: 'map-magnifier',
+    name: 'Lupa · Mapa',
+    category: 'fusion-plana',
+    renderLeft: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/magnifying-glass-tilted-left.svg"
+          alt="Lupa"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(176, 189, 198, 0.5))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderRight: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/world-map.svg"
+          alt="Mapa"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(0, 192, 207, 0.45))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderPreview: (size = 46) => (
+      <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/world-map.svg"
+          alt="Mapa"
+          width={size}
+          height={size}
+          style={{ position: 'absolute', inset: 0, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(0, 192, 207, 0.35))' }}
+          draggable={false}
+        />
+        <img
+          src="/vergence/magnifying-glass-tilted-left.svg"
+          alt="Lupa"
+          width={Math.round(size * 0.78)}
+          height={Math.round(size * 0.78)}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            margin: 'auto',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 0 4px rgba(176, 189, 198, 0.6))',
+          }}
+          draggable={false}
+        />
+      </div>
+    ),
+  },
 ]
 
 export const CONVERGENCE_MODES = [
