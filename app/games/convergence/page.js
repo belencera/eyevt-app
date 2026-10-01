@@ -20,6 +20,32 @@ import {
 } from './data/stimuliPairs'
 import './convergence.css'
 
+function IconTriangleLeft() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden>
+      <polygon
+        points="16,5 7,12 16,19"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function IconTriangleRight() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden>
+      <polygon
+        points="8,5 17,12 8,19"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 function IconMinus() {
   return (
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
@@ -57,13 +83,23 @@ function IconModeMotion() {
   )
 }
 
+function IconGauge() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3.34 19a10 10 0 1 1 17.32 0" />
+      <path d="m12 14 4-4" />
+      <circle cx="12" cy="14" r="1.5" fill="currentColor" />
+    </svg>
+  )
+}
+
 export default function ConvergenceGame() {
   // ── Estados de Configuración ──
   const [selectedCategory, setSelectedCategory] = useState('fusion-plana')
   const [selectedPairId, setSelectedPairId] = useState('cross')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
   const [initialDistance, setInitialDistance] = useState(140) // px
-  const [speed, setSpeed] = useState(4) // velocidad de alejamiento
+  const [speed, setSpeed] = useState(4) // velocidad de separación progresiva
   const [stimulusSize, setStimulusSize] = useState('md')
 
   // ── Estados de Juego ──
@@ -132,7 +168,7 @@ export default function ConvergenceGame() {
     })
   }, [])
 
-  // ── Controles de Velocidad (Modo Movimiento) ──
+  // ── Controles de Velocidad Progresiva (Modo Movimiento) ──
   const adjustSpeed = useCallback((delta) => {
     setSpeed((prev) => Math.max(1, Math.min(prev + delta, 40)))
   }, [])
@@ -194,12 +230,12 @@ export default function ConvergenceGame() {
         if (e.code === 'Space') {
           e.preventDefault()
           toggleMotionPlay()
-        } else if (e.key === 'ArrowUp') {
+        } else if (e.key === 'ArrowUp' || e.key === '+' || e.key === '=') {
           e.preventDefault()
-          adjustSpeed(2)
-        } else if (e.key === 'ArrowDown') {
+          adjustSpeed(1)
+        } else if (e.key === 'ArrowDown' || e.key === '-') {
           e.preventDefault()
-          adjustSpeed(-2)
+          adjustSpeed(-1)
         } else if (e.key === 'r' || e.key === 'R') {
           e.preventDefault()
           resetToInitial()
@@ -377,7 +413,7 @@ export default function ConvergenceGame() {
           <div
             className="stimulusWrapper"
             style={{
-              transform: `translateX(-${currentDistance / 2}px)`,
+              transform: `translateX(-${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
           >
             {activePair.renderLeft ? activePair.renderLeft(currentSizePx) : null}
@@ -387,7 +423,7 @@ export default function ConvergenceGame() {
           <div
             className="stimulusWrapper"
             style={{
-              transform: `translateX(${currentDistance / 2}px)`,
+              transform: `translateX(${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
           >
             {activePair.renderRight ? activePair.renderRight(currentSizePx) : null}
@@ -400,32 +436,35 @@ export default function ConvergenceGame() {
             <div className="convControlPill">
               {mode === 'fixed' ? (
                 <>
+                  {/* Flecha Triangular Izquierda: Acercar estímulos */}
                   <button
                     type="button"
                     className="convCircleBtn"
                     onClick={() => adjustDistance(-10)}
-                    title="Reducir distancia (Flecha Izquierda o -)"
-                    aria-label="Reducir distancia"
+                    title="Acercar estímulos (Flecha Izquierda o -)"
+                    aria-label="Acercar estímulos"
                   >
-                    <IconMinus />
+                    <IconTriangleLeft />
                   </button>
 
                   <span className="convDistanceBadge">
                     {Math.round(currentDistance)} px
                   </span>
 
+                  {/* Flecha Triangular Derecha: Alejar estímulos */}
                   <button
                     type="button"
                     className="convCircleBtn"
                     onClick={() => adjustDistance(10)}
-                    title="Aumentar distancia (Flecha Derecha o +)"
-                    aria-label="Aumentar distancia"
+                    title="Alejar estímulos (Flecha Derecha o +)"
+                    aria-label="Alejar estímulos"
                   >
-                    <IconPlus />
+                    <IconTriangleRight />
                   </button>
                 </>
               ) : (
                 <>
+                  {/* Play / Pausa */}
                   <button
                     type="button"
                     className={`convCircleBtn ${motionActive ? 'convCircleBtnPrimary' : ''}`}
@@ -436,10 +475,12 @@ export default function ConvergenceGame() {
                     {motionActive ? <IconPause /> : <IconPlay />}
                   </button>
 
+                  {/* Distancia actual */}
                   <span className="convDistanceBadge">
                     {Math.round(currentDistance)} px
                   </span>
 
+                  {/* Reiniciar distancia inicial */}
                   <button
                     type="button"
                     className="convCircleBtn"
@@ -448,6 +489,37 @@ export default function ConvergenceGame() {
                     aria-label="Reiniciar a distancia inicial"
                   >
                     <IconReset />
+                  </button>
+
+                  <div className="convBarDivider" aria-hidden="true" />
+
+                  {/* Reducir velocidad (-) */}
+                  <button
+                    type="button"
+                    className="convCircleBtn"
+                    onClick={() => adjustSpeed(-1)}
+                    disabled={speed <= 1}
+                    title="Reducir velocidad progresivamente (Flecha Abajo o -)"
+                    aria-label="Reducir velocidad"
+                  >
+                    <IconMinus />
+                  </button>
+
+                  {/* Símbolo de velocidad */}
+                  <span className="convSpeedBadge" title="Velocidad (Ajustable con + y -)">
+                    <IconGauge />
+                  </span>
+
+                  {/* Aumentar velocidad (+) */}
+                  <button
+                    type="button"
+                    className="convCircleBtn"
+                    onClick={() => adjustSpeed(1)}
+                    disabled={speed >= 40}
+                    title="Aumentar velocidad progresivamente (Flecha Arriba o +)"
+                    aria-label="Aumentar velocidad"
+                  >
+                    <IconPlus />
                   </button>
                 </>
               )}

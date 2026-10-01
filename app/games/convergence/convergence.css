@@ -92,6 +92,7 @@
   height: 44px;
 }
 
+.convPairPreview img,
 .convPairPreview svg {
   max-width: 100%;
   max-height: 100%;
@@ -139,8 +140,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: -38px;
-  margin-left: -38px;
   will-change: transform;
 }
 
@@ -200,15 +199,21 @@
   padding: 0;
 }
 
-.convCircleBtn:hover {
+.convCircleBtn:hover:not(:disabled) {
   background: rgba(56, 189, 248, 0.18);
   border-color: #38bdf8;
   color: #38bdf8;
   transform: scale(1.05);
 }
 
-.convCircleBtn:active {
+.convCircleBtn:active:not(:disabled) {
   transform: scale(0.95);
+}
+
+.convCircleBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .convCircleBtnPrimary {
@@ -228,8 +233,24 @@
 }
 
 .convSpeedBadge {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #94a3b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
   padding: 0 4px;
+  min-width: 34px;
+  user-select: none;
+}
+
+.convSpeedBadge svg {
+  color: #38bdf8;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.45));
+}
+
+.convBarDivider {
+  width: 1px;
+  height: 20px;
+  background: rgba(148, 163, 184, 0.2);
+  margin: 0 2px;
 }
