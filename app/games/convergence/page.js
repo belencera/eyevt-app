@@ -95,7 +95,7 @@ function IconGauge() {
 
 export default function ConvergenceGame() {
   // ── Estados de Configuración ──
-  const [selectedCategory, setSelectedCategory] = useState('fusion-plana')
+  const [selectedCategory, setSelectedCategory] = useState('percepcion-simultanea')
   const [selectedPairId, setSelectedPairId] = useState('cross')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
   const [initialDistance, setInitialDistance] = useState(140) // px
@@ -300,9 +300,11 @@ export default function ConvergenceGame() {
             )
           })
         ) : (
-          <p style={{ color: '#64748b', fontSize: '13px', gridColumn: '1 / -1', padding: '12px 0' }}>
-            Pronto podrás añadir más parejas en esta categoría.
-          </p>
+          <div className="dashNoExtras" style={{ gridColumn: '1 / -1' }}>
+            <p className="dashNoExtrasText">
+              Próximamente
+            </p>
+          </div>
         )}
       </div>
     </div>
@@ -405,6 +407,7 @@ export default function ConvergenceGame() {
       stimulusGrid={stimulusSelector}
       gameControls={gameControls}
       speedContent={speedContent}
+      startDisabled={categoryPairs.length === 0}
     >
       {/* ── Zona de Juego Inmersiva ── */}
       <div className="convergenceArena">

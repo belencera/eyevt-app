@@ -28,6 +28,7 @@ export function GameShell({
   gameControls,
   fullWidthDuration = true,
   isFullscreen,
+  startDisabled = false,
   children,
 }) {
   const {
@@ -214,10 +215,10 @@ export function GameShell({
             <button
               type="button"
               className="dashStartBtn"
-              disabled={!isIdle}
+              disabled={!isIdle || startDisabled}
               onClick={handleStart}
               aria-label="Empezar ejercicio"
-              title="Empezar"
+              title={startDisabled ? 'Selecciona una categoría con estímulos' : 'Empezar'}
             >
               <IconPlay />
               <span>Empezar</span>
