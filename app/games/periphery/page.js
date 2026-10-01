@@ -6,6 +6,7 @@ import {
   OptionPicker,
   StimulusDot,
   StimulusGrid,
+  StimulusExtraControls,
   useGameSession,
   useStimulusManager,
   PERIPHERY_MODES,
@@ -14,16 +15,6 @@ import {
   getRandomPeripheralPosition,
   IconClick,
   COLOR_INTERVAL_OPTIONS,
-  LETTER_SIZE_OPTIONS,
-  WORD_SIZE_OPTIONS,
-  WORD_LENGTH_OPTIONS,
-  ANIMAL_SIZE_OPTIONS,
-  FRUIT_SIZE_OPTIONS,
-  NUMBER_SIZE_OPTIONS,
-  NUMBER_DIGITS_OPTIONS,
-  ARROW_SIZE_OPTIONS,
-  getRandomWord,
-  getRandomNumber,
 } from '../_shared'
 
 const HINTS = {
@@ -184,6 +175,31 @@ export default function PeripheryGame() {
   const distanceLabel =
     DISTANCE_OPTIONS.find((d) => d.value === distance)?.label ?? 'Media'
 
+  // Controles de estímulo específicos: tamaño + intervalo de color (caso especial de Periferia)
+  const buildExtraControls = () => {
+    if (stimulus.stimulusType === 'classic') return null
+
+    return (
+      <>
+        {stimulus.stimulusType === 'colors' && (
+          <OptionPicker
+            id="periphery-color-interval"
+            label="Cambio de color"
+            value={stimulus.colorInterval}
+            options={COLOR_INTERVAL_OPTIONS}
+            disabled={!session.isIdle}
+            onChange={stimulus.setColorInterval}
+          />
+        )}
+        <StimulusExtraControls
+          stimulus={stimulus}
+          disabled={!session.isIdle}
+          prefix="periphery"
+        />
+      </>
+    )
+  }
+
   return (
     <GameShell
       title="Periferia"
@@ -257,116 +273,7 @@ export default function PeripheryGame() {
           />
         </>
       }
-      extraControls={
-        stimulus.stimulusType === 'classic' ? null : (
-          <>
-
-          {stimulus.stimulusType === 'colors' && (
-            <OptionPicker
-              id="periphery-color-interval"
-              label="Cambio de color"
-              value={stimulus.colorInterval}
-              options={COLOR_INTERVAL_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setColorInterval}
-            />
-          )}
-
-          {stimulus.stimulusType === 'letters' && (
-            <OptionPicker
-              id="periphery-letter-size"
-              label="Tamaño de letra"
-              value={stimulus.letterSize}
-              options={LETTER_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setLetterSize}
-            />
-          )}
-
-          {stimulus.stimulusType === 'words' && (
-            <>
-              <OptionPicker
-                id="periphery-word-size"
-                label="Tamaño de palabra"
-                value={stimulus.wordSize}
-                options={WORD_SIZE_OPTIONS}
-                disabled={!session.isIdle}
-                onChange={stimulus.setWordSize}
-              />
-              <OptionPicker
-                id="periphery-word-length"
-                label="Longitud de palabra"
-                value={stimulus.wordLength}
-                options={WORD_LENGTH_OPTIONS}
-                disabled={!session.isIdle}
-                onChange={(val) => {
-                  stimulus.setWordLength(val)
-                  stimulus.setCurrentWord(getRandomWord(val))
-                }}
-              />
-            </>
-          )}
-
-          {stimulus.stimulusType === 'numbers' && (
-            <>
-              <OptionPicker
-                id="periphery-number-size"
-                label="Tamaño de número"
-                value={stimulus.numberSize}
-                options={NUMBER_SIZE_OPTIONS}
-                disabled={!session.isIdle}
-                onChange={stimulus.setNumberSize}
-              />
-              <OptionPicker
-                id="periphery-number-digits"
-                label="Cifras"
-                value={stimulus.numberDigits}
-                options={NUMBER_DIGITS_OPTIONS}
-                disabled={!session.isIdle}
-                onChange={(val) => {
-                  stimulus.setNumberDigits(val)
-                  stimulus.setCurrentNumber(getRandomNumber(val))
-                }}
-              />
-            </>
-          )}
-
-          {stimulus.stimulusType === 'arrows' && (
-            <OptionPicker
-              id="periphery-arrow-size"
-              label="Tamaño de flecha"
-              value={stimulus.arrowSize}
-              options={ARROW_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setArrowSize}
-            />
-          )}
-
-          {stimulus.stimulusType === 'animals' && (
-            <OptionPicker
-              id="periphery-animal-size"
-              label="Tamaño de animal"
-              value={stimulus.animalSize}
-              options={ANIMAL_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setAnimalSize}
-            />
-          )}
-
-          {stimulus.stimulusType === 'fruits' && (
-            <OptionPicker
-              id="periphery-fruit-size"
-              label="Tamaño de fruta"
-              value={stimulus.fruitSize}
-              options={FRUIT_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setFruitSize}
-            />
-          )}
-
-          </>
-        )
-      }
+      extraControls={buildExtraControls()}
     >
       {/* Contador flotante de aciertos visible en la pantalla de juego durante la partida */}
       {session.started && mode === 'name-and-tap' && (
