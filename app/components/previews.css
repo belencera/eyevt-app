@@ -179,132 +179,159 @@
 }
 
 /* =========================================
-   4. CONVERGENCIA PREVIEW (De fuera hacia dentro, y al llegar al centro vuelve directamente a los extremos)
+   ELEMENTOS ÓPTICOS COMUNES DE BINOCULARIDAD (Estilo fino)
    ========================================= */
-.convergence-dot-left {
-  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
-  animation: convergeInLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-.convergence-dot-right {
-  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
-  animation: convergeInRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-}
-
-@keyframes convergeInLeft {
-  0% {
-    transform: translateX(0);
-  }
-  68% {
-    transform: translateX(47px);
-  }
-  74% {
-    transform: translateX(47px);
-  }
-  84% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-@keyframes convergeInRight {
-  0% {
-    transform: translateX(0);
-  }
-  68% {
-    transform: translateX(-47px);
-  }
-  74% {
-    transform: translateX(-47px);
-  }
-  84% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(0);
-  }
+.optic-eye {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.25));
 }
 
 /* =========================================
-   5. DIVERGENCIA PREVIEW (Al revés: de dentro hacia fuera, y al llegar a los extremos vuelve directamente al centro)
+   4. CONVERGENCIA PREVIEW (Estilo fino)
    ========================================= */
-.divergence-dot-left {
-  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
-  animation: divergeOutLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+.conv-ray {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.45));
 }
 
-.divergence-dot-right {
-  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
-  animation: divergeOutRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+.conv-ray-left {
+  transform-origin: 76px 60px;
+  animation: convRayLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
-@keyframes divergeOutLeft {
-  0% {
-    transform: translateX(47px);
-  }
-  68% {
-    transform: translateX(0);
-  }
-  74% {
-    transform: translateX(0);
-  }
-  84% {
-    transform: translateX(47px);
-  }
-  100% {
-    transform: translateX(47px);
-  }
+.conv-ray-right {
+  transform-origin: 124px 60px;
+  animation: convRayRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
-@keyframes divergeOutRight {
-  0% {
-    transform: translateX(-47px);
-  }
-  68% {
-    transform: translateX(0);
-  }
-  74% {
-    transform: translateX(0);
-  }
-  84% {
-    transform: translateX(-47px);
-  }
-  100% {
-    transform: translateX(-47px);
-  }
+@keyframes convRayLeft {
+  0% { transform: rotate(-44deg); }
+  68%, 76% { transform: rotate(0deg); }
+  84%, 100% { transform: rotate(-44deg); }
+}
+
+@keyframes convRayRight {
+  0% { transform: rotate(44deg); }
+  68%, 76% { transform: rotate(0deg); }
+  84%, 100% { transform: rotate(44deg); }
+}
+
+.conv-pupil-left {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: convPupilLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.conv-pupil-right {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: convPupilRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes convPupilLeft {
+  0% { transform: translateX(0); }
+  68%, 76% { transform: translateX(2px); }
+  84%, 100% { transform: translateX(0); }
+}
+
+@keyframes convPupilRight {
+  0% { transform: translateX(0); }
+  68%, 76% { transform: translateX(-2px); }
+  84%, 100% { transform: translateX(0); }
 }
 
 /* =========================================
-   6. FLEXIBILIDAD PREVIEW (Oscilando suave y continuo entre dentro y fuera)
+   5. DIVERGENCIA PREVIEW (De dentro hacia fuera)
    ========================================= */
-.flexibility-dot-left {
-  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
-  animation: flexOscillateLeft 4s ease-in-out infinite;
+.div-ray {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.45));
 }
 
-.flexibility-dot-right {
-  filter: drop-shadow(0 0 6px #38bdf8) drop-shadow(0 0 12px rgba(56, 189, 248, 0.9));
-  animation: flexOscillateRight 4s ease-in-out infinite;
+.div-ray-left {
+  transform-origin: 76px 60px;
+  animation: divRayLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
-@keyframes flexOscillateLeft {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(47px);
-  }
+.div-ray-right {
+  transform-origin: 124px 60px;
+  animation: divRayRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
-@keyframes flexOscillateRight {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(-47px);
-  }
+@keyframes divRayLeft {
+  0%, 8% { transform: rotate(0deg); }
+  68%, 76% { transform: rotate(-44deg); }
+  84%, 100% { transform: rotate(0deg); }
+}
+
+@keyframes divRayRight {
+  0%, 8% { transform: rotate(0deg); }
+  68%, 76% { transform: rotate(44deg); }
+  84%, 100% { transform: rotate(0deg); }
+}
+
+.div-pupil-left {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: divPupilLeft 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+.div-pupil-right {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: divPupilRight 3.4s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes divPupilLeft {
+  0%, 8% { transform: translateX(1.5px); }
+  68%, 76% { transform: translateX(-2px); }
+  84%, 100% { transform: translateX(1.5px); }
+}
+
+@keyframes divPupilRight {
+  0%, 8% { transform: translateX(-1.5px); }
+  68%, 76% { transform: translateX(2px); }
+  84%, 100% { transform: translateX(-1.5px); }
+}
+
+/* =========================================
+   6. FLEXIBILIDAD PREVIEW (Estilo fino oscilante)
+   ========================================= */
+.flex-ray {
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.45));
+}
+
+.flex-ray-left {
+  transform-origin: 76px 60px;
+  animation: flexRayLeft 4.4s ease-in-out infinite;
+}
+
+.flex-ray-right {
+  transform-origin: 124px 60px;
+  animation: flexRayRight 4.4s ease-in-out infinite;
+}
+
+@keyframes flexRayLeft {
+  0%, 100% { transform: rotate(22deg); }
+  50% { transform: rotate(-22deg); }
+}
+
+@keyframes flexRayRight {
+  0%, 100% { transform: rotate(-22deg); }
+  50% { transform: rotate(22deg); }
+}
+
+.flex-pupil-left {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: flexPupilLeft 4.4s ease-in-out infinite;
+}
+
+.flex-pupil-right {
+  filter: drop-shadow(0 0 3px #38bdf8);
+  animation: flexPupilRight 4.4s ease-in-out infinite;
+}
+
+@keyframes flexPupilLeft {
+  0%, 100% { transform: translateX(2px); }
+  50% { transform: translateX(-2px); }
+}
+
+@keyframes flexPupilRight {
+  0%, 100% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
 }
 
 /* =========================================

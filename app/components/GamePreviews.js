@@ -88,11 +88,19 @@ export function ConvergencePreview() {
   return (
     <div className="card-preview convergence-preview">
       <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
-        <line x1="30" y1="45" x2="170" y2="45" stroke="rgba(148, 163, 184, 0.25)" strokeWidth="1" strokeDasharray="3 3" />
-        <circle cx="100" cy="45" r="14" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1" strokeDasharray="2 2" />
-        <circle cx="100" cy="45" r="2.5" fill="rgba(56, 189, 248, 0.5)" />
-        <circle cx="45" cy="45" r="5" fill="#38bdf8" className="convergence-dot-left" />
-        <circle cx="155" cy="45" r="5" fill="#38bdf8" className="convergence-dot-right" />
+        {/* Rayos visuales convergentes finos */}
+        <line x1="76" y1="60" x2="98" y2="18" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 3" className="conv-ray conv-ray-left" />
+        <line x1="124" y1="60" x2="102" y2="18" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 3" className="conv-ray conv-ray-right" />
+
+        {/* Ojos con estilo fino */}
+        <g className="optic-eye">
+          <circle cx="76" cy="68" r="8.5" stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1" fill="rgba(15, 23, 42, 0.75)" />
+          <circle cx="76" cy="68" r="2.5" fill="#38bdf8" className="conv-pupil-left" />
+        </g>
+        <g className="optic-eye">
+          <circle cx="124" cy="68" r="8.5" stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1" fill="rgba(15, 23, 42, 0.75)" />
+          <circle cx="124" cy="68" r="2.5" fill="#38bdf8" className="conv-pupil-right" />
+        </g>
       </svg>
     </div>
   )
@@ -102,11 +110,19 @@ export function DivergencePreview() {
   return (
     <div className="card-preview divergence-preview">
       <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
-        <line x1="30" y1="45" x2="170" y2="45" stroke="rgba(148, 163, 184, 0.25)" strokeWidth="1" strokeDasharray="3 3" />
-        <circle cx="100" cy="45" r="14" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1" strokeDasharray="2 2" />
-        <circle cx="100" cy="45" r="2.5" fill="rgba(56, 189, 248, 0.5)" />
-        <circle cx="45" cy="45" r="5" fill="#38bdf8" className="divergence-dot-left" />
-        <circle cx="155" cy="45" r="5" fill="#38bdf8" className="divergence-dot-right" />
+        {/* Rayos visuales que parten del centro y divergen hacia fuera */}
+        <line x1="76" y1="60" x2="98" y2="18" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 3" className="div-ray div-ray-left" />
+        <line x1="124" y1="60" x2="102" y2="18" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 3" className="div-ray div-ray-right" />
+
+        {/* Ojos con estilo fino */}
+        <g className="optic-eye">
+          <circle cx="76" cy="68" r="8.5" stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1" fill="rgba(15, 23, 42, 0.75)" />
+          <circle cx="76" cy="68" r="2.5" fill="#38bdf8" className="div-pupil-left" />
+        </g>
+        <g className="optic-eye">
+          <circle cx="124" cy="68" r="8.5" stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1" fill="rgba(15, 23, 42, 0.75)" />
+          <circle cx="124" cy="68" r="2.5" fill="#38bdf8" className="div-pupil-right" />
+        </g>
       </svg>
     </div>
   )
@@ -116,11 +132,19 @@ export function VergenceFlexibilityPreview() {
   return (
     <div className="card-preview flexibility-preview">
       <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
-        <line x1="30" y1="45" x2="170" y2="45" stroke="rgba(148, 163, 184, 0.25)" strokeWidth="1" strokeDasharray="3 3" />
-        <circle cx="100" cy="45" r="14" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1" strokeDasharray="2 2" />
-        <circle cx="100" cy="45" r="2.5" fill="rgba(56, 189, 248, 0.5)" />
-        <circle cx="45" cy="45" r="5" fill="#38bdf8" className="flexibility-dot-left" />
-        <circle cx="155" cy="45" r="5" fill="#38bdf8" className="flexibility-dot-right" />
+        {/* Rayos visuales oscilantes finos */}
+        <line x1="76" y1="60" x2="76" y2="18" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 3" className="flex-ray flex-ray-left" />
+        <line x1="124" y1="60" x2="124" y2="18" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 3" className="flex-ray flex-ray-right" />
+
+        {/* Ojos con estilo fino */}
+        <g className="optic-eye">
+          <circle cx="76" cy="68" r="8.5" stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1" fill="rgba(15, 23, 42, 0.75)" />
+          <circle cx="76" cy="68" r="2.5" fill="#38bdf8" className="flex-pupil-left" />
+        </g>
+        <g className="optic-eye">
+          <circle cx="124" cy="68" r="8.5" stroke="rgba(56, 189, 248, 0.45)" strokeWidth="1" fill="rgba(15, 23, 42, 0.75)" />
+          <circle cx="124" cy="68" r="2.5" fill="#38bdf8" className="flex-pupil-right" />
+        </g>
       </svg>
     </div>
   )
