@@ -1,20 +1,20 @@
 import React from 'react'
 
 export const STIMULI_CATEGORIES = [
-  { id: 'fusion-plana', label: 'Fusión plana · 2D' },
-  { id: 'estereopsis', label: 'Estereopsis · 3D' },
-  { id: 'dinamicos', label: 'Dinámicos' },
+  { id: 'percepcion-simultanea', label: 'Percepción simultánea' },
+  { id: 'fusion-plana', label: 'Fusión plana' },
+  { id: 'estereopsis', label: 'Estereopsis' },
 ]
 
 /**
  * Catálogo de parejas complementarias de estímulos para convergencia.
  */
 export const STIMULI_PAIRS = [
-  // ─── CATEGORÍA: FUSIÓN PLANA · 2D ──────────────────────────
+  // ─── CATEGORÍA: PERCEPCIÓN SIMULTÁNEA ───────────────────────
   {
     id: 'cross',
     name: 'Cruz',
-    category: 'fusion-plana',
+    category: 'percepcion-simultanea',
     renderLeft: (size = 70) => (
       <svg viewBox="0 0 60 60" width={size} height={size} fill="none" style={{ overflow: 'visible' }}>
         <line x1="30" y1="8" x2="30" y2="52" stroke="#38bdf8" strokeWidth="4.5" strokeLinecap="round" />
@@ -35,7 +35,7 @@ export const STIMULI_PAIRS = [
   {
     id: 'bird-cage',
     name: 'Pájaro · Jaula',
-    category: 'fusion-plana',
+    category: 'percepcion-simultanea',
     renderLeft: (size = 70) => (
       <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <img
@@ -84,7 +84,7 @@ export const STIMULI_PAIRS = [
   {
     id: 'mouse-cheese',
     name: 'Ratón · Queso',
-    category: 'fusion-plana',
+    category: 'percepcion-simultanea',
     renderLeft: (size = 70) => (
       <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <img
@@ -138,7 +138,7 @@ export const STIMULI_PAIRS = [
   {
     id: 'monkey-banana',
     name: 'Mono · Plátano',
-    category: 'fusion-plana',
+    category: 'percepcion-simultanea',
     renderLeft: (size = 70) => (
       <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <img
@@ -193,7 +193,7 @@ export const STIMULI_PAIRS = [
   {
     id: 'ball-goal',
     name: 'Balón · Portería',
-    category: 'fusion-plana',
+    category: 'percepcion-simultanea',
     renderLeft: (size = 70) => (
       <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <img
@@ -247,7 +247,7 @@ export const STIMULI_PAIRS = [
   {
     id: 'car-road',
     name: 'Coche · Carretera',
-    category: 'fusion-plana',
+    category: 'percepcion-simultanea',
     renderLeft: (size = 70) => (
       <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <img
@@ -301,7 +301,7 @@ export const STIMULI_PAIRS = [
   {
     id: 'map-magnifier',
     name: 'Lupa · Mapa',
-    category: 'fusion-plana',
+    category: 'percepcion-simultanea',
     renderLeft: (size = 70) => (
       <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <img
