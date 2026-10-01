@@ -353,6 +353,171 @@ export const STIMULI_PAIRS = [
       </div>
     ),
   },
+  {
+    id: 'crab-shell',
+    name: 'Cangrejo · Caracola',
+    category: 'percepcion-simultanea',
+    renderLeft: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/crab.svg"
+          alt="Cangrejo"
+          width={Math.round(size * 0.9)}
+          height={Math.round(size * 0.9)}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(237, 76, 92, 0.45))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderRight: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/spiral-shell.svg"
+          alt="Caracola"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(221, 177, 153, 0.45))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderPreview: (size = 46) => (
+      <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/spiral-shell.svg"
+          alt="Caracola"
+          width={size}
+          height={size}
+          style={{ position: 'absolute', inset: 0, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(221, 177, 153, 0.35))' }}
+          draggable={false}
+        />
+        <img
+          src="/vergence/crab.svg"
+          alt="Cangrejo"
+          width={Math.round(size * 0.65)}
+          height={Math.round(size * 0.65)}
+          style={{
+            position: 'absolute',
+            bottom: '2px',
+            right: '2px',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 0 4px rgba(237, 76, 92, 0.55))',
+          }}
+          draggable={false}
+        />
+      </div>
+    ),
+  },
+  {
+    id: 'firetruck-fire',
+    name: 'Bomberos · Fuego',
+    category: 'percepcion-simultanea',
+    renderLeft: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/fire-engine.svg"
+          alt="Camión de bomberos"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(241, 78, 58, 0.45))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderRight: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/fire.svg"
+          alt="Fuego"
+          width={Math.round(size * 0.85)}
+          height={Math.round(size * 0.85)}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(255, 157, 51, 0.5))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderPreview: (size = 46) => (
+      <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/fire-engine.svg"
+          alt="Camión de bomberos"
+          width={size}
+          height={size}
+          style={{ position: 'absolute', inset: 0, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(241, 78, 58, 0.35))' }}
+          draggable={false}
+        />
+        <img
+          src="/vergence/fire.svg"
+          alt="Fuego"
+          width={Math.round(size * 0.52)}
+          height={Math.round(size * 0.52)}
+          style={{
+            position: 'absolute',
+            top: '1px',
+            right: '2px',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 0 4px rgba(255, 157, 51, 0.6))',
+          }}
+          draggable={false}
+        />
+      </div>
+    ),
+  },
+  {
+    id: 'tennis',
+    name: 'Pelota · Raqueta',
+    category: 'percepcion-simultanea',
+    renderLeft: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/tennis-ball.svg"
+          alt="Pelota de tenis"
+          width={Math.round(size * 0.58)}
+          height={Math.round(size * 0.58)}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(199, 231, 85, 0.55))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderRight: (size = 70) => (
+      <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/tennis-racket.svg"
+          alt="Raqueta de tenis"
+          width={size}
+          height={size}
+          style={{ objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(255, 113, 127, 0.45))' }}
+          draggable={false}
+        />
+      </div>
+    ),
+    renderPreview: (size = 46) => (
+      <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src="/vergence/tennis-racket.svg"
+          alt="Raqueta"
+          width={size}
+          height={size}
+          style={{ position: 'absolute', inset: 0, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(255, 113, 127, 0.35))' }}
+          draggable={false}
+        />
+        <img
+          src="/vergence/tennis-ball.svg"
+          alt="Pelota"
+          width={Math.round(size * 0.42)}
+          height={Math.round(size * 0.42)}
+          style={{
+            position: 'absolute',
+            top: '2px',
+            left: '2px',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 0 4px rgba(199, 231, 85, 0.6))',
+          }}
+          draggable={false}
+        />
+      </div>
+    ),
+  },
 ]
 
 export const CONVERGENCE_MODES = [
