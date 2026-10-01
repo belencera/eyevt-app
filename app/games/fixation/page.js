@@ -3,19 +3,12 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   GameShell,
-  OptionPicker,
   StimulusDot,
   StimulusGrid,
+  StimulusExtraControls,
+  hasStimulusExtras,
   useGameSession,
   useStimulusManager,
-  LETTER_SIZE_OPTIONS,
-  WORD_SIZE_OPTIONS,
-  WORD_LENGTH_OPTIONS,
-  NUMBER_SIZE_OPTIONS,
-  NUMBER_DIGITS_OPTIONS,
-  ARROW_SIZE_OPTIONS,
-  ANIMAL_SIZE_OPTIONS,
-  FRUIT_SIZE_OPTIONS,
 } from '../_shared'
 
 const HINTS = {
@@ -76,100 +69,6 @@ export default function FixationGame() {
     return () => clearTimer()
   }, [session.isPlaying, session.isPaused, changeInterval, stimulus.stimulusType])
 
-  // Controles específicos de tamaño/parámetros según el estímulo activo
-  const renderExtraControls = () => {
-    switch (stimulus.stimulusType) {
-      case 'letters':
-        return (
-          <OptionPicker
-            id="letter-size"
-            label="Tamaño de letra"
-            value={stimulus.letterSize}
-            options={LETTER_SIZE_OPTIONS}
-            disabled={!session.isIdle}
-            onChange={stimulus.setLetterSize}
-          />
-        )
-      case 'words':
-        return (
-          <>
-            <OptionPicker
-              id="word-size"
-              label="Tamaño de palabra"
-              value={stimulus.wordSize}
-              options={WORD_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setWordSize}
-            />
-            <OptionPicker
-              id="word-length"
-              label="Longitud de palabra"
-              value={stimulus.wordLength}
-              options={WORD_LENGTH_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setWordLength}
-            />
-          </>
-        )
-      case 'numbers':
-        return (
-          <>
-            <OptionPicker
-              id="number-size"
-              label="Tamaño de número"
-              value={stimulus.numberSize}
-              options={NUMBER_SIZE_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setNumberSize}
-            />
-            <OptionPicker
-              id="number-digits"
-              label="Cifras numéricas"
-              value={stimulus.numberDigits}
-              options={NUMBER_DIGITS_OPTIONS}
-              disabled={!session.isIdle}
-              onChange={stimulus.setNumberDigits}
-            />
-          </>
-        )
-      case 'arrows':
-        return (
-          <OptionPicker
-            id="arrow-size"
-            label="Tamaño de flecha"
-            value={stimulus.arrowSize}
-            options={ARROW_SIZE_OPTIONS}
-            disabled={!session.isIdle}
-            onChange={stimulus.setArrowSize}
-          />
-        )
-      case 'animals':
-        return (
-          <OptionPicker
-            id="animal-size"
-            label="Tamaño de animal"
-            value={stimulus.animalSize}
-            options={ANIMAL_SIZE_OPTIONS}
-            disabled={!session.isIdle}
-            onChange={stimulus.setAnimalSize}
-          />
-        )
-      case 'fruits':
-        return (
-          <OptionPicker
-            id="fruit-size"
-            label="Tamaño de fruta"
-            value={stimulus.fruitSize}
-            options={FRUIT_SIZE_OPTIONS}
-            disabled={!session.isIdle}
-            onChange={stimulus.setFruitSize}
-          />
-        )
-      default:
-        return null
-    }
-  }
-
   // Visibilidad del estímulo en pantalla
   const showDot =
     !session.isIdle ||
@@ -208,26 +107,17 @@ export default function FixationGame() {
           }}
         />
       }
-      extraControls={renderExtraControls()}
+      extraControls={
+        hasStimulusExtras(stimulus.stimulusType)
+          ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="fixation" />
+          : null
+      }
     >
       {showDot && (
         <StimulusDot
           position={CENTER_POSITION}
-          color={stimulus.currentColor}
-          letter={stimulus.currentLetter}
-          letterSize={stimulus.letterSize}
-          word={stimulus.currentWord}
-          wordSize={stimulus.wordSize}
-          number={stimulus.currentNumber}
-          numberSize={stimulus.numberSize}
-          arrow={stimulus.currentArrow}
-          arrowSize={stimulus.arrowSize}
-          animal={stimulus.currentAnimal}
-          animalSize={stimulus.animalSize}
-          fruit={stimulus.currentFruit}
-          fruitSize={stimulus.fruitSize}
+          stimulus={stimulus}
           isPaused={session.isPaused}
-          stimulusType={stimulus.stimulusType}
         />
       )}
     </GameShell>
