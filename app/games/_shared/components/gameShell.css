@@ -532,6 +532,38 @@
 /* ============================================================
    Tarjeta Duración - fila de botones
    ============================================================ */
+.dashCardDuration,
+.dashCardSpeed {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.dashCardSpeed .controlGroup {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.dashCardSpeed .dashNoExtras {
+  min-height: 38px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px dashed rgba(148, 163, 184, 0.14);
+}
+
+.dashCardSpeed .dashNoExtrasText {
+  font-size: 0.76rem;
+  color: #64748b;
+  margin: 0;
+  white-space: nowrap;
+}
+
 .durationRow {
   display: flex;
   gap: 6px;
