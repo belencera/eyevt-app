@@ -1,4 +1,4 @@
-# EYEVT — Eye Visual Therapy
+# EYEVT — Eye Visual Training
 
 Plataforma web clínica interactiva para terapia visual y rehabilitación optométrica digital. Diseñada para su uso por pacientes bajo la supervisión de un especialista o terapeuta visual.
 
