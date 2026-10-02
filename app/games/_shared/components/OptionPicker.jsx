@@ -7,7 +7,8 @@ function getActiveBadge(label, option) {
   if (intervalMatch) {
     return `Cada ${intervalMatch[1]} segundos`
   }
-  return `${lbl} activo`
+  const prefix = option.icon ? `${option.icon} ` : ''
+  return `${prefix}${lbl} activo`
 }
 
 /**
@@ -51,6 +52,7 @@ export function OptionPicker({
               type="button"
               role="radio"
               aria-checked={isSelected}
+              aria-label={opt.label}
               disabled={isDisabled}
               className={`optionGridBtn ${isSelected ? 'optionGridBtnActive' : ''}`}
               onClick={() => {
@@ -59,7 +61,12 @@ export function OptionPicker({
                 }
               }}
             >
-              {opt.label}
+              {opt.icon && <span className="optionGridBtnIcon">{opt.icon}</span>}
+              {opt.label && (
+                <span className={opt.icon ? 'optionGridBtnTextWithIcon' : undefined}>
+                  {opt.label}
+                </span>
+              )}
             </button>
           )
         })}

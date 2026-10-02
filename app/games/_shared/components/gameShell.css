@@ -471,6 +471,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
   flex: 1 1 0px;
   min-width: 0;
   height: 34px;
@@ -515,6 +516,24 @@
   border-style: dashed;
   border-color: rgba(148, 163, 184, 0.12);
   transform: none;
+}
+
+.optionGridBtnIcon {
+  font-size: 1.15rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.optionGridBtnTextWithIcon {
+  display: inline;
+}
+
+@media (max-width: 768px) {
+  .optionGridBtnTextWithIcon {
+    display: none;
+  }
 }
 
 /* ============================================================
