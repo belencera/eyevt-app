@@ -69,6 +69,30 @@ export default function FixationGame() {
     return () => clearTimer()
   }, [session.isPlaying, session.isPaused, changeInterval, stimulus.stimulusType])
 
+  // ── Atajos de Teclado durante la partida ──
+  useEffect(() => {
+    if (!session.started) return
+
+    const handleKeyDown = (e) => {
+      // Espacio: Pausar y reanudar
+      if (e.code === 'Space') {
+        e.preventDefault()
+        session.handleTogglePause()
+        return
+      }
+
+      // Tecla R: Reiniciar
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault()
+        session.handleReset()
+        return
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [session.started, session.handleTogglePause, session.handleReset])
+
   // Visibilidad del estímulo en pantalla
   const showDot =
     !session.isIdle ||
@@ -112,6 +136,10 @@ export default function FixationGame() {
           ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="fixation" />
           : null
       }
+      shortcuts={[
+        { keys: ['Espacio'], label: 'Pausar y reanudar' },
+        { keys: ['R'], label: 'Reiniciar' },
+      ]}
     >
       {showDot && (
         <StimulusDot

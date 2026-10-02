@@ -8,6 +8,7 @@ export { GameShell } from './components/GameShell'
 export { OptionPicker } from './components/OptionPicker'
 export { StimulusGrid } from './components/StimulusGrid'
 export { StimulusExtraControls, hasStimulusExtras } from './components/StimulusExtraControls'
+export { KeyboardShortcutsBar } from './components/KeyboardShortcutsBar'
 
 // Estímulos visuales
 export { StimulusDot } from './stimuli/StimulusDot'

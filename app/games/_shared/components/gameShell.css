@@ -92,7 +92,7 @@
    ============================================================ */
 .dashGrid {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: var(--dash-col-1, 42%) 1fr;
   gap: 16px;
   align-content: start;
 }
@@ -116,6 +116,29 @@
   grid-column: 1 / -1;
 }
 
+/* Tarjeta de configuración unificada (Columna 2) */
+.dashCardSettings,
+.dashCardExtras {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: auto;
+}
+
+.dashSettingsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Tarjeta compacta para la barra de atajos inferior (Fila 2) */
+.dashShortcutsCard {
+  grid-column: 1 / -1;
+  padding: 10px 18px !important;
+  gap: 0 !important;
+  border-radius: 12px !important;
+}
+
 /* -- Cabecera de tarjeta -- */
 .dashCardHead {
   display: flex;
@@ -136,13 +159,6 @@
   font-weight: 500;
   color: #475569;
   letter-spacing: 0.02em;
-}
-
-.dashCardExtras {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  height: auto;
 }
 
 .dashNoExtras {
@@ -175,7 +191,7 @@
 
 .stimulusGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
   gap: 8px;
 }
 
@@ -186,8 +202,8 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 12px 6px;
-  min-height: 68px;
+  padding: 10px 4px;
+  min-height: 74px;
   border-radius: 12px;
   border: 1px solid rgba(148, 163, 184, 0.15);
   background: rgba(15, 23, 42, 0.9);
@@ -212,8 +228,7 @@
 .stimulusCardActive {
   background: rgba(56, 189, 248, 0.1) !important;
   border-color: #38bdf8 !important;
-  box-shadow: 0 0 18px rgba(56, 189, 248, 0.2),
-    inset 0 0 10px rgba(56, 189, 248, 0.06);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.2);
   color: #f8fafc;
 }
 
@@ -234,15 +249,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 44px;
+  height: 44px;
 }
 
 .stimulusCardLabel {
   font-size: 0.72rem;
   font-weight: 600;
   line-height: 1.1;
-  color: #94a3b8;
+  color: #cbd5e1;
   letter-spacing: -0.01em;
   transition: color 0.14s ease;
 }
@@ -265,16 +280,16 @@
    Iconos de estímulo
    ============================================================ */
 .stimulusIconDot {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #38bdf8;
   box-shadow: 0 0 10px #38bdf8;
 }
 
 .stimulusIconColors {
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: conic-gradient(
     #ef4444 0deg, #facc15 72deg, #22c55e 144deg,
@@ -284,7 +299,7 @@
 }
 
 .stimulusIconLetters {
-  font-size: 0.95rem;
+  font-size: 1.3rem;
   font-weight: 800;
   font-family: monospace, sans-serif;
   color: #cbd5e1;
@@ -293,18 +308,18 @@
 
 .stimulusIconWords,
 .stimulusIconNumbers {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #cbd5e1;
-  padding: 1px 4px;
+  padding: 2px 4px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 4px;
   line-height: 1.2;
 }
 
 .stimulusIconArrows {
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #38bdf8;
   line-height: 1;
@@ -315,20 +330,19 @@
 
 .stimulusIconAnimals,
 .stimulusIconFruits {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
 }
 
 .stimulusIconImg {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.4));
 }
 
 /* ============================================================
@@ -615,6 +629,117 @@
   cursor: not-allowed;
 }
 
+/* Bloque de duración integrado en Columna 2 */
+.dashDurationBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   Barra de Atajos de Teclado (Fila Inferior / dashShortcutsCard)
+   ============================================================ */
+.dashShortcutsBar,
+.convControlsCompact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.dashShortcutsLeft,
+.convControlsLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dashShortcutsLabel,
+.convControlsLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.dashShortcutsPills,
+.convControlsPills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dashPillItemWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashPillItem,
+.convPillItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.74rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.dashKey,
+.convKey {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  background: rgba(30, 41, 59, 0.75);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 4px;
+  font-family: inherit;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.dashPillSep,
+.convPillSep {
+  color: #334155;
+  font-size: 0.7rem;
+  user-select: none;
+}
+
+.dashShortcutsBaseHint,
+.convControlsBaseHint {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+@media (max-width: 768px) {
+
+  .dashShortcutsBar,
+  .convControlsCompact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .dashShortcutsBaseHint,
+  .convControlsBaseHint {
+    margin-left: 0;
+  }
+}
+
 /* ============================================================
    Barra de acciones (inferior)
    ============================================================ */
@@ -751,8 +876,15 @@
 }
 
 @keyframes optionMenuIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .therapistFeedbackLabel {
@@ -763,70 +895,127 @@
   color: #94a3b8;
 }
 
-.therapistColorBadge { display: flex; align-items: center; gap: 10px; }
+.therapistColorBadge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 .therapistColorSwatch {
-  width: 28px; height: 28px; border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
 }
 
 .therapistColorName {
-  font-size: 1.05rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
 }
 
-.therapistLetterBadge { display: flex; align-items: center; justify-content: center; min-height: 38px; }
+.therapistLetterBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+}
 
 .therapistLetterChar {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 1.4rem; font-weight: 800; text-transform: uppercase;
-  color: #38bdf8; line-height: 1; text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #38bdf8;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
 }
 
 .therapistWordBadge {
-  display: flex; align-items: center; justify-content: center;
-  padding: 4px 12px; min-height: 38px; border-radius: 10px;
-  background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  min-height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
   box-shadow: 0 0 14px rgba(56, 189, 248, 0.15);
 }
 
 .therapistWordText {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 1.15rem; font-weight: 800; letter-spacing: 0.06em;
-  text-transform: uppercase; color: #38bdf8; line-height: 1;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  line-height: 1;
   text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
 }
 
 .therapistAnimalBadge {
-  display: flex; align-items: center; gap: 8px; padding: 4px 10px;
-  min-height: 38px; border-radius: 10px;
-  background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  min-height: 38px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
   box-shadow: 0 0 14px rgba(56, 189, 248, 0.15);
 }
 
-.therapistAnimalThumb { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+.therapistAnimalThumb {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
 
 .therapistAnimalName {
-  font-size: 0.95rem; font-weight: 700; color: #f8fafc; letter-spacing: -0.01em;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: -0.01em;
 }
 
 /* Botones genéricos reutilizados por floating bar
    ============================================================ */
 .btn {
-  border: none; font-weight: 600; cursor: pointer;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
   transition: transform 0.12s, opacity 0.12s, background 0.12s;
 }
 
 .btnIcon {
-  width: 42px; height: 42px; padding: 0;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%; flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.btnIcon svg { width: 20px; height: 20px; }
+.btnIcon svg {
+  width: 20px;
+  height: 20px;
+}
 
-.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-.btn:not(:disabled):active { transform: scale(0.98); }
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn:not(:disabled):active {
+  transform: scale(0.98);
+}
 
 /* ============================================================
    Área de juego
@@ -865,10 +1054,12 @@
     transform: scale(0.6);
     opacity: 0;
   }
+
   40% {
     transform: scale(1.05);
     opacity: 1;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -923,22 +1114,26 @@
 /* Tamaños configurables del estímulo de letra
    ============================================================ */
 .stimulusLetter-sm .stimulusLetterChar {
-  font-size: 1.75rem; /* ~28px
+  font-size: 1.75rem;
+  /* ~28px
    ============================================================ */
 }
 
 .stimulusLetter-md .stimulusLetterChar {
-  font-size: 2.75rem; /* ~44px
+  font-size: 2.75rem;
+  /* ~44px
    ============================================================ */
 }
 
 .stimulusLetter-lg .stimulusLetterChar {
-  font-size: 4rem; /* ~64px
+  font-size: 4rem;
+  /* ~64px
    ============================================================ */
 }
 
 .stimulusLetter-xl .stimulusLetterChar {
-  font-size: 5.5rem; /* ~88px
+  font-size: 5.5rem;
+  /* ~88px
    ============================================================ */
 }
 
@@ -983,22 +1178,26 @@
 /* Tamaños configurables del estímulo de palabra
    ============================================================ */
 .stimulusWord-sm .stimulusWordText {
-  font-size: 1.6rem; /* ~26px
+  font-size: 1.6rem;
+  /* ~26px
    ============================================================ */
 }
 
 .stimulusWord-md .stimulusWordText {
-  font-size: 2.4rem; /* ~38px
+  font-size: 2.4rem;
+  /* ~38px
    ============================================================ */
 }
 
 .stimulusWord-lg .stimulusWordText {
-  font-size: 3.4rem; /* ~54px
+  font-size: 3.4rem;
+  /* ~54px
    ============================================================ */
 }
 
 .stimulusWord-xl .stimulusWordText {
-  font-size: 4.6rem; /* ~74px
+  font-size: 4.6rem;
+  /* ~74px
    ============================================================ */
 }
 
@@ -1187,10 +1386,13 @@
 }
 
 @keyframes centralRingBreathe {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(0.95);
     opacity: 0.35;
   }
+
   50% {
     transform: scale(1.15);
     opacity: 0.7;
@@ -1234,10 +1436,13 @@
 }
 
 @keyframes peripheralTapPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(0.92);
     box-shadow: 0 0 14px #38bdf8, 0 0 26px rgba(56, 189, 248, 0.6);
   }
+
   50% {
     transform: scale(1.12);
     box-shadow: 0 0 20px #38bdf8, 0 0 40px rgba(56, 189, 248, 0.95);
@@ -1261,6 +1466,7 @@
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
+
   100% {
     width: 70px;
     height: 70px;
@@ -1364,6 +1570,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -1539,7 +1746,7 @@
   }
 
   .dashGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 14px;
     flex: none;
     min-height: auto;
@@ -1589,4 +1796,3 @@
     justify-content: center;
   }
 }
-

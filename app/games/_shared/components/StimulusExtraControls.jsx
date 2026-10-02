@@ -47,7 +47,7 @@ export function StimulusExtraControls({
       return showIntervals ? (
         <OptionPicker
           id={id('color-interval')}
-          label="Cambio de color"
+          label="Intervalo de cambio"
           value={stimulus.colorInterval}
           options={COLOR_INTERVAL_OPTIONS}
           disabled={disabled}
@@ -60,7 +60,7 @@ export function StimulusExtraControls({
         <>
           <OptionPicker
             id={id('letter-size')}
-            label="Tamaño de letra"
+            label="Tamaño del estímulo"
             value={stimulus.letterSize}
             options={LETTER_SIZE_OPTIONS}
             disabled={disabled}
@@ -69,7 +69,7 @@ export function StimulusExtraControls({
           {showIntervals && (
             <OptionPicker
               id={id('letter-interval')}
-              label="Cambio de letra"
+              label="Intervalo de cambio"
               value={stimulus.letterInterval}
               options={LETTER_INTERVAL_OPTIONS}
               disabled={disabled}
@@ -84,7 +84,7 @@ export function StimulusExtraControls({
         <>
           <OptionPicker
             id={id('word-size')}
-            label="Tamaño de palabra"
+            label="Tamaño del estímulo"
             value={stimulus.wordSize}
             options={WORD_SIZE_OPTIONS}
             disabled={disabled}
@@ -104,7 +104,7 @@ export function StimulusExtraControls({
           {showIntervals && (
             <OptionPicker
               id={id('word-interval')}
-              label="Cambio de palabra"
+              label="Intervalo de cambio"
               value={stimulus.wordInterval}
               options={WORD_INTERVAL_OPTIONS}
               disabled={disabled}
@@ -119,7 +119,7 @@ export function StimulusExtraControls({
         <>
           <OptionPicker
             id={id('number-size')}
-            label="Tamaño de número"
+            label="Tamaño del estímulo"
             value={stimulus.numberSize}
             options={NUMBER_SIZE_OPTIONS}
             disabled={disabled}
@@ -139,7 +139,7 @@ export function StimulusExtraControls({
           {showIntervals && (
             <OptionPicker
               id={id('number-interval')}
-              label="Cambio de número"
+              label="Intervalo de cambio"
               value={stimulus.numberInterval}
               options={NUMBER_INTERVAL_OPTIONS}
               disabled={disabled}
@@ -154,7 +154,7 @@ export function StimulusExtraControls({
         <>
           <OptionPicker
             id={id('arrow-size')}
-            label="Tamaño de flecha"
+            label="Tamaño del estímulo"
             value={stimulus.arrowSize}
             options={ARROW_SIZE_OPTIONS}
             disabled={disabled}
@@ -163,7 +163,7 @@ export function StimulusExtraControls({
           {showIntervals && (
             <OptionPicker
               id={id('arrow-interval')}
-              label="Cambio de flecha"
+              label="Intervalo de cambio"
               value={stimulus.arrowInterval}
               options={ARROW_INTERVAL_OPTIONS}
               disabled={disabled}
@@ -178,7 +178,7 @@ export function StimulusExtraControls({
         <>
           <OptionPicker
             id={id('animal-size')}
-            label="Tamaño de animal"
+            label="Tamaño del estímulo"
             value={stimulus.animalSize}
             options={ANIMAL_SIZE_OPTIONS}
             disabled={disabled}
@@ -187,7 +187,7 @@ export function StimulusExtraControls({
           {showIntervals && (
             <OptionPicker
               id={id('animal-interval')}
-              label="Cambio de animal"
+              label="Intervalo de cambio"
               value={stimulus.animalInterval}
               options={ANIMAL_INTERVAL_OPTIONS}
               disabled={disabled}
@@ -202,7 +202,7 @@ export function StimulusExtraControls({
         <>
           <OptionPicker
             id={id('fruit-size')}
-            label="Tamaño de fruta"
+            label="Tamaño del estímulo"
             value={stimulus.fruitSize}
             options={FRUIT_SIZE_OPTIONS}
             disabled={disabled}
@@ -211,7 +211,7 @@ export function StimulusExtraControls({
           {showIntervals && (
             <OptionPicker
               id={id('fruit-interval')}
-              label="Cambio de fruta"
+              label="Intervalo de cambio"
               value={stimulus.fruitInterval}
               options={FRUIT_INTERVAL_OPTIONS}
               disabled={disabled}

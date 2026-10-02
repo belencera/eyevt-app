@@ -22,8 +22,8 @@ function StimulusIcon({ type }) {
           <img
             src="/animals/lion.svg"
             alt=""
-            width={22}
-            height={22}
+            width={36}
+            height={36}
             className="stimulusIconImg"
             draggable={false}
           />
@@ -35,8 +35,8 @@ function StimulusIcon({ type }) {
           <img
             src="/fruits/strawberry.svg"
             alt=""
-            width={22}
-            height={22}
+            width={36}
+            height={36}
             className="stimulusIconImg"
             draggable={false}
           />
@@ -80,9 +80,8 @@ export function StimulusGrid({
               role="radio"
               aria-checked={isSelected}
               disabled={isDisabled}
-              className={`stimulusCard ${
-                isSelected ? 'stimulusCardActive' : ''
-              }`}
+              className={`stimulusCard ${isSelected ? 'stimulusCardActive' : ''
+                }`}
               onClick={() => {
                 if (!isDisabled && onChange) {
                   onChange(opt.value)

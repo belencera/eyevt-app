@@ -171,6 +171,30 @@ export default function PeripheryGame() {
     return () => clearCadenceTimer()
   }, [clearCadenceTimer])
 
+  // ── Atajos de Teclado durante la partida ──
+  useEffect(() => {
+    if (!session.started || showSummary) return
+
+    const handleKeyDown = (e) => {
+      // Espacio: Pausar y reanudar
+      if (e.code === 'Space') {
+        e.preventDefault()
+        shellSession.handleTogglePause()
+        return
+      }
+
+      // Tecla R: Reiniciar
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault()
+        shellSession.handleReset()
+        return
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [session.started, showSummary, shellSession])
+
   const isPlayingOrPaused = session.started && (session.isPlaying || session.isPaused)
   const distanceLabel =
     DISTANCE_OPTIONS.find((d) => d.value === distance)?.label ?? 'Media'
@@ -184,7 +208,7 @@ export default function PeripheryGame() {
         {stimulus.stimulusType === 'colors' && (
           <OptionPicker
             id="periphery-color-interval"
-            label="Cambio de color"
+            label="Intervalo de cambio"
             value={stimulus.colorInterval}
             options={COLOR_INTERVAL_OPTIONS}
             disabled={!session.isIdle}
@@ -274,6 +298,10 @@ export default function PeripheryGame() {
         </>
       }
       extraControls={buildExtraControls()}
+      shortcuts={[
+        { keys: ['Espacio'], label: 'Pausar y reanudar' },
+        { keys: ['R'], label: 'Reiniciar' },
+      ]}
     >
       {/* Contador flotante de aciertos visible en la pantalla de juego durante la partida */}
       {session.started && mode === 'name-and-tap' && (

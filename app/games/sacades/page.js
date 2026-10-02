@@ -76,9 +76,47 @@ export default function SacadesGame() {
     onEnd: clearJumpInterval,
   })
 
+  // Actualizar intervalo en caliente al variar la velocidad durante el juego
   useEffect(() => {
-    return () => clearJumpInterval()
-  }, [])
+    if (session.isPlaying && !session.isPaused) {
+      clearJumpInterval()
+      intervalRef.current = setInterval(jumpToRandom, speedToInterval(speed))
+    }
+  }, [speed, session.isPlaying, session.isPaused])
+
+  // ── Atajos de Teclado durante la partida ──
+  useEffect(() => {
+    if (!session.started) return
+
+    const handleKeyDown = (e) => {
+      // Espacio: Pausar y reanudar
+      if (e.code === 'Space') {
+        e.preventDefault()
+        session.handleTogglePause()
+        return
+      }
+
+      // Tecla R: Reiniciar
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault()
+        session.handleReset()
+        return
+      }
+
+      if (session.isPaused) return
+
+      if (e.key === 'ArrowLeft' || e.key === '-') {
+        e.preventDefault()
+        setSpeed((prev) => Math.max(12, prev - 2))
+      } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
+        e.preventDefault()
+        setSpeed((prev) => Math.min(48, prev + 2))
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [session.started, session.isPaused, session.handleTogglePause, session.handleReset])
 
   const showDot = session.started && (session.isPlaying || session.isPaused)
 
@@ -108,6 +146,12 @@ export default function SacadesGame() {
           ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="sacade" />
           : null
       }
+      shortcuts={[
+        { keys: ['←', '→'], label: 'Velocidad de salto' },
+        { keys: ['Espacio'], label: 'Pausar y reanudar' },
+        { keys: ['R'], label: 'Reiniciar' },
+      ]}
+      shortcutsHint="Inicio: Vel. 28"
     >
       {showDot && (
         <StimulusDot

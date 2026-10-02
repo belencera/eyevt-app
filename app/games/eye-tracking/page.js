@@ -148,6 +148,40 @@ export default function EyeTrackingGame() {
     return () => cancelAnimationFrame(frameId)
   }, [session.running])
 
+  // ── Atajos de Teclado durante la partida ──
+  useEffect(() => {
+    if (!session.started) return
+
+    const handleKeyDown = (e) => {
+      // Espacio: Pausar y reanudar
+      if (e.code === 'Space') {
+        e.preventDefault()
+        session.handleTogglePause()
+        return
+      }
+
+      // Tecla R: Reiniciar
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault()
+        session.handleReset()
+        return
+      }
+
+      if (session.isPaused) return
+
+      if (e.key === 'ArrowLeft' || e.key === '-') {
+        e.preventDefault()
+        setSpeed((prev) => Math.max(8, prev - 2))
+      } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
+        e.preventDefault()
+        setSpeed((prev) => Math.min(60, prev + 2))
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [session.started, session.isPaused, session.handleTogglePause, session.handleReset])
+
   const showDot = session.started && (session.isPlaying || session.isPaused)
 
   return (
@@ -178,6 +212,12 @@ export default function EyeTrackingGame() {
           ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="tracking" showIntervals />
           : null
       }
+      shortcuts={[
+        { keys: ['←', '→'], label: 'Velocidad' },
+        { keys: ['Espacio'], label: 'Pausar y reanudar' },
+        { keys: ['R'], label: 'Reiniciar' },
+      ]}
+      shortcutsHint="Inicio: Vel. 28"
     >
       {showDot && (
         <StimulusDot

@@ -4,17 +4,30 @@ import Link from 'next/link'
 import { DURATION_OPTIONS } from '../data/constants'
 import { formatTime } from '../utils/formatTime'
 import { IconPause, IconPlay, IconReset } from '../utils/icons'
+import { KeyboardShortcutsBar } from './KeyboardShortcutsBar'
 import './gameShell.css'
 
+const GRID_SPLITS = {
+  compact: '42%', // Estímulo compacto (42%) y Ajustes amplios (58%)
+  wide: '58%',    // Estímulo amplio para catálogos (58%) y Ajustes (42%)
+}
+
 /**
- * Layout tipo dashboard con tarjetas modulares.
+ * Layout tipo dashboard unificado con 2 columnas y barra inferior de atajos de teclado.
  *
  * Props:
- * - stimulusGrid: JSX del selector de estímulos (tarjeta propia)
- * - speedControl: { id, label, value, min, max, step, onChange } (tarjeta velocidad con slider)
- * - speedContent: JSX alternativo para la tarjeta velocidad (ej: cadencia en periferia)
- * - extraControls: JSX con opciones específicas del estímulo (tarjeta derecha)
- * - gameControls: JSX con controles propios del juego (modo, distancia…)
+ * - stimulusGrid: JSX del selector de estímulos (Columna 1, izquierda)
+ * - stimulusTitle: Título para la tarjeta de estímulos (def: 'Estímulo')
+ * - stimulusSub: Subtítulo para la tarjeta de estímulos (def: '· Selecciona tipo de objetivo')
+ * - speedControl: { id, label, value, min, max, step, unit, disabled, onChange } (slider en Columna 2)
+ * - speedContent: JSX alternativo para velocidad/cadencia en Columna 2
+ * - extraControls: JSX con opciones específicas del estímulo en Columna 2
+ * - gameControls: JSX con controles propios del juego (modo, distancia…) en Columna 2
+ * - shortcuts: Array<{ keys: string[], label: string }> para la barra inferior de atajos
+ * - shortcutsHint: Texto informativo contextual a la derecha de los atajos
+ * - bottomContent: JSX alternativo para la fila inferior
+ * - hideDuration: Oculta el selector de duración si el juego lo gestiona internamente
+ * - split: Proporción de la Columna 1 ('compact' (42%), 'wide' (58%) o porcentaje personalizado ej: '50%')
  * - children: contenido del área de juego
  */
 export function GameShell({
@@ -22,12 +35,17 @@ export function GameShell({
   hint,
   session,
   stimulusGrid,
+  stimulusTitle = 'Estímulo',
+  stimulusSub = '· Selecciona tipo de objetivo',
   speedControl,
   speedContent,
   extraControls,
   gameControls,
+  shortcuts,
+  shortcutsHint,
   bottomContent,
-  fullWidthDuration = true,
+  hideDuration = false,
+  split = 'compact',
   isFullscreen,
   startDisabled = false,
   children,
@@ -51,8 +69,7 @@ export function GameShell({
   const isGameActive =
     isFullscreen !== undefined ? isFullscreen : started || isCountingDown
 
-  const hasExtras = Boolean(extraControls) || Boolean(gameControls)
-  const hasSpeedCard = Boolean(speedControl) || Boolean(speedContent)
+  const resolvedSplit = GRID_SPLITS[split] || split
 
   return (
     <div className="gameLayout">
@@ -74,83 +91,33 @@ export function GameShell({
           </div>
         </div>
 
-        {/* Cuadrícula de tarjetas */}
-        <div className="dashGrid">
-          {/* Tarjeta: Estímulo */}
+        {/* Cuadrícula de tarjetas unificada: 2 columnas + fila inferior */}
+        <div className="dashGrid" style={{ '--dash-col-1': resolvedSplit }}>
+          {/* ── COLUMNA 1: Selector de Estímulo ── */}
           <div className="dashCard dashCardStimulus">
             <div className="dashCardHead">
-              <span className="dashCardLabel">Estímulo</span>
-              <span className="dashCardSub">· Selecciona tipo de objetivo</span>
+              <span className="dashCardLabel">{stimulusTitle}</span>
+              <span className="dashCardSub">{stimulusSub}</span>
             </div>
             {stimulusGrid}
           </div>
 
-          {/* Tarjeta: Ajustes específicos */}
-          <div className="dashCard dashCardExtras">
-            {hasExtras ? (
-              <>
-                {gameControls}
-                {extraControls}
-              </>
-            ) : (
-              <>
-                <div className="dashCardHead">
-                  <span className="dashCardLabel">Ajustes específicos</span>
-                  <span className="dashCardSub">· Personalización</span>
-                </div>
-                <div className="dashNoExtras">
-                  <p className="dashNoExtrasText">
-                    El estímulo seleccionado no requiere ajustes adicionales.
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
+          {/* ── COLUMNA 2: Configuración (Modo, Velocidad, Extras y Duración) ── */}
+          <div className="dashCard dashCardSettings">
+            <div className="dashCardHead">
+              <span className="dashCardLabel">Configuración</span>
+              <span className="dashCardSub">· Ajustes del ejercicio</span>
+            </div>
 
-          {/* Tarjeta: Duración o Contenido inferior personalizado */}
-          <div
-            className={`dashCard dashCardDuration ${!hasSpeedCard && fullWidthDuration ? 'dashCardFull' : ''}`}
-          >
-            {bottomContent ? (
-              bottomContent
-            ) : (
-              <>
-                <div className="dashCardHead">
-                  <span className="dashCardLabel">Duración</span>
-                  <span className="dashCardSub">Tiempo total</span>
-                </div>
-                <div className="durationRow">
-                  {DURATION_OPTIONS.map((opt) => {
-                    const isSelected = opt.value === durationSetting
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        role="radio"
-                        aria-checked={isSelected}
-                        className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
-                        disabled={!isIdle}
-                        onClick={() => setDurationSetting(opt.value)}
-                      >
-                        {opt.label}
-                      </button>
-                    )
-                  })}
-                </div>
-              </>
-            )}
-          </div>
+            <div className="dashSettingsContent">
+              {gameControls}
 
-          {/* Tarjeta: Velocidad / Cadencia */}
-          {hasSpeedCard && (
-            <div className="dashCard dashCardSpeed">
-              {speedControl ? (
-                <>
-                  <div className="dashCardHead">
-                    <span className="dashCardLabel">
-                      {speedControl.label ?? 'Velocidad'}
-                    </span>
-                  </div>
+              {/* Control de velocidad con slider */}
+              {speedControl && (
+                <div className="speedControlBlock">
+                  <span className="controlLabel" id={`label-${speedControl.id ?? 'speed'}`}>
+                    {speedControl.label ?? 'Velocidad'}
+                  </span>
                   <div className="speedSliderRow">
                     <input
                       id={speedControl.id ?? 'speed'}
@@ -164,14 +131,57 @@ export function GameShell({
                         speedControl.onChange(Number(e.target.value))
                       }
                       className="dashSlider"
+                      aria-labelledby={`label-${speedControl.id ?? 'speed'}`}
                     />
                     <span className="speedSliderValue">
                       {speedControl.value}{speedControl.unit ?? ''}
                     </span>
                   </div>
-                </>
+                </div>
+              )}
+
+              {/* Contenido alternativo de velocidad / cadencia */}
+              {speedContent}
+
+              {/* Duración de la sesión (control fijo permanente) */}
+              {!hideDuration && (
+                <div className="dashDurationBlock">
+                  <span className="controlLabel" id="dash-duration-label">
+                    Duración de la sesión
+                  </span>
+                  <div className="durationRow" role="radiogroup" aria-labelledby="dash-duration-label">
+                    {DURATION_OPTIONS.map((opt) => {
+                      const isSelected = opt.value === durationSetting
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          role="radio"
+                          aria-checked={isSelected}
+                          className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+                          disabled={!isIdle}
+                          onClick={() => setDurationSetting(opt.value)}
+                        >
+                          {opt.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Ajustes específicos del estímulo (se suman abajo dinámicamente) */}
+              {extraControls}
+            </div>
+          </div>
+
+          {/* ── FILA INFERIOR: Atajos de teclado a ancho completo ── */}
+          {(shortcuts || bottomContent) && (
+            <div className="dashCard dashShortcutsCard">
+              {shortcuts ? (
+                <KeyboardShortcutsBar shortcuts={shortcuts} hint={shortcutsHint} />
               ) : (
-                speedContent
+                bottomContent
               )}
             </div>
           )}

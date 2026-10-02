@@ -254,9 +254,30 @@ export default function ConvergenceGame() {
 
   // ── Atajos de Teclado en la Zona de Juego ──
   useEffect(() => {
-    if (!session.isPlaying || session.isPaused) return
+    if (!session.started) return
 
     const handleKeyDown = (e) => {
+      // Espacio: Pausar y reanudar
+      if (e.code === 'Space') {
+        e.preventDefault()
+        session.handleTogglePause()
+        return
+      }
+
+      // Tecla R: Reiniciar
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault()
+        if (mode === 'fixed') {
+          resetToInitial()
+        } else {
+          handleInGameReset()
+        }
+        return
+      }
+
+      // Si está en pausa, no modificar tamaño ni distancia
+      if (session.isPaused) return
+
       // Ajuste de tamaño continuo común para ambos modos con flechas vertical
       if (e.key === 'ArrowUp') {
         e.preventDefault()
@@ -276,32 +297,23 @@ export default function ConvergenceGame() {
         } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
           e.preventDefault()
           adjustDistance(4)
-        } else if (e.key === 'r' || e.key === 'R') {
-          e.preventDefault()
-          resetToInitial()
         }
       } else if (mode === 'motion') {
-        if (e.code === 'Space') {
-          e.preventDefault()
-          toggleMotionPlay()
-        } else if (e.key === 'ArrowLeft' || e.key === '-') {
+        if (e.key === 'ArrowLeft' || e.key === '-') {
           e.preventDefault()
           adjustSpeed(-1)
         } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
           e.preventDefault()
           adjustSpeed(1)
-        } else if (e.key === 'r' || e.key === 'R') {
-          e.preventDefault()
-          handleInGameReset()
         }
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [session.isPlaying, session.isPaused, mode, adjustDistance, adjustSpeed, adjustSize, toggleMotionPlay, resetToInitial, handleInGameReset])
+  }, [session.started, session.isPaused, session.handleTogglePause, mode, adjustDistance, adjustSpeed, adjustSize, resetToInitial, handleInGameReset])
 
-  // ── Selector de Estímulos (Fila 1 · Tarjeta 1 · Arriba Izquierda) ──
+  // ── Selector de Estímulos (Columna 1 · Izquierda) ──
   const stimulusSelector = (
     <div>
       {/* Píldoras de Categoría */}
@@ -364,135 +376,74 @@ export default function ConvergenceGame() {
     </div>
   )
 
-  // ── Configuración (Fila 1 · Tarjeta 2 · Arriba Derecha) ──
+  // ── Configuración (Columna 2 · Derecha) ──
   const gameControls = (
-    <>
-      {/* Selector de modo */}
-      <div className="modeGridContainer">
-        <div className="convModeHeader">
-          <span className="controlLabel" id="conv-mode-label">
-            Modo de ejercicio
-          </span>
-          <span className="convModeSubtext">
-            {mode === 'fixed'
-              ? 'Distancia constante entre estímulos'
-              : 'Los estímulos se separan lentamente'}
-          </span>
-        </div>
-        <div
-          className="modeGrid"
-          role="radiogroup"
-          aria-labelledby="conv-mode-label"
-        >
-          {CONVERGENCE_MODES.map((m) => {
-            const isSelected = m.value === mode
-            return (
-              <button
-                key={m.value}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                disabled={!session.isIdle}
-                className={`modeCard ${isSelected ? 'modeCardActive' : ''}`}
-                onClick={() => {
-                  if (session.isIdle) {
-                    setMode(m.value)
-                  }
-                }}
-                title={m.description}
-              >
-                <div className="modeCardIcon">
-                  {m.value === 'fixed' ? <IconModeFixed /> : <IconModeMotion />}
-                </div>
-                <span className="modeCardLabel">{m.label}</span>
-              </button>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Duración de la sesión integrada */}
-      <div className="convDurationBlock">
-        <span className="controlLabel" id="conv-duration-label">
-          Duración de la sesión
+    <div className="modeGridContainer">
+      <div className="convModeHeader">
+        <span className="controlLabel" id="conv-mode-label">
+          Modo de ejercicio
         </span>
-        <div className="durationRow" role="radiogroup" aria-labelledby="conv-duration-label">
-          {DURATION_OPTIONS.map((opt) => {
-            const isSelected = opt.value === session.durationSetting
-            return (
-              <button
-                key={opt.value}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
-                disabled={!session.isIdle}
-                onClick={() => session.setDurationSetting(opt.value)}
-              >
-                {opt.label}
-              </button>
-            )
-          })}
-        </div>
+        <span className="convModeSubtext">
+          {mode === 'fixed'
+            ? 'Distancia constante entre estímulos'
+            : 'Los estímulos se separan lentamente'}
+        </span>
       </div>
-    </>
-  )
-
-  // ── Guía de Controles en Directo (Fila 2 · Tarjeta 3 · Barra compacta y escueta) ──
-  const bottomContent = (
-    <div className="convControlsCompact">
-      <div className="convControlsLeft">
-        <span className="convControlsLabel">Atajos:</span>
-        <div className="convControlsPills">
-          <div className="convPillItem">
-            <kbd className="convKey">↑</kbd>
-            <kbd className="convKey">↓</kbd>
-            <span>Tamaño</span>
-          </div>
-
-          <span className="convPillSep" aria-hidden="true">•</span>
-
-          <div className="convPillItem">
-            <kbd className="convKey">←</kbd>
-            <kbd className="convKey">→</kbd>
-            <span>{mode === 'fixed' ? 'Separación' : 'Velocidad'}</span>
-          </div>
-
-          {mode === 'motion' && (
-            <>
-              <span className="convPillSep" aria-hidden="true">•</span>
-              <div className="convPillItem">
-                <kbd className="convKey">Espacio</kbd>
-                <span>Pausar</span>
+      <div
+        className="modeGrid"
+        role="radiogroup"
+        aria-labelledby="conv-mode-label"
+      >
+        {CONVERGENCE_MODES.map((m) => {
+          const isSelected = m.value === mode
+          return (
+            <button
+              key={m.value}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              disabled={!session.isIdle}
+              className={`modeCard ${isSelected ? 'modeCardActive' : ''}`}
+              onClick={() => {
+                if (session.isIdle) {
+                  setMode(m.value)
+                }
+              }}
+              title={m.description}
+            >
+              <div className="modeCardIcon">
+                {m.value === 'fixed' ? <IconModeFixed /> : <IconModeMotion />}
               </div>
-            </>
-          )}
-
-          <span className="convPillSep" aria-hidden="true">•</span>
-
-          <div className="convPillItem">
-            <kbd className="convKey">R</kbd>
-            <span>Reiniciar</span>
-          </div>
-        </div>
+              <span className="modeCardLabel">{m.label}</span>
+            </button>
+          )
+        })}
       </div>
-
-      <span className="convControlsBaseHint">
-        {mode === 'fixed'
-          ? 'Inicio: 140 px · 76 px'
-          : 'Inicio: 140 px · 76 px · Vel. baja progresiva'}
-      </span>
     </div>
   )
+
+  // ── Atajos de Teclado (Fila Inferior · Ancho completo) ──
+  const shortcuts = [
+    { keys: ['↑', '↓'], label: 'Tamaño' },
+    { keys: ['←', '→'], label: mode === 'fixed' ? 'Separación' : 'Velocidad' },
+    { keys: ['Espacio'], label: 'Pausar y reanudar' },
+    { keys: ['R'], label: 'Reiniciar' },
+  ]
 
   return (
     <GameShell
       title="Convergencia"
       hint="Converge hasta fusionar los dos estímulos en una única imagen central nítida."
       session={session}
+      split="wide"
       stimulusGrid={stimulusSelector}
       gameControls={gameControls}
-      bottomContent={bottomContent}
+      shortcuts={shortcuts}
+      shortcutsHint={
+        mode === 'fixed'
+          ? 'Inicio: 140 px · 76 px'
+          : 'Inicio: 140 px · 76 px · Vel. baja progresiva'
+      }
       startDisabled={categoryPairs.length === 0}
     >
       {/* ── Zona de Juego Inmersiva ── */}
