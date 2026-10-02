@@ -5,6 +5,7 @@ import {
   GameShell,
   OptionPicker,
   useGameSession,
+  DURATION_OPTIONS,
   IconPlay,
   IconPause,
   IconReset,
@@ -13,12 +14,19 @@ import {
   STIMULI_CATEGORIES,
   STIMULI_PAIRS,
   CONVERGENCE_MODES,
-  INITIAL_DISTANCE_OPTIONS,
-  SPEED_OPTIONS,
-  STIMULUS_SIZE_OPTIONS,
-  STIMULUS_SIZE_PX,
 } from './data/stimuliPairs'
 import './convergence.css'
+
+// ── Niveles de Velocidad Progresiva (Modo Movimiento) ──
+// Comienza en velocidad muy baja (3.5 px/s) para facilitar la fusión inicial
+// y progresa exponencialmente para un control gradual y amplio
+const MOTION_SPEED_LEVELS = [
+  { level: 1, pxPerSec: 3.5, label: 'Muy baja' },
+  { level: 2, pxPerSec: 5.5, label: 'Baja' },
+  { level: 3, pxPerSec: 8.5, label: 'Suave' },
+  { level: 4, pxPerSec: 13, label: 'Moderada' },
+  { level: 5, pxPerSec: 19, label: 'Media' },
+]
 
 function IconTriangleLeft() {
   return (
@@ -98,12 +106,11 @@ export default function ConvergenceGame() {
   const [selectedCategory, setSelectedCategory] = useState('percepcion-simultanea')
   const [selectedPairId, setSelectedPairId] = useState('cross')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
-  const [initialDistance, setInitialDistance] = useState(140) // px
-  const [speed, setSpeed] = useState(4) // velocidad de separación progresiva
-  const [stimulusSize, setStimulusSize] = useState('md')
+  const [speed, setSpeed] = useState(1) // velocidad inicial muy baja (progresiva en partida)
 
-  // ── Estados de Juego ──
-  const [currentDistance, setCurrentDistance] = useState(140)
+  // ── Estados de Juego (Distancia y Tamaño continuos en píxeles) ──
+  const [stimulusSize, setStimulusSize] = useState(76) // px (recorrido amplio de 36px a 160px)
+  const [currentDistance, setCurrentDistance] = useState(140) // px
   const [motionActive, setMotionActive] = useState(false)
 
   // Referencias para el bucle de animación
@@ -125,30 +132,51 @@ export default function ConvergenceGame() {
     (p) => p.category === selectedCategory
   )
 
-  // Tamaño en píxeles del estímulo
-  const currentSizePx = STIMULUS_SIZE_PX[stimulusSize] || 76
+  // Tamaño en píxeles del estímulo (recorrido continuo)
+  const currentSizePx = stimulusSize
+
+  // Reiniciar a valores iniciales estándar
+  const resetToInitial = useCallback(() => {
+    setCurrentDistance(140)
+    setStimulusSize(76)
+    setSpeed(1)
+    setMotionActive(false)
+  }, [])
 
   // ── Sesión de Juego ──
   const session = useGameSession({
     onStart: () => {
-      setCurrentDistance(initialDistance)
-      setMotionActive(false)
+      resetToInitial()
+    },
+    onBeginPlay: () => {
+      if (mode === 'motion') {
+        setMotionActive(true)
+      }
+    },
+    onResume: () => {
+      if (mode === 'motion') {
+        setMotionActive(true)
+      }
     },
     onReset: () => {
-      setCurrentDistance(initialDistance)
-      setMotionActive(false)
+      resetToInitial()
     },
     onPause: () => {
       setMotionActive(false)
     },
+    onEnd: () => {
+      setMotionActive(false)
+    },
   })
 
-  // Sincronizar distancia inicial cuando cambia en el menú
-  useEffect(() => {
-    if (session.isIdle) {
-      setCurrentDistance(initialDistance)
+  // Reiniciar durante la partida (en juego): mantiene o reactiva el movimiento desde 140 px a vel. 1
+  const handleInGameReset = useCallback(() => {
+    setCurrentDistance(140)
+    setSpeed(1)
+    if (session.isPlaying && !session.isPaused) {
+      setMotionActive(true)
     }
-  }, [initialDistance, session.isIdle])
+  }, [session.isPlaying, session.isPaused])
 
   // Cambiar automáticamente al primer estímulo de la categoría si el actual no pertenece a ella
   const handleCategoryChange = (catId) => {
@@ -159,7 +187,7 @@ export default function ConvergenceGame() {
     }
   }
 
-  // ── Controles de Distancia (Modo Fijo) ──
+  // ── Ajuste de Distancia (Paso de 10 px) ──
   const adjustDistance = useCallback((delta) => {
     setCurrentDistance((prev) => {
       const maxDist = typeof window !== 'undefined' ? window.innerWidth - 120 : 600
@@ -168,9 +196,17 @@ export default function ConvergenceGame() {
     })
   }, [])
 
-  // ── Controles de Velocidad Progresiva (Modo Movimiento) ──
+  // ── Ajuste de Tamaño Continuo (Paso suave de 4 px, rango 36 px a 680 px) ──
+  const adjustSize = useCallback((delta) => {
+    setStimulusSize((prev) => {
+      const next = prev + delta
+      return Math.max(36, Math.min(next, 680))
+    })
+  }, [])
+
+  // ── Ajuste de Velocidad Progresiva (Modo Movimiento) ──
   const adjustSpeed = useCallback((delta) => {
-    setSpeed((prev) => Math.max(1, Math.min(prev + delta, 40)))
+    setSpeed((prev) => Math.max(1, Math.min(prev + delta, MOTION_SPEED_LEVELS.length)))
   }, [])
 
   const toggleMotionPlay = useCallback(() => {
@@ -179,26 +215,29 @@ export default function ConvergenceGame() {
     }
   }, [session.isPlaying, session.isPaused])
 
-  const resetToInitial = useCallback(() => {
-    setCurrentDistance(initialDistance)
-    setMotionActive(false)
-  }, [initialDistance])
-
   // ── Bucle de Animación de Alejamiento en Modo Movimiento ──
   useEffect(() => {
     if (mode !== 'motion' || !session.isPlaying || session.isPaused || !motionActive) {
       return
     }
 
-    let lastTime = performance.now()
     let frameId
+    let lastTime = performance.now()
 
     const animate = (now) => {
-      const dt = (now - lastTime) / 1000
+      const dt = Math.min((now - lastTime) / 1000, 0.1)
       lastTime = now
 
-      const maxDist = window.innerWidth - 120
-      const nextDist = currentDistanceRef.current + speedRef.current * dt
+      const maxDist = typeof window !== 'undefined' ? window.innerWidth - 120 : 600
+      const currentLevel = Math.max(1, Math.min(speedRef.current, MOTION_SPEED_LEVELS.length))
+      const basePxPerSec = MOTION_SPEED_LEVELS[currentLevel - 1].pxPerSec
+
+      // Aceleración progresiva suave con la distancia recorrida desde el punto inicial (140 px)
+      const distTraveled = Math.max(0, currentDistanceRef.current - 140)
+      const progressiveMultiplier = 1 + Math.min(distTraveled / 400, 1) * 0.5
+      const effectiveSpeed = basePxPerSec * progressiveMultiplier
+
+      const nextDist = currentDistanceRef.current + effectiveSpeed * dt
 
       if (nextDist >= maxDist) {
         setCurrentDistance(maxDist)
@@ -218,36 +257,51 @@ export default function ConvergenceGame() {
     if (!session.isPlaying || session.isPaused) return
 
     const handleKeyDown = (e) => {
+      // Ajuste de tamaño continuo común para ambos modos con flechas vertical
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        adjustSize(4)
+        return
+      }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        adjustSize(-4)
+        return
+      }
+
       if (mode === 'fixed') {
         if (e.key === 'ArrowLeft' || e.key === '-') {
           e.preventDefault()
-          adjustDistance(-10)
+          adjustDistance(-4)
         } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
           e.preventDefault()
-          adjustDistance(10)
+          adjustDistance(4)
+        } else if (e.key === 'r' || e.key === 'R') {
+          e.preventDefault()
+          resetToInitial()
         }
       } else if (mode === 'motion') {
         if (e.code === 'Space') {
           e.preventDefault()
           toggleMotionPlay()
-        } else if (e.key === 'ArrowUp' || e.key === '+' || e.key === '=') {
-          e.preventDefault()
-          adjustSpeed(1)
-        } else if (e.key === 'ArrowDown' || e.key === '-') {
+        } else if (e.key === 'ArrowLeft' || e.key === '-') {
           e.preventDefault()
           adjustSpeed(-1)
+        } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
+          e.preventDefault()
+          adjustSpeed(1)
         } else if (e.key === 'r' || e.key === 'R') {
           e.preventDefault()
-          resetToInitial()
+          handleInGameReset()
         }
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [session.isPlaying, session.isPaused, mode, adjustDistance, adjustSpeed, toggleMotionPlay, resetToInitial])
+  }, [session.isPlaying, session.isPaused, mode, adjustDistance, adjustSpeed, adjustSize, toggleMotionPlay, resetToInitial, handleInGameReset])
 
-  // ── Selector de Estímulos para el Dashboard (Tarjeta 1 · Arriba Izquierda) ──
+  // ── Selector de Estímulos (Fila 1 · Tarjeta 1 · Arriba Izquierda) ──
   const stimulusSelector = (
     <div>
       {/* Píldoras de Categoría */}
@@ -270,7 +324,7 @@ export default function ConvergenceGame() {
         })}
       </div>
 
-      {/* Cuadrícula de Parejas Disponibles (sin descripciones debajo de los títulos) */}
+      {/* Cuadrícula de Parejas Disponibles */}
       <div className="convPairsGrid">
         {categoryPairs.length > 0 ? (
           categoryPairs.map((pair) => {
@@ -310,14 +364,21 @@ export default function ConvergenceGame() {
     </div>
   )
 
-  // ── Controles del Ejercicio para el Dashboard (Tarjeta 2 · Arriba Derecha · Estilo Periferia) ──
+  // ── Configuración (Fila 1 · Tarjeta 2 · Arriba Derecha) ──
   const gameControls = (
     <>
-      {/* Selector de modo en cuadrícula de tarjetas estilo Periferia */}
+      {/* Selector de modo */}
       <div className="modeGridContainer">
-        <span className="controlLabel" id="conv-mode-label">
-          Modo de ejercicio
-        </span>
+        <div className="convModeHeader">
+          <span className="controlLabel" id="conv-mode-label">
+            Modo de ejercicio
+          </span>
+          <span className="convModeSubtext">
+            {mode === 'fixed'
+              ? 'Distancia constante entre estímulos'
+              : 'Los estímulos se separan lentamente'}
+          </span>
+        </div>
         <div
           className="modeGrid"
           role="radiogroup"
@@ -350,54 +411,79 @@ export default function ConvergenceGame() {
         </div>
       </div>
 
-      <OptionPicker
-        id="conv-distance"
-        label="Distancia inicial"
-        value={initialDistance}
-        options={INITIAL_DISTANCE_OPTIONS}
-        disabled={!session.isIdle}
-        onChange={setInitialDistance}
-      />
-
-      <OptionPicker
-        id="conv-size"
-        label="Tamaño del estímulo"
-        value={stimulusSize}
-        options={STIMULUS_SIZE_OPTIONS}
-        disabled={!session.isIdle}
-        onChange={setStimulusSize}
-      />
+      {/* Duración de la sesión integrada */}
+      <div className="convDurationBlock">
+        <span className="controlLabel" id="conv-duration-label">
+          Duración de la sesión
+        </span>
+        <div className="durationRow" role="radiogroup" aria-labelledby="conv-duration-label">
+          {DURATION_OPTIONS.map((opt) => {
+            const isSelected = opt.value === session.durationSetting
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+                disabled={!session.isIdle}
+                onClick={() => session.setDurationSetting(opt.value)}
+              >
+                {opt.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
     </>
   )
 
-  // ── Tarjeta 4 (Abajo Derecha: Velocidad de separación con subtítulo explicativo en Fijo) ──
-  const speedContent =
-    mode === 'motion' ? (
-      <OptionPicker
-        id="conv-speed"
-        label="Velocidad de separación"
-        value={speed}
-        options={SPEED_OPTIONS}
-        disabled={!session.isIdle}
-        onChange={setSpeed}
-      />
-    ) : (
-      <div className="dashFixedSpeedPlaceholder" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-        <div className="dashCardHead" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <span className="controlLabel" id="conv-speed-label">
-            Velocidad de separación
-          </span>
-          <span className="dashCardSub" style={{ marginLeft: 'auto' }}>
-            Inactivo en modo fijo
-          </span>
-        </div>
-        <div className="dashNoExtras">
-          <p className="dashNoExtrasText">
-            En modo fijo los estímulos no se desplazan automáticamente.
-          </p>
+  // ── Guía de Controles en Directo (Fila 2 · Tarjeta 3 · Barra compacta y escueta) ──
+  const bottomContent = (
+    <div className="convControlsCompact">
+      <div className="convControlsLeft">
+        <span className="convControlsLabel">Atajos:</span>
+        <div className="convControlsPills">
+          <div className="convPillItem">
+            <kbd className="convKey">↑</kbd>
+            <kbd className="convKey">↓</kbd>
+            <span>Tamaño</span>
+          </div>
+
+          <span className="convPillSep" aria-hidden="true">•</span>
+
+          <div className="convPillItem">
+            <kbd className="convKey">←</kbd>
+            <kbd className="convKey">→</kbd>
+            <span>{mode === 'fixed' ? 'Separación' : 'Velocidad'}</span>
+          </div>
+
+          {mode === 'motion' && (
+            <>
+              <span className="convPillSep" aria-hidden="true">•</span>
+              <div className="convPillItem">
+                <kbd className="convKey">Espacio</kbd>
+                <span>Pausar</span>
+              </div>
+            </>
+          )}
+
+          <span className="convPillSep" aria-hidden="true">•</span>
+
+          <div className="convPillItem">
+            <kbd className="convKey">R</kbd>
+            <span>Reiniciar</span>
+          </div>
         </div>
       </div>
-    )
+
+      <span className="convControlsBaseHint">
+        {mode === 'fixed'
+          ? 'Inicio: 140 px · 76 px'
+          : 'Inicio: 140 px · 76 px · Vel. baja progresiva'}
+      </span>
+    </div>
+  )
 
   return (
     <GameShell
@@ -406,7 +492,7 @@ export default function ConvergenceGame() {
       session={session}
       stimulusGrid={stimulusSelector}
       gameControls={gameControls}
-      speedContent={speedContent}
+      bottomContent={bottomContent}
       startDisabled={categoryPairs.length === 0}
     >
       {/* ── Zona de Juego Inmersiva ── */}
@@ -414,7 +500,7 @@ export default function ConvergenceGame() {
         <div className="convergenceTrack">
           {/* Estímulo Ojo Izquierdo */}
           <div
-            className="stimulusWrapper"
+            className={`stimulusWrapper ${mode === 'fixed' || !motionActive ? 'stimulusWrapperSmooth' : ''}`}
             style={{
               transform: `translateX(-${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
@@ -424,7 +510,7 @@ export default function ConvergenceGame() {
 
           {/* Estímulo Ojo Derecho */}
           <div
-            className="stimulusWrapper"
+            className={`stimulusWrapper ${mode === 'fixed' || !motionActive ? 'stimulusWrapperSmooth' : ''}`}
             style={{
               transform: `translateX(${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
@@ -443,7 +529,7 @@ export default function ConvergenceGame() {
                   <button
                     type="button"
                     className="convCircleBtn"
-                    onClick={() => adjustDistance(-10)}
+                    onClick={() => adjustDistance(-4)}
                     title="Acercar estímulos (Flecha Izquierda o -)"
                     aria-label="Acercar estímulos"
                   >
@@ -458,11 +544,41 @@ export default function ConvergenceGame() {
                   <button
                     type="button"
                     className="convCircleBtn"
-                    onClick={() => adjustDistance(10)}
+                    onClick={() => adjustDistance(4)}
                     title="Alejar estímulos (Flecha Derecha o +)"
                     aria-label="Alejar estímulos"
                   >
                     <IconTriangleRight />
+                  </button>
+
+                  <div className="convBarDivider" aria-hidden="true" />
+
+                  {/* Reducir tamaño */}
+                  <button
+                    type="button"
+                    className="convCircleBtn"
+                    onClick={() => adjustSize(-4)}
+                    disabled={stimulusSize <= 36}
+                    title="Reducir tamaño (Flecha Abajo)"
+                    aria-label="Reducir tamaño"
+                  >
+                    <IconMinus />
+                  </button>
+
+                  <span className="convDistanceBadge" style={{ minWidth: '60px' }}>
+                    {stimulusSize} px
+                  </span>
+
+                  {/* Aumentar tamaño */}
+                  <button
+                    type="button"
+                    className="convCircleBtn"
+                    onClick={() => adjustSize(4)}
+                    disabled={stimulusSize >= 680}
+                    title="Aumentar tamaño (Flecha Arriba)"
+                    aria-label="Aumentar tamaño"
+                  >
+                    <IconPlus />
                   </button>
                 </>
               ) : (
@@ -487,9 +603,9 @@ export default function ConvergenceGame() {
                   <button
                     type="button"
                     className="convCircleBtn"
-                    onClick={resetToInitial}
-                    title="Reiniciar a distancia inicial (R)"
-                    aria-label="Reiniciar a distancia inicial"
+                    onClick={handleInGameReset}
+                    title="Reiniciar a distancia y velocidad iniciales (R)"
+                    aria-label="Reiniciar a distancia y velocidad iniciales"
                   >
                     <IconReset />
                   </button>
@@ -502,15 +618,21 @@ export default function ConvergenceGame() {
                     className="convCircleBtn"
                     onClick={() => adjustSpeed(-1)}
                     disabled={speed <= 1}
-                    title="Reducir velocidad progresivamente (Flecha Abajo o -)"
+                    title="Reducir velocidad"
                     aria-label="Reducir velocidad"
                   >
                     <IconMinus />
                   </button>
 
-                  {/* Símbolo de velocidad */}
-                  <span className="convSpeedBadge" title="Velocidad (Ajustable con + y -)">
+                  {/* Símbolo e indicador numérico de velocidad */}
+                  <span
+                    className="convSpeedBadge"
+                    title={`Velocidad progresiva: Nivel ${speed} (${MOTION_SPEED_LEVELS[speed - 1]?.label || ''})`}
+                  >
                     <IconGauge />
+                    <span className="convSpeedNum">
+                      {speed}
+                    </span>
                   </span>
 
                   {/* Aumentar velocidad (+) */}
@@ -518,9 +640,39 @@ export default function ConvergenceGame() {
                     type="button"
                     className="convCircleBtn"
                     onClick={() => adjustSpeed(1)}
-                    disabled={speed >= 40}
-                    title="Aumentar velocidad progresivamente (Flecha Arriba o +)"
+                    disabled={speed >= MOTION_SPEED_LEVELS.length}
+                    title="Aumentar velocidad"
                     aria-label="Aumentar velocidad"
+                  >
+                    <IconPlus />
+                  </button>
+
+                  <div className="convBarDivider" aria-hidden="true" />
+
+                  {/* Reducir tamaño */}
+                  <button
+                    type="button"
+                    className="convCircleBtn"
+                    onClick={() => adjustSize(-4)}
+                    disabled={stimulusSize <= 36}
+                    title="Reducir tamaño (Flecha Abajo)"
+                    aria-label="Reducir tamaño"
+                  >
+                    <IconMinus />
+                  </button>
+
+                  <span className="convDistanceBadge" style={{ minWidth: '60px' }}>
+                    {stimulusSize} px
+                  </span>
+
+                  {/* Aumentar tamaño */}
+                  <button
+                    type="button"
+                    className="convCircleBtn"
+                    onClick={() => adjustSize(4)}
+                    disabled={stimulusSize >= 680}
+                    title="Aumentar tamaño (Flecha Arriba)"
+                    aria-label="Aumentar tamaño"
                   >
                     <IconPlus />
                   </button>

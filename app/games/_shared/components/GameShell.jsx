@@ -26,6 +26,7 @@ export function GameShell({
   speedContent,
   extraControls,
   gameControls,
+  bottomContent,
   fullWidthDuration = true,
   isFullscreen,
   startDisabled = false,
@@ -106,32 +107,38 @@ export function GameShell({
             )}
           </div>
 
-          {/* Tarjeta: Duración */}
+          {/* Tarjeta: Duración o Contenido inferior personalizado */}
           <div
             className={`dashCard dashCardDuration ${!hasSpeedCard && fullWidthDuration ? 'dashCardFull' : ''}`}
           >
-            <div className="dashCardHead">
-              <span className="dashCardLabel">Duración</span>
-              <span className="dashCardSub">Tiempo total</span>
-            </div>
-            <div className="durationRow">
-              {DURATION_OPTIONS.map((opt) => {
-                const isSelected = opt.value === durationSetting
-                return (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={isSelected}
-                    className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
-                    disabled={!isIdle}
-                    onClick={() => setDurationSetting(opt.value)}
-                  >
-                    {opt.label}
-                  </button>
-                )
-              })}
-            </div>
+            {bottomContent ? (
+              bottomContent
+            ) : (
+              <>
+                <div className="dashCardHead">
+                  <span className="dashCardLabel">Duración</span>
+                  <span className="dashCardSub">Tiempo total</span>
+                </div>
+                <div className="durationRow">
+                  {DURATION_OPTIONS.map((opt) => {
+                    const isSelected = opt.value === durationSetting
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        role="radio"
+                        aria-checked={isSelected}
+                        className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+                        disabled={!isIdle}
+                        onClick={() => setDurationSetting(opt.value)}
+                      >
+                        {opt.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Tarjeta: Velocidad / Cadencia */}

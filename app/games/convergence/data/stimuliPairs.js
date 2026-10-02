@@ -205,7 +205,7 @@ export const CONVERGENCE_MODES = [
   {
     value: 'motion',
     label: 'En movimiento',
-    description: 'Los estímulos se alejan de forma progresiva',
+    description: 'Los estímulos se separan lentamente',
     icon: 'motion',
   },
 ]
