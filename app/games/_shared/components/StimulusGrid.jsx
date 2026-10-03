@@ -1,8 +1,24 @@
 'use client'
 
-import { STIMULUS_OPTIONS } from '../data/constants'
+import { STIMULUS_OPTIONS, getIllustrationCategory } from '../data/constants'
 
 function StimulusIcon({ type }) {
+  const illCat = getIllustrationCategory(type)
+  if (illCat) {
+    return (
+      <span className={`stimulusIconIllustration stimulusIcon-${type}`} aria-hidden>
+        <img
+          src={illCat.iconSrc}
+          alt=""
+          width={36}
+          height={36}
+          className="stimulusIconImg"
+          draggable={false}
+        />
+      </span>
+    )
+  }
+
   switch (type) {
     case 'classic':
       return <span className="stimulusIconDot" aria-hidden />
@@ -16,32 +32,6 @@ function StimulusIcon({ type }) {
       return <span className="stimulusIconNumbers" aria-hidden>123</span>
     case 'arrows':
       return <span className="stimulusIconArrows" aria-hidden>➜</span>
-    case 'animals':
-      return (
-        <span className="stimulusIconAnimals" aria-hidden>
-          <img
-            src="/animals/lion.svg"
-            alt=""
-            width={36}
-            height={36}
-            className="stimulusIconImg"
-            draggable={false}
-          />
-        </span>
-      )
-    case 'fruits':
-      return (
-        <span className="stimulusIconFruits" aria-hidden>
-          <img
-            src="/fruits/strawberry.svg"
-            alt=""
-            width={36}
-            height={36}
-            className="stimulusIconImg"
-            draggable={false}
-          />
-        </span>
-      )
     default:
       return null
   }

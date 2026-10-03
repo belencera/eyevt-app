@@ -329,7 +329,9 @@
 }
 
 .stimulusIconAnimals,
-.stimulusIconFruits {
+.stimulusIconFruits,
+.stimulusIconFood,
+.stimulusIconIllustration {
   font-size: 1.4rem;
   line-height: 1;
   display: inline-flex;

@@ -9,6 +9,8 @@ import {
   hasStimulusExtras,
   useGameSession,
   useStimulusManager,
+  isIllustrationCategory,
+  getIllustrationHint,
 } from '../_shared'
 
 const MIN = 2
@@ -38,6 +40,7 @@ function setVelocityMagnitude(vel, speed) {
 const HINTS = {
   animals: 'Sigue los animales con la mirada sin mover la cabeza y nómbralo en voz alta cada vez que cambie.',
   fruits: 'Sigue la fruta con la mirada sin mover la cabeza y nómbrala en voz alta cada vez que cambie.',
+  food: 'Sigue la comida con la mirada sin mover la cabeza y nómbrala en voz alta cada vez que cambie.',
   words: 'Sigue la palabra con la vista sin mover la cabeza y léela en voz alta cada vez que cambie.',
   numbers: 'Sigue el número con la mirada sin mover la cabeza y dilo en voz alta cada vez que cambie.',
   arrows: 'Sigue la flecha con los ojos sin mover la cabeza e indica su dirección en voz alta cada vez que cambie.',
@@ -122,10 +125,8 @@ export default function EyeTrackingGame() {
         targetInterval = stim.refs.letterIntervalRef.current
       } else if (type === 'words') {
         targetInterval = stim.refs.wordIntervalRef.current
-      } else if (type === 'animals') {
-        targetInterval = stim.refs.animalIntervalRef.current
-      } else if (type === 'fruits') {
-        targetInterval = stim.refs.fruitIntervalRef.current
+      } else if (isIllustrationCategory(type)) {
+        targetInterval = stim.refs.illustrationIntervalRef.current
       } else if (type === 'numbers') {
         targetInterval = stim.refs.numberIntervalRef.current
       } else if (type === 'arrows') {
@@ -187,7 +188,7 @@ export default function EyeTrackingGame() {
   return (
     <GameShell
       title="Seguimientos"
-      hint={HINTS[stimulus.stimulusType] || HINTS.classic}
+      hint={getIllustrationHint('eye-tracking', stimulus.stimulusType) || HINTS[stimulus.stimulusType] || HINTS.classic}
       session={session}
       speedControl={{
         id: 'speed',

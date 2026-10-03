@@ -1,15 +1,17 @@
 'use client'
 
+import { getIllustrationCategory } from '../data/illustrationsRegistry'
+
 /**
  * Componente modular unificado para renderizar estímulos gráficos basados en ilustraciones
- * (SVG o PNG), reutilizado para animales, frutas y futuras categorías.
+ * (SVG o PNG), reutilizado para animales, frutas, comida y futuras categorías registradas.
  *
  * @param {Object} props
  * @param {{ id: string, name: string, src?: string }} [props.item] - Datos de la ilustración
  * @param {'sm'|'md'|'lg'|'xl'} [props.size='md'] - Tamaño de la ilustración
  * @param {{ x: number, y: number }} props.position - Posición porcentual en pantalla
  * @param {boolean} [props.isPaused=false] - Indica si el ejercicio está en pausa
- * @param {string} [props.category='illustration'] - Categoría ('animals' | 'fruits')
+ * @param {string} [props.category='illustration'] - Categoría ('animals' | 'fruits' | 'food' | ...)
  */
 export function StimulusIllustration({
   item,
@@ -23,6 +25,9 @@ export function StimulusIllustration({
     name: 'Estímulo',
     src: '',
   }
+
+  const categoryMeta = getIllustrationCategory(category)
+  const fallbackEmoji = categoryMeta?.fallbackEmoji || (category === 'fruits' ? '🍓' : category === 'food' ? '🍕' : '🦁')
 
   return (
     <div
@@ -43,7 +48,7 @@ export function StimulusIllustration({
           className="stimulusIllustrationImg"
           draggable={false}
           onError={(e) => {
-            // Si la imagen todavía no está en /public/fruits/ o da error 404, ocultar img rota y mostrar texto amigable
+            // Ocultar img rota y mostrar texto de fallback si el SVG no carga
             e.currentTarget.style.display = 'none'
             if (e.currentTarget.nextElementSibling) {
               e.currentTarget.nextElementSibling.style.display = 'inline-flex'
@@ -55,7 +60,7 @@ export function StimulusIllustration({
         className="stimulusIllustrationFallback"
         style={{ display: current.src ? 'none' : 'inline-flex' }}
       >
-        {category === 'fruits' ? '🍓' : '🦁'} {current.name}
+        {fallbackEmoji} {current.name}
       </span>
     </div>
   )

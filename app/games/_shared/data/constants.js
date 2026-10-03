@@ -20,6 +20,7 @@ export const STIMULUS_TYPES = {
   ARROWS: 'arrows',
   ANIMALS: 'animals',
   FRUITS: 'fruits',
+  FOOD: 'food',
 }
 
 export const STIMULUS_OPTIONS = [
@@ -71,6 +72,12 @@ export const STIMULUS_OPTIONS = [
     iconType: 'fruits',
     description: 'Frutas ilustradas aleatorias',
   },
+  {
+    value: 'food',
+    label: 'Comida',
+    iconType: 'food',
+    description: 'Alimentos y comida ilustrada aleatoria',
+  },
 ]
 
 export const COLOR_INTERVAL_OPTIONS = [
@@ -117,4 +124,6 @@ export * from './numbers'
 export * from './arrows'
 export * from './animals'
 export * from './fruits'
+export * from './food'
+export * from './illustrationsRegistry'
 export * from './periphery'

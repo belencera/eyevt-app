@@ -16,8 +16,6 @@ export { StimulusLetter } from './stimuli/StimulusLetter'
 export { StimulusWord } from './stimuli/StimulusWord'
 export { StimulusNumber } from './stimuli/StimulusNumber'
 export { StimulusArrow } from './stimuli/StimulusArrow'
-export { StimulusAnimal } from './stimuli/StimulusAnimal'
-export { StimulusFruit } from './stimuli/StimulusFruit'
 export { StimulusIllustration } from './stimuli/StimulusIllustration'
 
 // Hooks

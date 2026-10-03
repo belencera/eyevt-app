@@ -5,6 +5,7 @@ import { StimulusWord } from './StimulusWord'
 import { StimulusNumber } from './StimulusNumber'
 import { StimulusArrow } from './StimulusArrow'
 import { StimulusIllustration } from './StimulusIllustration'
+import { isIllustrationCategory } from '../data/constants'
 
 /**
  * Componente despachador de estímulo visual.
@@ -16,8 +17,7 @@ import { StimulusIllustration } from './StimulusIllustration'
  * - Palabras de 3 a 6 letras en mayúscula con selección de tamaño ('words')
  * - Números aleatorios de 1 a 5 cifras con selección de tamaño ('numbers')
  * - Flechas direccionales en 4 sentidos cardinales ('arrows')
- * - Animales ilustrados con selección de tamaño ('animals')
- * - Frutas ilustradas con selección de tamaño ('fruits')
+ * - Ilustraciones vectoriales modulares (animales, frutas, comida y futuras categorías)
  */
 export function StimulusDot({
   position,
@@ -33,10 +33,14 @@ export function StimulusDot({
   numberSize = 'md',
   arrow,
   arrowSize = 'md',
+  illustration,
+  illustrationSize = 'md',
   animal,
-  animalSize = 'md',
+  animalSize,
   fruit,
-  fruitSize = 'md',
+  fruitSize,
+  food,
+  foodSize,
   stimulusType = 'colors',
 }) {
   const type = stimulus?.stimulusType ?? stimulusType
@@ -49,10 +53,26 @@ export function StimulusDot({
   const activeNumberSize = stimulus?.numberSize ?? numberSize
   const activeArrow = stimulus?.currentArrow ?? arrow
   const activeArrowSize = stimulus?.arrowSize ?? arrowSize
-  const activeAnimal = stimulus?.currentAnimal ?? animal
-  const activeAnimalSize = stimulus?.animalSize ?? animalSize
-  const activeFruit = stimulus?.currentFruit ?? fruit
-  const activeFruitSize = stimulus?.fruitSize ?? fruitSize
+
+  // Tamaño genérico de ilustración con fallbacks
+  const activeIllustrationSize =
+    stimulus?.illustrationSize ??
+    stimulus?.animalSize ??
+    stimulus?.fruitSize ??
+    stimulus?.foodSize ??
+    illustrationSize ??
+    animalSize ??
+    fruitSize ??
+    foodSize ??
+    'md'
+
+  // Ítem activo de ilustración según categoría
+  const activeIllustrationItem =
+    stimulus?.currentIllustration ??
+    (type === 'animals' ? (stimulus?.currentAnimal ?? animal) : null) ??
+    (type === 'fruits' ? (stimulus?.currentFruit ?? fruit) : null) ??
+    (type === 'food' ? (stimulus?.currentFood ?? food) : null) ??
+    illustration
 
   if (type === 'letters') {
     return (
@@ -98,26 +118,15 @@ export function StimulusDot({
     )
   }
 
-  if (type === 'animals') {
+  // Renderizado dinámico de cualquier categoría de ilustración registrada
+  if (isIllustrationCategory(type)) {
     return (
       <StimulusIllustration
         position={position}
-        item={activeAnimal}
-        size={activeAnimalSize}
+        item={activeIllustrationItem}
+        size={activeIllustrationSize}
         isPaused={isPaused}
-        category="animals"
-      />
-    )
-  }
-
-  if (type === 'fruits') {
-    return (
-      <StimulusIllustration
-        position={position}
-        item={activeFruit}
-        size={activeFruitSize}
-        isPaused={isPaused}
-        category="fruits"
+        category={type}
       />
     )
   }

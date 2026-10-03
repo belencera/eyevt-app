@@ -10,11 +10,14 @@ import {
   useGameSession,
   useStimulusManager,
   CADENCE_STEPS,
+  isIllustrationCategory,
+  getIllustrationHint,
 } from '../_shared'
 
 const HINTS = {
   animals: 'Mantén la mirada fija en el centro y nombra al animal en voz alta cada vez que cambie.',
   fruits: 'Mantén la mirada fija en el centro y nombra la fruta en voz alta cada vez que cambie.',
+  food: 'Mantén la mirada fija en el centro y nombra la comida en voz alta cada vez que cambie.',
   words: 'Mantén la mirada fija en el centro y lee la palabra en voz alta cada vez que cambie.',
   numbers: 'Mantén la mirada fija en el centro y di el número en voz alta cada vez que cambie.',
   arrows: 'Mantén la mirada fija en el centro e indica la dirección de la flecha en voz alta cada vez que cambie.',
@@ -103,13 +106,12 @@ export default function FixationGame() {
     stimulus.stimulusType === 'words' ||
     stimulus.stimulusType === 'numbers' ||
     stimulus.stimulusType === 'arrows' ||
-    stimulus.stimulusType === 'animals' ||
-    stimulus.stimulusType === 'fruits'
+    isIllustrationCategory(stimulus.stimulusType)
 
   return (
     <GameShell
       title="Fijación"
-      hint={HINTS[stimulus.stimulusType] || HINTS.classic}
+      hint={getIllustrationHint('fixation', stimulus.stimulusType) || HINTS[stimulus.stimulusType] || HINTS.classic}
       session={session}
       speedControl={{
         id: 'change-interval',

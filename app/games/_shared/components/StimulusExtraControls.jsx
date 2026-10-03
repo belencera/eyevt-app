@@ -17,6 +17,9 @@ import {
   ANIMAL_INTERVAL_OPTIONS,
   FRUIT_SIZE_OPTIONS,
   FRUIT_INTERVAL_OPTIONS,
+  isIllustrationCategory,
+  ILLUSTRATION_SIZE_OPTIONS,
+  ILLUSTRATION_INTERVAL_OPTIONS,
   getRandomWord,
   getRandomNumber,
 } from '../data/constants'
@@ -38,6 +41,31 @@ export function StimulusExtraControls({
   showIntervals = false,
 }) {
   const id = (name) => (prefix ? `${prefix}-${name}` : name)
+
+  if (isIllustrationCategory(stimulus.stimulusType)) {
+    return (
+      <>
+        <OptionPicker
+          id={id('illustration-size')}
+          label="Tamaño del estímulo"
+          value={stimulus.illustrationSize}
+          options={ILLUSTRATION_SIZE_OPTIONS}
+          disabled={disabled}
+          onChange={stimulus.setIllustrationSize}
+        />
+        {showIntervals && (
+          <OptionPicker
+            id={id('illustration-interval')}
+            label="Intervalo de cambio"
+            value={stimulus.illustrationInterval}
+            options={ILLUSTRATION_INTERVAL_OPTIONS}
+            disabled={disabled}
+            onChange={stimulus.setIllustrationInterval}
+          />
+        )}
+      </>
+    )
+  }
 
   switch (stimulus.stimulusType) {
     case 'classic':
@@ -168,54 +196,6 @@ export function StimulusExtraControls({
               options={ARROW_INTERVAL_OPTIONS}
               disabled={disabled}
               onChange={stimulus.setArrowInterval}
-            />
-          )}
-        </>
-      )
-
-    case 'animals':
-      return (
-        <>
-          <OptionPicker
-            id={id('animal-size')}
-            label="Tamaño del estímulo"
-            value={stimulus.animalSize}
-            options={ANIMAL_SIZE_OPTIONS}
-            disabled={disabled}
-            onChange={stimulus.setAnimalSize}
-          />
-          {showIntervals && (
-            <OptionPicker
-              id={id('animal-interval')}
-              label="Intervalo de cambio"
-              value={stimulus.animalInterval}
-              options={ANIMAL_INTERVAL_OPTIONS}
-              disabled={disabled}
-              onChange={stimulus.setAnimalInterval}
-            />
-          )}
-        </>
-      )
-
-    case 'fruits':
-      return (
-        <>
-          <OptionPicker
-            id={id('fruit-size')}
-            label="Tamaño del estímulo"
-            value={stimulus.fruitSize}
-            options={FRUIT_SIZE_OPTIONS}
-            disabled={disabled}
-            onChange={stimulus.setFruitSize}
-          />
-          {showIntervals && (
-            <OptionPicker
-              id={id('fruit-interval')}
-              label="Intervalo de cambio"
-              value={stimulus.fruitInterval}
-              options={FRUIT_INTERVAL_OPTIONS}
-              disabled={disabled}
-              onChange={stimulus.setFruitInterval}
             />
           )}
         </>
