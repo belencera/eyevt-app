@@ -11,7 +11,7 @@ import {
   useStimulusManager,
   PERIPHERY_MODES,
   DISTANCE_OPTIONS,
-  PERIPHERY_CADENCE_OPTIONS,
+  CADENCE_STEPS,
   getRandomPeripheralPosition,
   IconClick,
   COLOR_INTERVAL_OPTIONS,
@@ -229,16 +229,15 @@ export default function PeripheryGame() {
       title="Periferia"
       hint={HINTS[mode]}
       session={shellSession}
-      speedContent={
-        <OptionPicker
-          id="periphery-cadence"
-          label="Cadencia de cambio"
-          value={cadence}
-          options={PERIPHERY_CADENCE_OPTIONS}
-          disabled={!session.isIdle}
-          onChange={setCadence}
-        />
-      }
+      speedControl={{
+        id: 'periphery-cadence',
+        label: 'Tiempo de cambio',
+        value: cadence,
+        steps: CADENCE_STEPS,
+        unit: ' s',
+        disabled: !session.isIdle,
+        onChange: setCadence,
+      }}
       stimulusGrid={
         <StimulusGrid
           value={stimulus.stimulusType}

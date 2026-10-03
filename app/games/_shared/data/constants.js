@@ -1,5 +1,8 @@
 export const COUNTDOWN_START = 3
 
+/** Pasos unificados de cadencia/tiempo en segundos para Fijación, Periferia y Sacádicos */
+export const CADENCE_STEPS = [0.3, 0.7, 1, 2, 3, 4, 5]
+
 export const DURATION_OPTIONS = [
   { value: 0, label: 'Infinito' },
   { value: 30, label: '30 s' },

@@ -9,6 +9,7 @@ import {
   hasStimulusExtras,
   useGameSession,
   useStimulusManager,
+  CADENCE_STEPS,
 } from '../_shared'
 
 const MIN = 2
@@ -21,9 +22,8 @@ function randomPosition() {
   }
 }
 
-/** Convierte velocidad del slider (12–48) en intervalo entre saltos (ms). */
-function speedToInterval(speed) {
-  return Math.round(1500 - speed * 25)
+function intervalToMs(sec) {
+  return Math.round(sec * 1000)
 }
 
 const HINTS = {
@@ -39,7 +39,7 @@ const HINTS = {
 
 export default function SacadesGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
-  const [speed, setSpeed] = useState(28)
+  const [jumpInterval, setJumpInterval] = useState(0.7)
   const intervalRef = useRef(null)
 
   const stimulus = useStimulusManager('classic')
@@ -59,7 +59,7 @@ export default function SacadesGame() {
   const startJumping = () => {
     clearJumpInterval()
     jumpToRandom()
-    intervalRef.current = setInterval(jumpToRandom, speedToInterval(speed))
+    intervalRef.current = setInterval(jumpToRandom, intervalToMs(jumpInterval))
   }
 
   const resetBall = () => {
@@ -76,13 +76,13 @@ export default function SacadesGame() {
     onEnd: clearJumpInterval,
   })
 
-  // Actualizar intervalo en caliente al variar la velocidad durante el juego
+  // Actualizar intervalo en caliente al variar el tiempo durante el juego
   useEffect(() => {
     if (session.isPlaying && !session.isPaused) {
       clearJumpInterval()
-      intervalRef.current = setInterval(jumpToRandom, speedToInterval(speed))
+      intervalRef.current = setInterval(jumpToRandom, intervalToMs(jumpInterval))
     }
-  }, [speed, session.isPlaying, session.isPaused])
+  }, [jumpInterval, session.isPlaying, session.isPaused])
 
   // ── Atajos de Teclado durante la partida ──
   useEffect(() => {
@@ -107,10 +107,16 @@ export default function SacadesGame() {
 
       if (e.key === 'ArrowLeft' || e.key === '-') {
         e.preventDefault()
-        setSpeed((prev) => Math.max(12, prev - 2))
+        setJumpInterval((prev) => {
+          const idx = CADENCE_STEPS.indexOf(prev)
+          return idx > 0 ? CADENCE_STEPS[idx - 1] : CADENCE_STEPS[0]
+        })
       } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
         e.preventDefault()
-        setSpeed((prev) => Math.min(48, prev + 2))
+        setJumpInterval((prev) => {
+          const idx = CADENCE_STEPS.indexOf(prev)
+          return idx < CADENCE_STEPS.length - 1 ? CADENCE_STEPS[idx + 1] : CADENCE_STEPS[CADENCE_STEPS.length - 1]
+        })
       }
     }
 
@@ -126,13 +132,13 @@ export default function SacadesGame() {
       hint={HINTS[stimulus.stimulusType] || HINTS.classic}
       session={session}
       speedControl={{
-        id: 'sacade-speed',
-        label: 'Velocidad',
-        value: speed,
-        min: 12,
-        max: 48,
-        step: 2,
-        onChange: setSpeed,
+        id: 'sacade-interval',
+        label: 'Tiempo entre saltos',
+        value: jumpInterval,
+        steps: CADENCE_STEPS,
+        unit: ' s',
+        disabled: !session.isIdle,
+        onChange: setJumpInterval,
       }}
       stimulusGrid={
         <StimulusGrid

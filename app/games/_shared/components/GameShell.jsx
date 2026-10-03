@@ -113,32 +113,44 @@ export function GameShell({
               {gameControls}
 
               {/* Control de velocidad con slider */}
-              {speedControl && (
-                <div className="speedControlBlock">
-                  <span className="controlLabel" id={`label-${speedControl.id ?? 'speed'}`}>
-                    {speedControl.label ?? 'Velocidad'}
-                  </span>
-                  <div className="speedSliderRow">
-                    <input
-                      id={speedControl.id ?? 'speed'}
-                      type="range"
-                      min={speedControl.min}
-                      max={speedControl.max}
-                      step={speedControl.step ?? 1}
-                      value={speedControl.value}
-                      disabled={speedControl.disabled ?? !isIdle}
-                      onChange={(e) =>
-                        speedControl.onChange(Number(e.target.value))
-                      }
-                      className="dashSlider"
-                      aria-labelledby={`label-${speedControl.id ?? 'speed'}`}
-                    />
-                    <span className="speedSliderValue">
-                      {speedControl.value}{speedControl.unit ?? ''}
+              {speedControl && (() => {
+                const hasSteps = Array.isArray(speedControl.steps) && speedControl.steps.length > 0
+                const currentIdx = hasSteps
+                  ? Math.max(0, speedControl.steps.indexOf(speedControl.value))
+                  : 0
+
+                return (
+                  <div className="speedControlBlock">
+                    <span className="controlLabel" id={`label-${speedControl.id ?? 'speed'}`}>
+                      {speedControl.label ?? 'Velocidad'}
                     </span>
+                    <div className="speedSliderRow">
+                      <input
+                        id={speedControl.id ?? 'speed'}
+                        type="range"
+                        min={hasSteps ? 0 : speedControl.min}
+                        max={hasSteps ? speedControl.steps.length - 1 : speedControl.max}
+                        step={hasSteps ? 1 : (speedControl.step ?? 1)}
+                        value={hasSteps ? currentIdx : speedControl.value}
+                        disabled={speedControl.disabled ?? !isIdle}
+                        onChange={(e) => {
+                          const num = Number(e.target.value)
+                          if (hasSteps) {
+                            speedControl.onChange(speedControl.steps[num])
+                          } else {
+                            speedControl.onChange(num)
+                          }
+                        }}
+                        className="dashSlider"
+                        aria-labelledby={`label-${speedControl.id ?? 'speed'}`}
+                      />
+                      <span className="speedSliderValue">
+                        {speedControl.value}{speedControl.unit ?? ''}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )
+              })()}
 
               {/* Contenido alternativo de velocidad / cadencia */}
               {speedContent}

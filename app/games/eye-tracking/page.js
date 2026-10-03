@@ -48,7 +48,7 @@ const HINTS = {
 
 export default function EyeTrackingGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
-  const [speed, setSpeed] = useState(28)
+  const [speed, setSpeed] = useState(20)
 
   const stimulus = useStimulusManager('classic')
   const stimulusRef = useRef(stimulus)
@@ -57,7 +57,7 @@ export default function EyeTrackingGame() {
   }, [stimulus])
 
   const positionRef = useRef({ x: 50, y: 50 })
-  const velocityRef = useRef(randomVelocity(28))
+  const velocityRef = useRef(randomVelocity(20))
   const timerRef = useRef(0)
 
   useEffect(() => {
@@ -171,10 +171,10 @@ export default function EyeTrackingGame() {
 
       if (e.key === 'ArrowLeft' || e.key === '-') {
         e.preventDefault()
-        setSpeed((prev) => Math.max(8, prev - 2))
+        setSpeed((prev) => Math.max(1, prev - 1))
       } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
         e.preventDefault()
-        setSpeed((prev) => Math.min(60, prev + 2))
+        setSpeed((prev) => Math.min(50, prev + 1))
       }
     }
 
@@ -193,8 +193,9 @@ export default function EyeTrackingGame() {
         id: 'speed',
         label: 'Velocidad',
         value: speed,
-        min: 8,
-        max: 60,
+        min: 1,
+        max: 50,
+        step: 1,
         onChange: setSpeed,
       }}
       stimulusGrid={

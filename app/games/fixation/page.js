@@ -9,6 +9,7 @@ import {
   hasStimulusExtras,
   useGameSession,
   useStimulusManager,
+  CADENCE_STEPS,
 } from '../_shared'
 
 const HINTS = {
@@ -112,11 +113,9 @@ export default function FixationGame() {
       session={session}
       speedControl={{
         id: 'change-interval',
-        label: 'Velocidad de cambio',
+        label: 'Tiempo de cambio',
         value: changeInterval,
-        min: 1,
-        max: 10,
-        step: 1,
+        steps: CADENCE_STEPS,
         unit: ' s',
         disabled: !session.isIdle,
         onChange: setChangeInterval,
