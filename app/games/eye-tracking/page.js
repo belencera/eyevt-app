@@ -168,6 +168,17 @@ export default function EyeTrackingGame() {
         return
       }
 
+      // Flechas Arriba / Abajo: Modificar tamaño del estímulo
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        stimulus.increaseSize()
+        return
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        stimulus.decreaseSize()
+        return
+      }
+
       if (session.isPaused) return
 
       if (e.key === 'ArrowLeft' || e.key === '-') {
@@ -216,6 +227,7 @@ export default function EyeTrackingGame() {
       }
       shortcuts={[
         { keys: ['←', '→'], label: 'Velocidad' },
+        { keys: ['↑', '↓'], label: 'Tamaño del estímulo' },
         { keys: ['Espacio'], label: 'Pausar y reanudar' },
         { keys: ['R'], label: 'Reiniciar' },
       ]}

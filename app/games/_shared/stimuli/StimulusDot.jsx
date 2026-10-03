@@ -25,6 +25,7 @@ export function StimulusDot({
   isPaused = false,
   // Fallbacks retrocompatibles para props individuales
   color,
+  dotSize = 'md',
   letter = 'A',
   letterSize = 'md',
   word = 'SOL',
@@ -45,6 +46,7 @@ export function StimulusDot({
 }) {
   const type = stimulus?.stimulusType ?? stimulusType
   const activeColor = stimulus?.currentColor ?? color
+  const activeDotSize = stimulus?.dotSize ?? dotSize
   const activeLetter = stimulus?.currentLetter ?? letter
   const activeLetterSize = stimulus?.letterSize ?? letterSize
   const activeWord = stimulus?.currentWord ?? word
@@ -74,12 +76,15 @@ export function StimulusDot({
     (type === 'food' ? (stimulus?.currentFood ?? food) : null) ??
     illustration
 
+  const activeSizePx = stimulus?.sizePx
+
   if (type === 'letters') {
     return (
       <StimulusLetter
         position={position}
         letter={activeLetter}
         size={activeLetterSize}
+        sizePx={activeSizePx}
         isPaused={isPaused}
       />
     )
@@ -91,6 +96,7 @@ export function StimulusDot({
         position={position}
         word={activeWord}
         size={activeWordSize}
+        sizePx={activeSizePx}
         isPaused={isPaused}
       />
     )
@@ -102,6 +108,7 @@ export function StimulusDot({
         position={position}
         number={activeNumber}
         size={activeNumberSize}
+        sizePx={activeSizePx}
         isPaused={isPaused}
       />
     )
@@ -113,6 +120,7 @@ export function StimulusDot({
         position={position}
         arrow={activeArrow}
         size={activeArrowSize}
+        sizePx={activeSizePx}
         isPaused={isPaused}
       />
     )
@@ -125,6 +133,7 @@ export function StimulusDot({
         position={position}
         item={activeIllustrationItem}
         size={activeIllustrationSize}
+        sizePx={activeSizePx}
         isPaused={isPaused}
         category={type}
       />
@@ -132,6 +141,7 @@ export function StimulusDot({
   }
 
   const hex = activeColor?.hex || '#38bdf8'
+  const dotPx = activeSizePx ?? (activeDotSize === 'xs' ? 14 : activeDotSize === 'sm' ? 20 : activeDotSize === 'lg' ? 40 : activeDotSize === 'xl' ? 56 : 28)
 
   return (
     <div
@@ -139,6 +149,8 @@ export function StimulusDot({
       style={{
         left: `${position.x}%`,
         top: `${position.y}%`,
+        width: `${dotPx}px`,
+        height: `${dotPx}px`,
         backgroundColor: hex,
         boxShadow: isPaused
           ? `0 0 16px ${hex}66`

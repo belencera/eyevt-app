@@ -88,6 +88,24 @@ export const COLOR_INTERVAL_OPTIONS = [
   { value: 5, label: '5 s' },
 ]
 
+export const STIMULUS_SIZE_PRESETS = {
+  xs: 20,
+  sm: 32,
+  md: 48,
+  lg: 72,
+  xl: 100,
+}
+
+export const STIMULUS_SIZE_OPTIONS = [
+  { value: 'xs', label: 'Muy pequeño' },
+  { value: 'sm', label: 'Pequeño' },
+  { value: 'md', label: 'Mediano' },
+  { value: 'lg', label: 'Grande' },
+  { value: 'xl', label: 'Muy grande' },
+]
+
+export const DOT_SIZE_OPTIONS = STIMULUS_SIZE_OPTIONS
+
 /**
  * Colores básicos de alto contraste sobre fondo oscuro, excluyendo el negro.
  */

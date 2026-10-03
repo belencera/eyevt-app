@@ -4,6 +4,7 @@
  */
 
 export const NUMBER_SIZE_OPTIONS = [
+  { value: 'xs', label: 'Muy pequeño' },
   { value: 'sm', label: 'Pequeño' },
   { value: 'md', label: 'Mediano' },
   { value: 'lg', label: 'Grande' },

@@ -4,6 +4,7 @@
  */
 
 export const ILLUSTRATION_SIZES = {
+  XS: 'xs',
   SM: 'sm',
   MD: 'md',
   LG: 'lg',
@@ -11,6 +12,7 @@ export const ILLUSTRATION_SIZES = {
 }
 
 export const ILLUSTRATION_SIZE_OPTIONS = [
+  { value: 'xs', label: 'Muy pequeño' },
   { value: 'sm', label: 'Pequeño' },
   { value: 'md', label: 'Mediano' },
   { value: 'lg', label: 'Grande' },

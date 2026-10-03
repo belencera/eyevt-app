@@ -328,9 +328,6 @@
   justify-content: center;
 }
 
-.stimulusIconAnimals,
-.stimulusIconFruits,
-.stimulusIconFood,
 .stimulusIconIllustration {
   font-size: 1.4rem;
   line-height: 1;
@@ -1102,6 +1099,31 @@
   will-change: left, top;
 }
 
+.gameDot-xs {
+  width: 14px;
+  height: 14px;
+}
+
+.gameDot-sm {
+  width: 20px;
+  height: 20px;
+}
+
+.gameDot-md {
+  width: 28px;
+  height: 28px;
+}
+
+.gameDot-lg {
+  width: 40px;
+  height: 40px;
+}
+
+.gameDot-xl {
+  width: 56px;
+  height: 56px;
+}
+
 .gameDotPaused {
   opacity: 0.55;
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
@@ -1134,6 +1156,12 @@
 
 /* Tamaños configurables del estímulo de letra
    ============================================================ */
+.stimulusLetter-xs .stimulusLetterChar {
+  font-size: 1.15rem;
+  /* ~18px
+   ============================================================ */
+}
+
 .stimulusLetter-sm .stimulusLetterChar {
   font-size: 1.75rem;
   /* ~28px
@@ -1198,6 +1226,12 @@
 
 /* Tamaños configurables del estímulo de palabra
    ============================================================ */
+.stimulusWord-xs .stimulusWordText {
+  font-size: 1.1rem;
+  /* ~18px
+   ============================================================ */
+}
+
 .stimulusWord-sm .stimulusWordText {
   font-size: 1.6rem;
   /* ~26px
@@ -1231,9 +1265,8 @@
   text-shadow: none;
 }
 
-/* Estilos para el estímulo de animal o fruta ilustrada (SVG / PNG)
+/* Estilos para el estímulo de ilustraciones (SVG / PNG)
    ============================================================ */
-.stimulusAnimal,
 .stimulusIllustration {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -1250,7 +1283,6 @@
   transition: opacity 0.15s ease, filter 0.15s ease;
 }
 
-.stimulusAnimalImg,
 .stimulusIllustrationImg {
   width: 100%;
   height: 100%;
@@ -1275,33 +1307,33 @@
   white-space: nowrap;
 }
 
-/* Tamaños configurables del estímulo gráfico (animales y frutas)
+/* Tamaños configurables del estímulo gráfico (ilustraciones)
    ============================================================ */
-.stimulusAnimal-sm,
+.stimulusIllustration-xs {
+  width: 32px;
+  height: 32px;
+}
+
 .stimulusIllustration-sm {
   width: 48px;
   height: 48px;
 }
 
-.stimulusAnimal-md,
 .stimulusIllustration-md {
   width: 72px;
   height: 72px;
 }
 
-.stimulusAnimal-lg,
 .stimulusIllustration-lg {
   width: 96px;
   height: 96px;
 }
 
-.stimulusAnimal-xl,
 .stimulusIllustration-xl {
   width: 124px;
   height: 124px;
 }
 
-.stimulusAnimalPaused,
 .stimulusIllustrationPaused {
   opacity: 0.45;
   filter: grayscale(40%);
@@ -1333,6 +1365,11 @@
 
 /* Tamaños configurables del estímulo de flecha
    ============================================================ */
+.stimulusArrow-xs {
+  width: 22px;
+  height: 22px;
+}
+
 .stimulusArrow-sm {
   width: 32px;
   height: 32px;

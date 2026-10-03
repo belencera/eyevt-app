@@ -189,6 +189,18 @@ export default function PeripheryGame() {
         shellSession.handleReset()
         return
       }
+
+      // Flechas Arriba / Abajo: Modificar tamaño del estímulo
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        stimulus.increaseSize()
+        return
+      }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        stimulus.decreaseSize()
+        return
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
@@ -201,8 +213,6 @@ export default function PeripheryGame() {
 
   // Controles de estímulo específicos: tamaño + intervalo de color (caso especial de Periferia)
   const buildExtraControls = () => {
-    if (stimulus.stimulusType === 'classic') return null
-
     return (
       <>
         {stimulus.stimulusType === 'colors' && (
@@ -300,6 +310,7 @@ export default function PeripheryGame() {
       shortcuts={[
         { keys: ['Espacio'], label: 'Pausar y reanudar' },
         { keys: ['R'], label: 'Reiniciar' },
+        { keys: ['↑', '↓'], label: 'Tamaño del estímulo' },
       ]}
     >
       {/* Contador flotante de aciertos visible en la pantalla de juego durante la partida */}

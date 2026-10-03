@@ -16,6 +16,7 @@ import { getIllustrationCategory } from '../data/illustrationsRegistry'
 export function StimulusIllustration({
   item,
   size = 'md',
+  sizePx,
   position,
   isPaused = false,
   category = 'illustration',
@@ -37,6 +38,7 @@ export function StimulusIllustration({
       style={{
         left: `${position.x}%`,
         top: `${position.y}%`,
+        ...(sizePx ? { width: `${sizePx}px`, height: `${sizePx}px` } : {}),
       }}
       role="img"
       aria-label={`Estímulo ${current.name}`}

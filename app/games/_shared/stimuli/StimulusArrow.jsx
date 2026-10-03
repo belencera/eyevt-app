@@ -13,6 +13,7 @@
 export function StimulusArrow({
   arrow,
   size = 'md',
+  sizePx,
   position,
   isPaused = false,
 }) {
@@ -26,6 +27,7 @@ export function StimulusArrow({
       style={{
         left: `${position.x}%`,
         top: `${position.y}%`,
+        ...(sizePx ? { width: `${sizePx}px`, height: `${sizePx}px` } : {}),
       }}
       role="img"
       aria-label={`Estímulo flecha ${current.name}`}

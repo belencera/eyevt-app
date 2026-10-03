@@ -3,36 +3,24 @@
 import { OptionPicker } from './OptionPicker'
 import {
   COLOR_INTERVAL_OPTIONS,
-  LETTER_SIZE_OPTIONS,
+  STIMULUS_SIZE_OPTIONS,
   LETTER_INTERVAL_OPTIONS,
-  WORD_SIZE_OPTIONS,
   WORD_LENGTH_OPTIONS,
   WORD_INTERVAL_OPTIONS,
-  NUMBER_SIZE_OPTIONS,
   NUMBER_DIGITS_OPTIONS,
   NUMBER_INTERVAL_OPTIONS,
-  ARROW_SIZE_OPTIONS,
   ARROW_INTERVAL_OPTIONS,
-  ANIMAL_SIZE_OPTIONS,
-  ANIMAL_INTERVAL_OPTIONS,
-  FRUIT_SIZE_OPTIONS,
-  FRUIT_INTERVAL_OPTIONS,
-  isIllustrationCategory,
-  ILLUSTRATION_SIZE_OPTIONS,
   ILLUSTRATION_INTERVAL_OPTIONS,
+  isIllustrationCategory,
   getRandomWord,
   getRandomNumber,
 } from '../data/constants'
 
 /**
- * Renderiza los controles de ajuste (tamaño, longitud, intervalo…) para
- * el tipo de estímulo activo gestionado por useStimulusManager.
+ * Renderiza los controles de ajuste para el estímulo activo.
  *
- * Props:
- * - stimulus:      objeto devuelto por useStimulusManager()
- * - disabled:      deshabilita todos los controles (ej: !session.isIdle)
- * - prefix:        prefijo para IDs únicos (ej: 'fixation', 'sacade')
- * - showIntervals: muestra los pickers de intervalo de cambio (solo Seguimientos)
+ * Todos los estímulos (punto fijo, colores, letras, palabras, números, flechas e ilustraciones)
+ * comparten el mismo selector universal de tamaño, además de sus opciones específicas si aplican.
  */
 export function StimulusExtraControls({
   stimulus,
@@ -41,38 +29,22 @@ export function StimulusExtraControls({
   showIntervals = false,
 }) {
   const id = (name) => (prefix ? `${prefix}-${name}` : name)
+  const type = stimulus.stimulusType
 
-  if (isIllustrationCategory(stimulus.stimulusType)) {
-    return (
-      <>
-        <OptionPicker
-          id={id('illustration-size')}
-          label="Tamaño del estímulo"
-          value={stimulus.illustrationSize}
-          options={ILLUSTRATION_SIZE_OPTIONS}
-          disabled={disabled}
-          onChange={stimulus.setIllustrationSize}
-        />
-        {showIntervals && (
-          <OptionPicker
-            id={id('illustration-interval')}
-            label="Intervalo de cambio"
-            value={stimulus.illustrationInterval}
-            options={ILLUSTRATION_INTERVAL_OPTIONS}
-            disabled={disabled}
-            onChange={stimulus.setIllustrationInterval}
-          />
-        )}
-      </>
-    )
-  }
+  return (
+    <>
+      {/* ── Selector de Tamaño Universal para TODOS los estímulos ── */}
+      <OptionPicker
+        id={id('stimulus-size')}
+        label="Tamaño del estímulo"
+        value={stimulus.sizeLevel}
+        options={STIMULUS_SIZE_OPTIONS}
+        disabled={disabled}
+        onChange={stimulus.setSizeLevel}
+      />
 
-  switch (stimulus.stimulusType) {
-    case 'classic':
-      return null
-
-    case 'colors':
-      return showIntervals ? (
+      {/* ── Controles específicos de cada estímulo ── */}
+      {type === 'colors' && showIntervals && (
         <OptionPicker
           id={id('color-interval')}
           label="Intervalo de cambio"
@@ -81,52 +53,30 @@ export function StimulusExtraControls({
           disabled={disabled}
           onChange={stimulus.setColorInterval}
         />
-      ) : null
+      )}
 
-    case 'letters':
-      return (
-        <>
-          <OptionPicker
-            id={id('letter-size')}
-            label="Tamaño del estímulo"
-            value={stimulus.letterSize}
-            options={LETTER_SIZE_OPTIONS}
-            disabled={disabled}
-            onChange={stimulus.setLetterSize}
-          />
-          {showIntervals && (
-            <OptionPicker
-              id={id('letter-interval')}
-              label="Intervalo de cambio"
-              value={stimulus.letterInterval}
-              options={LETTER_INTERVAL_OPTIONS}
-              disabled={disabled}
-              onChange={stimulus.setLetterInterval}
-            />
-          )}
-        </>
-      )
+      {type === 'letters' && showIntervals && (
+        <OptionPicker
+          id={id('letter-interval')}
+          label="Intervalo de cambio"
+          value={stimulus.letterInterval}
+          options={LETTER_INTERVAL_OPTIONS}
+          disabled={disabled}
+          onChange={stimulus.setLetterInterval}
+        />
+      )}
 
-    case 'words':
-      return (
+      {type === 'words' && (
         <>
-          <OptionPicker
-            id={id('word-size')}
-            label="Tamaño del estímulo"
-            value={stimulus.wordSize}
-            options={WORD_SIZE_OPTIONS}
-            disabled={disabled}
-            onChange={stimulus.setWordSize}
-          />
           <OptionPicker
             id={id('word-length')}
             label="Longitud de palabra"
             value={stimulus.wordLength}
             options={WORD_LENGTH_OPTIONS}
             disabled={disabled}
-            onChange={(val) => {
-              stimulus.setWordLength(val)
-              stimulus.setCurrentWord(getRandomWord(val))
+            onChange={(len) => {
+              stimulus.setWordLength(len)
+              stimulus.setCurrentWord(getRandomWord(len))
             }}
           />
           {showIntervals && (
@@ -140,28 +90,19 @@ export function StimulusExtraControls({
             />
           )}
         </>
-      )
+      )}
 
-    case 'numbers':
-      return (
+      {type === 'numbers' && (
         <>
           <OptionPicker
-            id={id('number-size')}
-            label="Tamaño del estímulo"
-            value={stimulus.numberSize}
-            options={NUMBER_SIZE_OPTIONS}
-            disabled={disabled}
-            onChange={stimulus.setNumberSize}
-          />
-          <OptionPicker
             id={id('number-digits')}
-            label="Cifras"
+            label="Cantidad de dígitos"
             value={stimulus.numberDigits}
             options={NUMBER_DIGITS_OPTIONS}
             disabled={disabled}
-            onChange={(val) => {
-              stimulus.setNumberDigits(val)
-              stimulus.setCurrentNumber(getRandomNumber(val))
+            onChange={(digits) => {
+              stimulus.setNumberDigits(digits)
+              stimulus.setCurrentNumber(getRandomNumber(digits))
             }}
           />
           {showIntervals && (
@@ -175,43 +116,37 @@ export function StimulusExtraControls({
             />
           )}
         </>
-      )
+      )}
 
-    case 'arrows':
-      return (
-        <>
-          <OptionPicker
-            id={id('arrow-size')}
-            label="Tamaño del estímulo"
-            value={stimulus.arrowSize}
-            options={ARROW_SIZE_OPTIONS}
-            disabled={disabled}
-            onChange={stimulus.setArrowSize}
-          />
-          {showIntervals && (
-            <OptionPicker
-              id={id('arrow-interval')}
-              label="Intervalo de cambio"
-              value={stimulus.arrowInterval}
-              options={ARROW_INTERVAL_OPTIONS}
-              disabled={disabled}
-              onChange={stimulus.setArrowInterval}
-            />
-          )}
-        </>
-      )
+      {type === 'arrows' && showIntervals && (
+        <OptionPicker
+          id={id('arrow-interval')}
+          label="Intervalo de cambio"
+          value={stimulus.arrowInterval}
+          options={ARROW_INTERVAL_OPTIONS}
+          disabled={disabled}
+          onChange={stimulus.setArrowInterval}
+        />
+      )}
 
-    default:
-      return null
-  }
+      {isIllustrationCategory(type) && showIntervals && (
+        <OptionPicker
+          id={id('illustration-interval')}
+          label="Intervalo de cambio"
+          value={stimulus.illustrationInterval}
+          options={ILLUSTRATION_INTERVAL_OPTIONS}
+          disabled={disabled}
+          onChange={stimulus.setIllustrationInterval}
+        />
+      )}
+    </>
+  )
 }
 
 /**
  * Indica si el tipo de estímulo activo tiene controles extra que renderizar.
- * Útil para que GameShell sepa si mostrar el placeholder "sin ajustes".
+ * Dado que todos tienen selector de tamaño, siempre devuelve true.
  */
-export function hasStimulusExtras(stimulusType, showIntervals = false) {
-  if (stimulusType === 'classic') return false
-  if (stimulusType === 'colors' && !showIntervals) return false
+export function hasStimulusExtras() {
   return true
 }

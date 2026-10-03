@@ -10,6 +10,7 @@ export const UPPERCASE_ALPHABET = [
 ]
 
 export const LETTER_SIZES = {
+  XS: 'xs',
   SM: 'sm',
   MD: 'md',
   LG: 'lg',
@@ -17,6 +18,7 @@ export const LETTER_SIZES = {
 }
 
 export const LETTER_SIZE_OPTIONS = [
+  { value: 'xs', label: 'Muy pequeña' },
   { value: 'sm', label: 'Pequeña' },
   { value: 'md', label: 'Mediana' },
   { value: 'lg', label: 'Grande' },

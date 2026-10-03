@@ -11,6 +11,7 @@ export const ARROW_DIRECTIONS = [
 ]
 
 export const ARROW_SIZE_OPTIONS = [
+  { value: 'xs', label: 'Muy pequeña' },
   { value: 'sm', label: 'Pequeña' },
   { value: 'md', label: 'Mediana' },
   { value: 'lg', label: 'Grande' },
