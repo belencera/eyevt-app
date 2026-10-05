@@ -80,7 +80,7 @@ export const STIMULUS_OPTIONS = [
   },
 ]
 
-export const COLOR_INTERVAL_OPTIONS = [
+export const CHANGE_INTERVAL_OPTIONS = [
   { value: 1, label: '1 s' },
   { value: 2, label: '2 s' },
   { value: 3, label: '3 s' },
@@ -104,7 +104,7 @@ export const STIMULUS_SIZE_OPTIONS = [
   { value: 'xl', label: 'Muy grande' },
 ]
 
-export const DOT_SIZE_OPTIONS = STIMULUS_SIZE_OPTIONS
+
 
 /**
  * Colores básicos de alto contraste sobre fondo oscuro, excluyendo el negro.
@@ -135,7 +135,6 @@ export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
   return pool[idx]
 }
 
-export * from './illustrations'
 export * from './letters'
 export * from './words'
 export * from './numbers'

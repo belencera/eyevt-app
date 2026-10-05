@@ -10,21 +10,8 @@ import {
   useGameSession,
   useStimulusManager,
   CADENCE_STEPS,
-  isIllustrationCategory,
-  getIllustrationHint,
+  getGameHint,
 } from '../_shared'
-
-const HINTS = {
-  animals: 'Mantén la mirada fija en el centro y nombra al animal en voz alta cada vez que cambie.',
-  fruits: 'Mantén la mirada fija en el centro y nombra la fruta en voz alta cada vez que cambie.',
-  food: 'Mantén la mirada fija en el centro y nombra la comida en voz alta cada vez que cambie.',
-  words: 'Mantén la mirada fija en el centro y lee la palabra en voz alta cada vez que cambie.',
-  numbers: 'Mantén la mirada fija en el centro y di el número en voz alta cada vez que cambie.',
-  arrows: 'Mantén la mirada fija en el centro e indica la dirección de la flecha en voz alta cada vez que cambie.',
-  letters: 'Mantén la mirada fija en el centro y nombra la letra en voz alta cada vez que cambie.',
-  colors: 'Mantén la mirada fija en el centro y di el color en voz alta cada vez que cambie.',
-  classic: 'Mantén la mirada fija en el punto central sin mover los ojos ni la cabeza.',
-}
 
 // Punto fijo en el centro de la pantalla
 const CENTER_POSITION = { x: 50, y: 50 }
@@ -109,21 +96,10 @@ export default function FixationGame() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [session.started, session.handleTogglePause, session.handleReset])
 
-  // Visibilidad del estímulo en pantalla
-  const showDot =
-    !session.isIdle ||
-    stimulus.stimulusType === 'classic' ||
-    stimulus.stimulusType === 'colors' ||
-    stimulus.stimulusType === 'letters' ||
-    stimulus.stimulusType === 'words' ||
-    stimulus.stimulusType === 'numbers' ||
-    stimulus.stimulusType === 'arrows' ||
-    isIllustrationCategory(stimulus.stimulusType)
-
   return (
     <GameShell
       title="Fijación"
-      hint={getIllustrationHint('fixation', stimulus.stimulusType) || HINTS[stimulus.stimulusType] || HINTS.classic}
+      hint={getGameHint('fixation', stimulus.stimulusType) || 'Mantén la mirada fija en el punto central sin mover los ojos ni la cabeza.'}
       session={session}
       speedControl={{
         id: 'change-interval',
@@ -155,13 +131,11 @@ export default function FixationGame() {
         { keys: ['↑', '↓'], label: 'Tamaño del estímulo' },
       ]}
     >
-      {showDot && (
-        <StimulusDot
-          position={CENTER_POSITION}
-          stimulus={stimulus}
-          isPaused={session.isPaused}
-        />
-      )}
+      <StimulusDot
+        position={CENTER_POSITION}
+        stimulus={stimulus}
+        isPaused={session.isPaused}
+      />
     </GameShell>
   )
 }

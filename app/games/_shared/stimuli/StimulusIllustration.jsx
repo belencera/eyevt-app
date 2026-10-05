@@ -28,7 +28,7 @@ export function StimulusIllustration({
   }
 
   const categoryMeta = getIllustrationCategory(category)
-  const fallbackEmoji = categoryMeta?.fallbackEmoji || (category === 'fruits' ? '🍓' : category === 'food' ? '🍕' : '🦁')
+  const fallbackEmoji = categoryMeta?.fallbackEmoji || '🦁'
 
   return (
     <div

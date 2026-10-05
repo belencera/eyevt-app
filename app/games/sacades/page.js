@@ -10,8 +10,7 @@ import {
   useGameSession,
   useStimulusManager,
   CADENCE_STEPS,
-  isIllustrationCategory,
-  getIllustrationHint,
+  getGameHint,
 } from '../_shared'
 
 const MIN = 2
@@ -26,18 +25,6 @@ function randomPosition() {
 
 function intervalToMs(sec) {
   return Math.round(sec * 1000)
-}
-
-const HINTS = {
-  animals: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el animal cambie de posición y nómbralo en voz alta.',
-  fruits: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la fruta cambie de posición y nómbrala en voz alta.',
-  food: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la comida cambie de posición y nómbrala en voz alta.',
-  words: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la palabra cambie de posición y léela en voz alta.',
-  numbers: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el número cambie de posición y dilo en voz alta.',
-  arrows: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la flecha cambie de posición e indica su dirección en voz alta.',
-  letters: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la letra cambie de posición y léela en voz alta.',
-  colors: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el color cambie de posición y di el color en voz alta.',
-  classic: 'Mueve los ojos con precisión entre los diferentes puntos sin mover la cabeza.',
 }
 
 export default function SacadesGame() {
@@ -143,7 +130,7 @@ export default function SacadesGame() {
   return (
     <GameShell
       title="Sacádicos"
-      hint={getIllustrationHint('sacades', stimulus.stimulusType) || HINTS[stimulus.stimulusType] || HINTS.classic}
+      hint={getGameHint('sacades', stimulus.stimulusType) || 'Mueve los ojos con precisión entre los diferentes puntos sin mover la cabeza.'}
       session={session}
       speedControl={{
         id: 'sacade-interval',

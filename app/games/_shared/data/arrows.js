@@ -10,22 +10,6 @@ export const ARROW_DIRECTIONS = [
   { id: 'left', name: 'Izquierda', angle: 270, symbol: '←' },
 ]
 
-export const ARROW_SIZE_OPTIONS = [
-  { value: 'xs', label: 'Muy pequeña' },
-  { value: 'sm', label: 'Pequeña' },
-  { value: 'md', label: 'Mediana' },
-  { value: 'lg', label: 'Grande' },
-  { value: 'xl', label: 'Muy grande' },
-]
-
-export const ARROW_INTERVAL_OPTIONS = [
-  { value: 1, label: '1 s' },
-  { value: 2, label: '2 s' },
-  { value: 3, label: '3 s' },
-  { value: 4, label: '4 s' },
-  { value: 5, label: '5 s' },
-]
-
 /**
  * Devuelve una flecha aleatoria de las 4 direcciones,
  * evitando repetir consecutivamente la dirección anterior.

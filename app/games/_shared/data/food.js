@@ -1,16 +1,7 @@
 /**
- * Configuración y catálogo modular de alimentos para terapia visual.
+ * Catálogo modular de alimentos para terapia visual.
  * 12 ilustraciones vectoriales en formato SVG alojadas en /food/.
  */
-
-import {
-  ILLUSTRATION_SIZE_OPTIONS,
-  ILLUSTRATION_INTERVAL_OPTIONS,
-  getRandomIllustration,
-} from './illustrations'
-
-export const FOOD_SIZE_OPTIONS = ILLUSTRATION_SIZE_OPTIONS
-export const FOOD_INTERVAL_OPTIONS = ILLUSTRATION_INTERVAL_OPTIONS
 
 export const FOOD_LIST = [
   { id: 'bacon', name: 'Bacon', src: '/food/bacon.svg' },
@@ -26,10 +17,3 @@ export const FOOD_LIST = [
   { id: 'spaghetti', name: 'Espaguetis', src: '/food/spaghetti.svg' },
   { id: 'sushi', name: 'Sushi', src: '/food/sushi.svg' },
 ]
-
-/**
- * Devuelve un alimento aleatorio del catálogo evitando repetir inmediatamente el anterior.
- */
-export function getRandomFood(prevFood = null, list = FOOD_LIST) {
-  return getRandomIllustration(prevFood, list)
-}

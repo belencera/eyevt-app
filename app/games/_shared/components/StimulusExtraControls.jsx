@@ -2,15 +2,10 @@
 
 import { OptionPicker } from './OptionPicker'
 import {
-  COLOR_INTERVAL_OPTIONS,
+  CHANGE_INTERVAL_OPTIONS,
   STIMULUS_SIZE_OPTIONS,
-  LETTER_INTERVAL_OPTIONS,
   WORD_LENGTH_OPTIONS,
-  WORD_INTERVAL_OPTIONS,
   NUMBER_DIGITS_OPTIONS,
-  NUMBER_INTERVAL_OPTIONS,
-  ARROW_INTERVAL_OPTIONS,
-  ILLUSTRATION_INTERVAL_OPTIONS,
   isIllustrationCategory,
   getRandomWord,
   getRandomNumber,
@@ -46,10 +41,10 @@ export function StimulusExtraControls({
       {/* ── Controles específicos de cada estímulo ── */}
       {type === 'colors' && showIntervals && (
         <OptionPicker
-          id={id('color-interval')}
+          id={id('change-interval')}
           label="Intervalo de cambio"
           value={stimulus.colorInterval}
-          options={COLOR_INTERVAL_OPTIONS}
+          options={CHANGE_INTERVAL_OPTIONS}
           disabled={disabled}
           onChange={stimulus.setColorInterval}
         />
@@ -57,10 +52,10 @@ export function StimulusExtraControls({
 
       {type === 'letters' && showIntervals && (
         <OptionPicker
-          id={id('letter-interval')}
+          id={id('change-interval')}
           label="Intervalo de cambio"
           value={stimulus.letterInterval}
-          options={LETTER_INTERVAL_OPTIONS}
+          options={CHANGE_INTERVAL_OPTIONS}
           disabled={disabled}
           onChange={stimulus.setLetterInterval}
         />
@@ -81,10 +76,10 @@ export function StimulusExtraControls({
           />
           {showIntervals && (
             <OptionPicker
-              id={id('word-interval')}
+              id={id('change-interval')}
               label="Intervalo de cambio"
               value={stimulus.wordInterval}
-              options={WORD_INTERVAL_OPTIONS}
+              options={CHANGE_INTERVAL_OPTIONS}
               disabled={disabled}
               onChange={stimulus.setWordInterval}
             />
@@ -107,10 +102,10 @@ export function StimulusExtraControls({
           />
           {showIntervals && (
             <OptionPicker
-              id={id('number-interval')}
+              id={id('change-interval')}
               label="Intervalo de cambio"
               value={stimulus.numberInterval}
-              options={NUMBER_INTERVAL_OPTIONS}
+              options={CHANGE_INTERVAL_OPTIONS}
               disabled={disabled}
               onChange={stimulus.setNumberInterval}
             />
@@ -120,10 +115,10 @@ export function StimulusExtraControls({
 
       {type === 'arrows' && showIntervals && (
         <OptionPicker
-          id={id('arrow-interval')}
+          id={id('change-interval')}
           label="Intervalo de cambio"
           value={stimulus.arrowInterval}
-          options={ARROW_INTERVAL_OPTIONS}
+          options={CHANGE_INTERVAL_OPTIONS}
           disabled={disabled}
           onChange={stimulus.setArrowInterval}
         />
@@ -131,10 +126,10 @@ export function StimulusExtraControls({
 
       {isIllustrationCategory(type) && showIntervals && (
         <OptionPicker
-          id={id('illustration-interval')}
+          id={id('change-interval')}
           label="Intervalo de cambio"
           value={stimulus.illustrationInterval}
-          options={ILLUSTRATION_INTERVAL_OPTIONS}
+          options={CHANGE_INTERVAL_OPTIONS}
           disabled={disabled}
           onChange={stimulus.setIllustrationInterval}
         />

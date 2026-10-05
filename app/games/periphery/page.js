@@ -14,7 +14,7 @@ import {
   CADENCE_STEPS,
   getRandomPeripheralPosition,
   IconClick,
-  COLOR_INTERVAL_OPTIONS,
+  CHANGE_INTERVAL_OPTIONS,
 } from '../_shared'
 
 const HINTS = {
@@ -220,7 +220,7 @@ export default function PeripheryGame() {
             id="periphery-color-interval"
             label="Intervalo de cambio"
             value={stimulus.colorInterval}
-            options={COLOR_INTERVAL_OPTIONS}
+            options={CHANGE_INTERVAL_OPTIONS}
             disabled={!session.isIdle}
             onChange={stimulus.setColorInterval}
           />
