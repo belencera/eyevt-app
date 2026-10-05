@@ -16,7 +16,7 @@ export default function Home() {
         </div>
 
         <p className="description">
-          ¡Selecciona una actividad, personaliza los parámetros y a entrenar!
+          ¡Selecciona una actividad, personaliza los parámetros y comienza a entrenar!
         </p>
       </header>
 
@@ -26,7 +26,6 @@ export default function Home() {
             <section key={category.id} className="category-section">
               <div className="category-header">
                 <h2 className="category-title">{category.title}</h2>
-                <p className="category-desc">{category.description}</p>
               </div>
 
               <div className="games-grid">
