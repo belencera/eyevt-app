@@ -1,14 +1,7 @@
 /**
  * Configuración y utilidades modulares para el estímulo de números.
- * Soporta de 1 a 5 cifras y modo mixto, con selección de tamaño e intervalo.
+ * Soporta de 1 a 5 cifras y modo mixto.
  */
-
-export const NUMBER_SIZE_OPTIONS = [
-  { value: 'sm', label: 'Pequeño' },
-  { value: 'md', label: 'Mediano' },
-  { value: 'lg', label: 'Grande' },
-  { value: 'xl', label: 'Muy grande' },
-]
 
 export const NUMBER_DIGITS_OPTIONS = [
   { value: 1, label: '1 cifra' },
@@ -16,15 +9,7 @@ export const NUMBER_DIGITS_OPTIONS = [
   { value: 3, label: '3 cifras' },
   { value: 4, label: '4 cifras' },
   { value: 5, label: '5 cifras' },
-  { value: 'all', label: 'Mixto (1 a 5)' },
-]
-
-export const NUMBER_INTERVAL_OPTIONS = [
-  { value: 1, label: '1 s' },
-  { value: 2, label: '2 s' },
-  { value: 3, label: '3 s' },
-  { value: 4, label: '4 s' },
-  { value: 5, label: '5 s' },
+  { value: 'all', label: 'Aleatorio', icon: '🎲' },
 ]
 
 /**

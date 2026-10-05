@@ -7,55 +7,63 @@ import {
   getRandomWord,
   getRandomNumber,
   getRandomArrow,
-  getRandomAnimal,
-  getRandomFruit,
+  isIllustrationCategory,
+  getRandomIllustrationByCategory,
+  STIMULUS_SIZE_PRESETS,
 } from '../data/constants'
+
+export const SIZE_SCALE = ['xs', 'sm', 'md', 'lg', 'xl']
 
 /**
  * Hook modular para gestionar los estados, configuraciones y generación
- * aleatoria de estímulos (colores, letras, palabras, números, flechas, animales, frutas).
+ * aleatoria de estímulos.
+ *
+ * Cuenta con un sistema de TAMAÑO UNIFICADO para todos los estímulos:
+ * - Menú inicial: Selector discreto de 5 niveles ('xs', 'sm', 'md', 'lg', 'xl')
+ * - En juego / Teclado: Rango continuo en píxeles (4 px a 680 px con paso de 4 px)
  */
 export function useStimulusManager(initialType = 'classic') {
   const [stimulusType, setStimulusType] = useState(initialType)
+
+  // ── Tamaño unificado para TODOS los estímulos ──
+  const [sizeLevel, setSizeLevelState] = useState('md')
+  const [sizePx, setSizePx] = useState(STIMULUS_SIZE_PRESETS.md || 48)
 
   // Opciones de colores
   const [colorInterval, setColorInterval] = useState(3)
   const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
 
   // Opciones de letras
-  const [letterSize, setLetterSize] = useState('md')
   const [letterInterval, setLetterInterval] = useState(3)
   const [currentLetter, setCurrentLetter] = useState('A')
 
   // Opciones de palabras
-  const [wordSize, setWordSize] = useState('md')
   const [wordLength, setWordLength] = useState(4)
   const [wordInterval, setWordInterval] = useState(3)
   const [currentWord, setCurrentWord] = useState('CASA')
 
   // Opciones de números
-  const [numberSize, setNumberSize] = useState('md')
   const [numberDigits, setNumberDigits] = useState(1)
   const [numberInterval, setNumberInterval] = useState(3)
   const [currentNumber, setCurrentNumber] = useState(() => getRandomNumber(1))
 
   // Opciones de flechas (4 direcciones cardinales)
-  const [arrowSize, setArrowSize] = useState('md')
   const [arrowInterval, setArrowInterval] = useState(3)
   const [currentArrow, setCurrentArrow] = useState(() => getRandomArrow())
 
-  // Opciones de animales
-  const [animalSize, setAnimalSize] = useState('md')
-  const [animalInterval, setAnimalInterval] = useState(3)
-  const [currentAnimal, setCurrentAnimal] = useState(() => getRandomAnimal())
+  // Opciones de ilustraciones (Animales, Frutas, Comida y futuras categorías)
+  const [illustrationInterval, setIllustrationInterval] = useState(3)
+  const [currentIllustration, setCurrentIllustration] = useState(() => {
+    if (isIllustrationCategory(initialType)) {
+      return getRandomIllustrationByCategory(initialType)
+    }
+    return null
+  })
 
-  // Opciones de frutas
-  const [fruitSize, setFruitSize] = useState('md')
-  const [fruitInterval, setFruitInterval] = useState(3)
-  const [currentFruit, setCurrentFruit] = useState(() => getRandomFruit())
-
-  // Refs para acceso síncrono libre de stale-closures en bucles de animación o intervalos
+  // Refs para acceso síncrono libre de stale-closures en bucles de animación, atajos o intervalos
   const stimulusTypeRef = useRef(stimulusType)
+  const sizeLevelRef = useRef(sizeLevel)
+  const sizePxRef = useRef(sizePx)
   const colorIntervalRef = useRef(colorInterval)
   const currentColorRef = useRef(currentColor)
   const letterIntervalRef = useRef(letterInterval)
@@ -68,13 +76,13 @@ export function useStimulusManager(initialType = 'classic') {
   const currentNumberRef = useRef(currentNumber)
   const arrowIntervalRef = useRef(arrowInterval)
   const currentArrowRef = useRef(currentArrow)
-  const animalIntervalRef = useRef(animalInterval)
-  const currentAnimalRef = useRef(currentAnimal)
-  const fruitIntervalRef = useRef(fruitInterval)
-  const currentFruitRef = useRef(currentFruit)
+  const illustrationIntervalRef = useRef(illustrationInterval)
+  const currentIllustrationRef = useRef(currentIllustration)
 
   useEffect(() => {
     stimulusTypeRef.current = stimulusType
+    sizeLevelRef.current = sizeLevel
+    sizePxRef.current = sizePx
     colorIntervalRef.current = colorInterval
     currentColorRef.current = currentColor
     letterIntervalRef.current = letterInterval
@@ -87,12 +95,12 @@ export function useStimulusManager(initialType = 'classic') {
     currentNumberRef.current = currentNumber
     arrowIntervalRef.current = arrowInterval
     currentArrowRef.current = currentArrow
-    animalIntervalRef.current = animalInterval
-    currentAnimalRef.current = currentAnimal
-    fruitIntervalRef.current = fruitInterval
-    currentFruitRef.current = currentFruit
+    illustrationIntervalRef.current = illustrationInterval
+    currentIllustrationRef.current = currentIllustration
   }, [
     stimulusType,
+    sizeLevel,
+    sizePx,
     colorInterval,
     currentColor,
     letterInterval,
@@ -105,11 +113,53 @@ export function useStimulusManager(initialType = 'classic') {
     currentNumber,
     arrowInterval,
     currentArrow,
-    animalInterval,
-    currentAnimal,
-    fruitInterval,
-    currentFruit,
+    illustrationInterval,
+    currentIllustration,
   ])
+
+  // Establecer tamaño desde el menú de opciones (presets discretos 'xs' a 'xl')
+  const setSizeLevel = useCallback((level) => {
+    setSizeLevelState(level)
+    sizeLevelRef.current = level
+    const targetPx = STIMULUS_SIZE_PRESETS[level] ?? 48
+    setSizePx(targetPx)
+    sizePxRef.current = targetPx
+  }, [])
+
+  // Ajuste continuo de tamaño en píxeles (rango como en convergencia: Flechas ↑ y ↓)
+  const adjustSize = useCallback((delta) => {
+    setSizePx((prev) => {
+      const next = Math.max(4, Math.min(prev + delta, 680))
+      sizePxRef.current = next
+
+      // Sincronizar el nivel del menú inicial con el preset más cercano
+      let closest = 'md'
+      let minDiff = Infinity
+      for (const [lvl, px] of Object.entries(STIMULUS_SIZE_PRESETS)) {
+        const diff = Math.abs(px - next)
+        if (diff < minDiff) {
+          minDiff = diff
+          closest = lvl
+        }
+      }
+      if (minDiff <= 6) {
+        setSizeLevelState(closest)
+        sizeLevelRef.current = closest
+      }
+
+      return next
+    })
+  }, [])
+
+  // Aumentar en paso continuo de 4 px (Flecha Arriba)
+  const increaseSize = useCallback(() => {
+    adjustSize(4)
+  }, [adjustSize])
+
+  // Disminuir en paso continuo de 4 px (Flecha Abajo)
+  const decreaseSize = useCallback(() => {
+    adjustSize(-4)
+  }, [adjustSize])
 
   // Generar siguiente elemento según el estímulo activo evitando repeticiones
   const nextStimulus = useCallback(() => {
@@ -150,17 +200,10 @@ export function useStimulusManager(initialType = 'classic') {
       return next
     }
 
-    if (type === 'animals') {
-      const next = getRandomAnimal(currentAnimalRef.current)
-      currentAnimalRef.current = next
-      setCurrentAnimal(next)
-      return next
-    }
-
-    if (type === 'fruits') {
-      const next = getRandomFruit(currentFruitRef.current)
-      currentFruitRef.current = next
-      setCurrentFruit(next)
+    if (isIllustrationCategory(type)) {
+      const next = getRandomIllustrationByCategory(type, currentIllustrationRef.current)
+      currentIllustrationRef.current = next
+      setCurrentIllustration(next)
       return next
     }
 
@@ -196,14 +239,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomArrow()
       currentArrowRef.current = next
       setCurrentArrow(next)
-    } else if (newType === 'animals') {
-      const next = getRandomAnimal()
-      currentAnimalRef.current = next
-      setCurrentAnimal(next)
-    } else if (newType === 'fruits') {
-      const next = getRandomFruit()
-      currentFruitRef.current = next
-      setCurrentFruit(next)
+    } else if (isIllustrationCategory(newType)) {
+      const next = getRandomIllustrationByCategory(newType)
+      currentIllustrationRef.current = next
+      setCurrentIllustration(next)
     }
   }, [])
 
@@ -234,14 +273,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomArrow(currentArrowRef.current)
       currentArrowRef.current = next
       setCurrentArrow(next)
-    } else if (type === 'animals') {
-      const next = getRandomAnimal(currentAnimalRef.current)
-      currentAnimalRef.current = next
-      setCurrentAnimal(next)
-    } else if (type === 'fruits') {
-      const next = getRandomFruit(currentFruitRef.current)
-      currentFruitRef.current = next
-      setCurrentFruit(next)
+    } else if (isIllustrationCategory(type)) {
+      const next = getRandomIllustrationByCategory(type, currentIllustrationRef.current)
+      currentIllustrationRef.current = next
+      setCurrentIllustration(next)
     }
   }, [])
 
@@ -252,6 +287,15 @@ export function useStimulusManager(initialType = 'classic') {
     nextStimulus,
     resetStimulus,
 
+    // ── Tamaño unificado y rango continuo ──
+    sizeLevel,
+    setSizeLevel,
+    sizePx,
+    setSizePx,
+    adjustSize,
+    increaseSize,
+    decreaseSize,
+
     // Colores
     currentColor,
     setCurrentColor,
@@ -261,16 +305,12 @@ export function useStimulusManager(initialType = 'classic') {
     // Letras
     currentLetter,
     setCurrentLetter,
-    letterSize,
-    setLetterSize,
     letterInterval,
     setLetterInterval,
 
     // Palabras
     currentWord,
     setCurrentWord,
-    wordSize,
-    setWordSize,
     wordLength,
     setWordLength,
     wordInterval,
@@ -279,8 +319,6 @@ export function useStimulusManager(initialType = 'classic') {
     // Números
     currentNumber,
     setCurrentNumber,
-    numberSize,
-    setNumberSize,
     numberDigits,
     setNumberDigits,
     numberInterval,
@@ -289,30 +327,20 @@ export function useStimulusManager(initialType = 'classic') {
     // Flechas
     currentArrow,
     setCurrentArrow,
-    arrowSize,
-    setArrowSize,
     arrowInterval,
     setArrowInterval,
 
-    // Animales
-    currentAnimal,
-    setCurrentAnimal,
-    animalSize,
-    setAnimalSize,
-    animalInterval,
-    setAnimalInterval,
+    // Ilustraciones genéricas y extensibles
+    illustrationInterval,
+    setIllustrationInterval,
+    currentIllustration,
+    setCurrentIllustration,
 
-    // Frutas
-    currentFruit,
-    setCurrentFruit,
-    fruitSize,
-    setFruitSize,
-    fruitInterval,
-    setFruitInterval,
-
-    // Refs para animaciones y timers
+    // Refs para bucles de animación y temporizadores
     refs: {
       stimulusTypeRef,
+      sizeLevelRef,
+      sizePxRef,
       colorIntervalRef,
       currentColorRef,
       letterIntervalRef,
@@ -325,10 +353,8 @@ export function useStimulusManager(initialType = 'classic') {
       currentNumberRef,
       arrowIntervalRef,
       currentArrowRef,
-      animalIntervalRef,
-      currentAnimalRef,
-      fruitIntervalRef,
-      currentFruitRef,
+      illustrationIntervalRef,
+      currentIllustrationRef,
     },
   }
 }

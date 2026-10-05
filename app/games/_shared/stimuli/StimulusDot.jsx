@@ -5,61 +5,36 @@ import { StimulusWord } from './StimulusWord'
 import { StimulusNumber } from './StimulusNumber'
 import { StimulusArrow } from './StimulusArrow'
 import { StimulusIllustration } from './StimulusIllustration'
+import { isIllustrationCategory } from '../data/constants'
 
 /**
  * Componente despachador de estímulo visual.
- * 
+ *
  * Soporta:
  * - Punto fijo celeste ('classic')
  * - Punto dinámico de colores ('colors')
- * - Letras sueltas en mayúscula con selección de tamaño ('letters')
- * - Palabras de 3 a 6 letras en mayúscula con selección de tamaño ('words')
- * - Números aleatorios de 1 a 5 cifras con selección de tamaño ('numbers')
+ * - Letras sueltas en mayúscula ('letters')
+ * - Palabras de 3 a 6 letras en mayúscula ('words')
+ * - Números aleatorios de 1 a 5 cifras ('numbers')
  * - Flechas direccionales en 4 sentidos cardinales ('arrows')
- * - Animales ilustrados con selección de tamaño ('animals')
- * - Frutas ilustradas con selección de tamaño ('fruits')
+ * - Ilustraciones vectoriales modulares (animales, frutas, comida y futuras categorías)
  */
 export function StimulusDot({
   position,
   stimulus,
   isPaused = false,
-  // Fallbacks retrocompatibles para props individuales
-  color,
-  letter = 'A',
-  letterSize = 'md',
-  word = 'SOL',
-  wordSize = 'md',
-  number = '7',
-  numberSize = 'md',
-  arrow,
-  arrowSize = 'md',
-  animal,
-  animalSize = 'md',
-  fruit,
-  fruitSize = 'md',
-  stimulusType = 'colors',
 }) {
-  const type = stimulus?.stimulusType ?? stimulusType
-  const activeColor = stimulus?.currentColor ?? color
-  const activeLetter = stimulus?.currentLetter ?? letter
-  const activeLetterSize = stimulus?.letterSize ?? letterSize
-  const activeWord = stimulus?.currentWord ?? word
-  const activeWordSize = stimulus?.wordSize ?? wordSize
-  const activeNumber = stimulus?.currentNumber ?? number
-  const activeNumberSize = stimulus?.numberSize ?? numberSize
-  const activeArrow = stimulus?.currentArrow ?? arrow
-  const activeArrowSize = stimulus?.arrowSize ?? arrowSize
-  const activeAnimal = stimulus?.currentAnimal ?? animal
-  const activeAnimalSize = stimulus?.animalSize ?? animalSize
-  const activeFruit = stimulus?.currentFruit ?? fruit
-  const activeFruitSize = stimulus?.fruitSize ?? fruitSize
+  const type = stimulus?.stimulusType ?? 'classic'
+  const sizePx = stimulus?.sizePx
+  const sizeLevel = stimulus?.sizeLevel ?? 'md'
 
   if (type === 'letters') {
     return (
       <StimulusLetter
         position={position}
-        letter={activeLetter}
-        size={activeLetterSize}
+        letter={stimulus?.currentLetter ?? 'A'}
+        size={sizeLevel}
+        sizePx={sizePx}
         isPaused={isPaused}
       />
     )
@@ -69,8 +44,9 @@ export function StimulusDot({
     return (
       <StimulusWord
         position={position}
-        word={activeWord}
-        size={activeWordSize}
+        word={stimulus?.currentWord ?? 'SOL'}
+        size={sizeLevel}
+        sizePx={sizePx}
         isPaused={isPaused}
       />
     )
@@ -80,8 +56,9 @@ export function StimulusDot({
     return (
       <StimulusNumber
         position={position}
-        number={activeNumber}
-        size={activeNumberSize}
+        number={stimulus?.currentNumber ?? '7'}
+        size={sizeLevel}
+        sizePx={sizePx}
         isPaused={isPaused}
       />
     )
@@ -91,38 +68,32 @@ export function StimulusDot({
     return (
       <StimulusArrow
         position={position}
-        arrow={activeArrow}
-        size={activeArrowSize}
+        arrow={stimulus?.currentArrow}
+        size={sizeLevel}
+        sizePx={sizePx}
         isPaused={isPaused}
       />
     )
   }
 
-  if (type === 'animals') {
+  // Renderizado dinámico de cualquier categoría de ilustración registrada
+  if (isIllustrationCategory(type)) {
     return (
       <StimulusIllustration
         position={position}
-        item={activeAnimal}
-        size={activeAnimalSize}
+        item={stimulus?.currentIllustration}
+        size={sizeLevel}
+        sizePx={sizePx}
         isPaused={isPaused}
-        category="animals"
+        category={type}
       />
     )
   }
 
-  if (type === 'fruits') {
-    return (
-      <StimulusIllustration
-        position={position}
-        item={activeFruit}
-        size={activeFruitSize}
-        isPaused={isPaused}
-        category="fruits"
-      />
-    )
-  }
-
+  // Punto fijo (classic) o colores
+  const activeColor = stimulus?.currentColor
   const hex = activeColor?.hex || '#38bdf8'
+  const dotPx = sizePx ?? (sizeLevel === 'xs' ? 14 : sizeLevel === 'sm' ? 20 : sizeLevel === 'lg' ? 40 : sizeLevel === 'xl' ? 56 : 28)
 
   return (
     <div
@@ -130,6 +101,8 @@ export function StimulusDot({
       style={{
         left: `${position.x}%`,
         top: `${position.y}%`,
+        width: `${dotPx}px`,
+        height: `${dotPx}px`,
         backgroundColor: hex,
         boxShadow: isPaused
           ? `0 0 16px ${hex}66`

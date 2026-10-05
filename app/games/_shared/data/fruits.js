@@ -1,16 +1,7 @@
 /**
- * Configuración y catálogo modular de frutas para terapia visual.
+ * Catálogo modular de frutas para terapia visual.
  * 11 ilustraciones vectoriales en formato SVG alojadas en /fruits/.
  */
-
-import {
-  ILLUSTRATION_SIZE_OPTIONS,
-  ILLUSTRATION_INTERVAL_OPTIONS,
-  getRandomIllustration,
-} from './illustrations'
-
-export const FRUIT_SIZE_OPTIONS = ILLUSTRATION_SIZE_OPTIONS
-export const FRUIT_INTERVAL_OPTIONS = ILLUSTRATION_INTERVAL_OPTIONS
 
 export const FRUITS_LIST = [
   { id: 'banana', name: 'Plátano', src: '/fruits/banana.svg' },
@@ -25,10 +16,3 @@ export const FRUITS_LIST = [
   { id: 'tangerine', name: 'Mandarina', src: '/fruits/tangerine.svg' },
   { id: 'watermelon', name: 'Sandía', src: '/fruits/watermelon.svg' },
 ]
-
-/**
- * Devuelve una fruta aleatoria del catálogo evitando repetir inmediatamente la anterior.
- */
-export function getRandomFruit(prevFruit = null, list = FRUITS_LIST) {
-  return getRandomIllustration(prevFruit, list)
-}

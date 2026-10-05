@@ -2,13 +2,6 @@
    CONVERGENCIA · ESTILOS DEL DASHBOARD Y ZONA DE JUEGO
    ============================================================ */
 
-/* ── Proporción de Columnas: Mayor protagonismo y ancho para Estímulos ── */
-@media (min-width: 901px) {
-  .dashGrid:has(.convCategoryPills),
-  .dashboard:has(.convCategoryPills) .dashGrid {
-    grid-template-columns: 1.45fr 1fr;
-  }
-}
 
 /* ── Píldoras de Categorías en Tarjeta Estímulo ── */
 .convCategoryPills {
@@ -324,95 +317,6 @@
   min-height: unset !important;
   background: rgba(13, 21, 37, 0.5) !important;
   border-color: rgba(148, 163, 184, 0.08) !important;
-}
-
-.convControlsCompact {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-}
-
-.convControlsLeft {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.convControlsLabel {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #64748b;
-  white-space: nowrap;
-}
-
-.convControlsPills {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.convPillItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.74rem;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.convPillItem .convKey {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 19px;
-  height: 19px;
-  padding: 0 4px;
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #cbd5e1;
-  background: rgba(30, 41, 59, 0.75);
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 4px;
-  font-family: inherit;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.convPillSep {
-  color: #334155;
-  font-size: 0.7rem;
-  user-select: none;
-}
-
-.convControlsBaseHint {
-  font-size: 0.7rem;
-  color: #64748b;
-  font-weight: 500;
-  white-space: nowrap;
-  margin-left: auto;
-}
-
-@media (max-width: 768px) {
-  .convControlsCompact {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .convControlsBaseHint {
-    margin-left: 0;
-  }
-}
-
-/* Bloque de duración integrado en tarjeta 2 */
-.convDurationBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
 
 

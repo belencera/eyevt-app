@@ -9,28 +9,6 @@ export const UPPERCASE_ALPHABET = [
   'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 ]
 
-export const LETTER_SIZES = {
-  SM: 'sm',
-  MD: 'md',
-  LG: 'lg',
-  XL: 'xl',
-}
-
-export const LETTER_SIZE_OPTIONS = [
-  { value: 'sm', label: 'Pequeña' },
-  { value: 'md', label: 'Mediana' },
-  { value: 'lg', label: 'Grande' },
-  { value: 'xl', label: 'Muy grande' },
-]
-
-export const LETTER_INTERVAL_OPTIONS = [
-  { value: 1, label: '1 s' },
-  { value: 2, label: '2 s' },
-  { value: 3, label: '3 s' },
-  { value: 4, label: '4 s' },
-  { value: 5, label: '5 s' },
-]
-
 /**
  * Devuelve una letra aleatoria del abecedario en mayúscula,
  * evitando repetir la letra inmediatamente anterior si hay más de una disponible.

@@ -12,6 +12,7 @@
 export function StimulusLetter({
   letter = 'A',
   size = 'md',
+  sizePx,
   position,
   isPaused = false,
 }) {
@@ -29,7 +30,12 @@ export function StimulusLetter({
       role="img"
       aria-label={`Estímulo letra ${displayLetter}`}
     >
-      <span className="stimulusLetterChar">{displayLetter}</span>
+      <span
+        className="stimulusLetterChar"
+        style={sizePx ? { fontSize: `${sizePx}px` } : undefined}
+      >
+        {displayLetter}
+      </span>
     </div>
   )
 }

@@ -12,6 +12,7 @@
 export function StimulusWord({
   word = 'SOL',
   size = 'md',
+  sizePx,
   position,
   isPaused = false,
 }) {
@@ -29,7 +30,12 @@ export function StimulusWord({
       role="img"
       aria-label={`Estímulo palabra ${displayWord}`}
     >
-      <span className="stimulusWordText">{displayWord}</span>
+      <span
+        className="stimulusWordText"
+        style={sizePx ? { fontSize: `${sizePx * 0.75}px` } : undefined}
+      >
+        {displayWord}
+      </span>
     </div>
   )
 }

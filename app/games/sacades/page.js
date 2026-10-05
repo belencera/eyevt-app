@@ -9,6 +9,7 @@ import {
   hasStimulusExtras,
   useGameSession,
   useStimulusManager,
+  CADENCE_STEPS,
 } from '../_shared'
 
 const MIN = 2
@@ -21,25 +22,13 @@ function randomPosition() {
   }
 }
 
-/** Convierte velocidad del slider (12–48) en intervalo entre saltos (ms). */
-function speedToInterval(speed) {
-  return Math.round(1500 - speed * 25)
-}
-
-const HINTS = {
-  animals: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el animal cambie de posición y nómbralo en voz alta.',
-  fruits: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la fruta cambie de posición y nómbrala en voz alta.',
-  words: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la palabra cambie de posición y léela en voz alta.',
-  numbers: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el número cambie de posición y dilo en voz alta.',
-  arrows: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la flecha cambie de posición e indica su dirección en voz alta.',
-  letters: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la letra cambie de posición y léela en voz alta.',
-  colors: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el color cambie de posición y di el color en voz alta.',
-  classic: 'Mueve los ojos con precisión entre los diferentes puntos sin mover la cabeza.',
+function intervalToMs(sec) {
+  return Math.round(sec * 1000)
 }
 
 export default function SacadesGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
-  const [speed, setSpeed] = useState(28)
+  const [jumpInterval, setJumpInterval] = useState(0.7)
   const intervalRef = useRef(null)
 
   const stimulus = useStimulusManager('classic')
@@ -59,7 +48,7 @@ export default function SacadesGame() {
   const startJumping = () => {
     clearJumpInterval()
     jumpToRandom()
-    intervalRef.current = setInterval(jumpToRandom, speedToInterval(speed))
+    intervalRef.current = setInterval(jumpToRandom, intervalToMs(jumpInterval))
   }
 
   const resetBall = () => {
@@ -76,25 +65,80 @@ export default function SacadesGame() {
     onEnd: clearJumpInterval,
   })
 
+  // Actualizar intervalo en caliente al variar el tiempo durante el juego
   useEffect(() => {
-    return () => clearJumpInterval()
-  }, [])
+    if (session.isPlaying && !session.isPaused) {
+      clearJumpInterval()
+      intervalRef.current = setInterval(jumpToRandom, intervalToMs(jumpInterval))
+    }
+  }, [jumpInterval, session.isPlaying, session.isPaused])
+
+  // ── Atajos de Teclado durante la partida ──
+  useEffect(() => {
+    if (!session.started) return
+
+    const handleKeyDown = (e) => {
+      // Espacio: Pausar y reanudar
+      if (e.code === 'Space') {
+        e.preventDefault()
+        session.handleTogglePause()
+        return
+      }
+
+      // Tecla R: Reiniciar
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault()
+        session.handleReset()
+        return
+      }
+
+      // Flechas Arriba / Abajo: Modificar tamaño del estímulo
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        stimulus.increaseSize()
+        return
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        stimulus.decreaseSize()
+        return
+      }
+
+      if (session.isPaused) return
+
+      if (e.key === 'ArrowLeft' || e.key === '-') {
+        e.preventDefault()
+        setJumpInterval((prev) => {
+          const idx = CADENCE_STEPS.indexOf(prev)
+          return idx > 0 ? CADENCE_STEPS[idx - 1] : CADENCE_STEPS[0]
+        })
+      } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
+        e.preventDefault()
+        setJumpInterval((prev) => {
+          const idx = CADENCE_STEPS.indexOf(prev)
+          return idx < CADENCE_STEPS.length - 1 ? CADENCE_STEPS[idx + 1] : CADENCE_STEPS[CADENCE_STEPS.length - 1]
+        })
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [session.started, session.isPaused, session.handleTogglePause, session.handleReset])
 
   const showDot = session.started && (session.isPlaying || session.isPaused)
 
   return (
     <GameShell
       title="Sacádicos"
-      hint={HINTS[stimulus.stimulusType] || HINTS.classic}
+      hint="Mover los ojos con precisión hacia el estímulo sin mover la cabeza."
       session={session}
       speedControl={{
-        id: 'sacade-speed',
-        label: 'Velocidad',
-        value: speed,
-        min: 12,
-        max: 48,
-        step: 2,
-        onChange: setSpeed,
+        id: 'sacade-interval',
+        label: 'Tiempo entre saltos',
+        value: jumpInterval,
+        steps: CADENCE_STEPS,
+        unit: ' s',
+        disabled: !session.isIdle,
+        onChange: setJumpInterval,
       }}
       stimulusGrid={
         <StimulusGrid
@@ -108,6 +152,13 @@ export default function SacadesGame() {
           ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="sacade" />
           : null
       }
+      shortcuts={[
+        { keys: ['←', '→'], label: 'Velocidad de salto' },
+        { keys: ['↑', '↓'], label: 'Tamaño del estímulo' },
+        { keys: ['Espacio'], label: 'Pausar y reanudar' },
+        { keys: ['R'], label: 'Reiniciar' },
+      ]}
+      shortcutsHint="Inicio: Vel. 28"
     >
       {showDot && (
         <StimulusDot

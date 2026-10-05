@@ -1,5 +1,5 @@
 /**
- * Configuración y catálogo modular de animales para terapia visual.
+ * Catálogo modular de animales para terapia visual.
  * 26 ilustraciones vectoriales SVG alojadas en /animals/.
  */
 
@@ -31,19 +31,3 @@ export const ANIMALS_LIST = [
   { id: 'two-hump-camel', name: 'Camello', src: '/animals/two-hump-camel.svg' },
   { id: 'whale', name: 'Ballena', src: '/animals/whale.svg' },
 ]
-
-import {
-  ILLUSTRATION_SIZE_OPTIONS,
-  ILLUSTRATION_INTERVAL_OPTIONS,
-  getRandomIllustration,
-} from './illustrations'
-
-export const ANIMAL_SIZE_OPTIONS = ILLUSTRATION_SIZE_OPTIONS
-export const ANIMAL_INTERVAL_OPTIONS = ILLUSTRATION_INTERVAL_OPTIONS
-
-/**
- * Devuelve un animal aleatorio del catálogo, evitando repetir inmediatamente el anterior.
- */
-export function getRandomAnimal(prevAnimal = null, list = ANIMALS_LIST) {
-  return getRandomIllustration(prevAnimal, list)
-}

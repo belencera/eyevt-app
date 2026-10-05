@@ -1,5 +1,8 @@
 export const COUNTDOWN_START = 3
 
+/** Pasos unificados de cadencia/tiempo en segundos para Fijación, Periferia y Sacádicos */
+export const CADENCE_STEPS = [0.3, 0.7, 1, 2, 3, 4, 5]
+
 export const DURATION_OPTIONS = [
   { value: 0, label: 'Infinito' },
   { value: 30, label: '30 s' },
@@ -17,6 +20,12 @@ export const STIMULUS_TYPES = {
   ARROWS: 'arrows',
   ANIMALS: 'animals',
   FRUITS: 'fruits',
+  FOOD: 'food',
+  EMOJIS: 'emojis',
+  VEHICLES: 'vehicles',
+  OBJECTS: 'objects',
+  NATURE: 'nature',
+  FLAGS: 'flags',
 }
 
 export const STIMULUS_OPTIONS = [
@@ -68,15 +77,69 @@ export const STIMULUS_OPTIONS = [
     iconType: 'fruits',
     description: 'Frutas ilustradas aleatorias',
   },
+  {
+    value: 'food',
+    label: 'Comida',
+    iconType: 'food',
+    description: 'Alimentos y comida ilustrada aleatoria',
+  },
+  {
+    value: 'emojis',
+    label: 'Emojis',
+    iconType: 'emojis',
+    description: 'Caras de emoji ilustradas aleatorias',
+  },
+  {
+    value: 'vehicles',
+    label: 'Vehículos',
+    iconType: 'vehicles',
+    description: 'Vehículos y medios de transporte ilustrados aleatorios',
+  },
+  {
+    value: 'objects',
+    label: 'Objetos',
+    iconType: 'objects',
+    description: 'Objetos cotidianos ilustrados aleatorios',
+  },
+  {
+    value: 'nature',
+    label: 'Naturaleza',
+    iconType: 'nature',
+    description: 'Elementos de la naturaleza ilustrados aleatorios',
+  },
+  {
+    value: 'flags',
+    label: 'Banderas',
+    iconType: 'flags',
+    description: 'Banderas de países ilustradas aleatorias',
+  },
 ]
 
-export const COLOR_INTERVAL_OPTIONS = [
+export const CHANGE_INTERVAL_OPTIONS = [
   { value: 1, label: '1 s' },
   { value: 2, label: '2 s' },
   { value: 3, label: '3 s' },
   { value: 4, label: '4 s' },
   { value: 5, label: '5 s' },
 ]
+
+export const STIMULUS_SIZE_PRESETS = {
+  xs: 20,
+  sm: 32,
+  md: 48,
+  lg: 72,
+  xl: 100,
+}
+
+export const STIMULUS_SIZE_OPTIONS = [
+  { value: 'xs', label: 'Muy pequeño' },
+  { value: 'sm', label: 'Pequeño' },
+  { value: 'md', label: 'Mediano' },
+  { value: 'lg', label: 'Grande' },
+  { value: 'xl', label: 'Muy grande' },
+]
+
+
 
 /**
  * Colores básicos de alto contraste sobre fondo oscuro, excluyendo el negro.
@@ -107,11 +170,17 @@ export function getRandomColor(prevColor = null, palette = BASIC_COLORS) {
   return pool[idx]
 }
 
-export * from './illustrations'
 export * from './letters'
 export * from './words'
 export * from './numbers'
 export * from './arrows'
 export * from './animals'
 export * from './fruits'
+export * from './food'
+export * from './emojis'
+export * from './vehicles'
+export * from './objects'
+export * from './nature'
+export * from './flags'
+export * from './illustrationsRegistry'
 export * from './periphery'

@@ -9,6 +9,7 @@ import {
   hasStimulusExtras,
   useGameSession,
   useStimulusManager,
+  isIllustrationCategory,
 } from '../_shared'
 
 const MIN = 2
@@ -35,20 +36,9 @@ function setVelocityMagnitude(vel, speed) {
   vel.y = (vel.y / mag) * speed
 }
 
-const HINTS = {
-  animals: 'Sigue los animales con la mirada sin mover la cabeza y nómbralo en voz alta cada vez que cambie.',
-  fruits: 'Sigue la fruta con la mirada sin mover la cabeza y nómbrala en voz alta cada vez que cambie.',
-  words: 'Sigue la palabra con la vista sin mover la cabeza y léela en voz alta cada vez que cambie.',
-  numbers: 'Sigue el número con la mirada sin mover la cabeza y dilo en voz alta cada vez que cambie.',
-  arrows: 'Sigue la flecha con los ojos sin mover la cabeza e indica su dirección en voz alta cada vez que cambie.',
-  letters: 'Sigue la letra con la mirada sin mover la cabeza y nómbrala en voz alta cada vez que cambie.',
-  colors: 'Sigue el punto con los ojos sin mover la cabeza y di el color activo en voz alta cada vez que cambie.',
-  classic: 'Sigue el punto con la mirada sin mover la cabeza.',
-}
-
 export default function EyeTrackingGame() {
   const [position, setPosition] = useState({ x: 50, y: 50 })
-  const [speed, setSpeed] = useState(28)
+  const [speed, setSpeed] = useState(20)
 
   const stimulus = useStimulusManager('classic')
   const stimulusRef = useRef(stimulus)
@@ -57,7 +47,7 @@ export default function EyeTrackingGame() {
   }, [stimulus])
 
   const positionRef = useRef({ x: 50, y: 50 })
-  const velocityRef = useRef(randomVelocity(28))
+  const velocityRef = useRef(randomVelocity(20))
   const timerRef = useRef(0)
 
   useEffect(() => {
@@ -122,10 +112,8 @@ export default function EyeTrackingGame() {
         targetInterval = stim.refs.letterIntervalRef.current
       } else if (type === 'words') {
         targetInterval = stim.refs.wordIntervalRef.current
-      } else if (type === 'animals') {
-        targetInterval = stim.refs.animalIntervalRef.current
-      } else if (type === 'fruits') {
-        targetInterval = stim.refs.fruitIntervalRef.current
+      } else if (isIllustrationCategory(type)) {
+        targetInterval = stim.refs.illustrationIntervalRef.current
       } else if (type === 'numbers') {
         targetInterval = stim.refs.numberIntervalRef.current
       } else if (type === 'arrows') {
@@ -148,19 +136,65 @@ export default function EyeTrackingGame() {
     return () => cancelAnimationFrame(frameId)
   }, [session.running])
 
+  // ── Atajos de Teclado durante la partida ──
+  useEffect(() => {
+    if (!session.started) return
+
+    const handleKeyDown = (e) => {
+      // Espacio: Pausar y reanudar
+      if (e.code === 'Space') {
+        e.preventDefault()
+        session.handleTogglePause()
+        return
+      }
+
+      // Tecla R: Reiniciar
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault()
+        session.handleReset()
+        return
+      }
+
+      // Flechas Arriba / Abajo: Modificar tamaño del estímulo
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        stimulus.increaseSize()
+        return
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        stimulus.decreaseSize()
+        return
+      }
+
+      if (session.isPaused) return
+
+      if (e.key === 'ArrowLeft' || e.key === '-') {
+        e.preventDefault()
+        setSpeed((prev) => Math.max(1, prev - 1))
+      } else if (e.key === 'ArrowRight' || e.key === '+' || e.key === '=') {
+        e.preventDefault()
+        setSpeed((prev) => Math.min(50, prev + 1))
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [session.started, session.isPaused, session.handleTogglePause, session.handleReset])
+
   const showDot = session.started && (session.isPlaying || session.isPaused)
 
   return (
     <GameShell
       title="Seguimientos"
-      hint={HINTS[stimulus.stimulusType] || HINTS.classic}
+      hint="Seguir el estímulo con la mirada sin mover la cabeza."
       session={session}
       speedControl={{
         id: 'speed',
         label: 'Velocidad',
         value: speed,
-        min: 8,
-        max: 60,
+        min: 1,
+        max: 50,
+        step: 1,
         onChange: setSpeed,
       }}
       stimulusGrid={
@@ -178,6 +212,13 @@ export default function EyeTrackingGame() {
           ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="tracking" showIntervals />
           : null
       }
+      shortcuts={[
+        { keys: ['←', '→'], label: 'Velocidad' },
+        { keys: ['↑', '↓'], label: 'Tamaño del estímulo' },
+        { keys: ['Espacio'], label: 'Pausar y reanudar' },
+        { keys: ['R'], label: 'Reiniciar' },
+      ]}
+      shortcutsHint="Inicio: Vel. 28"
     >
       {showDot && (
         <StimulusDot

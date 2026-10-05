@@ -2,27 +2,12 @@ import { WORD_BANKS } from './wordsBanks'
 
 export { WORD_BANKS } from './wordsBanks'
 
-export const WORD_SIZE_OPTIONS = [
-  { value: 'sm', label: 'Pequeña' },
-  { value: 'md', label: 'Mediana' },
-  { value: 'lg', label: 'Grande' },
-  { value: 'xl', label: 'Muy grande' },
-]
-
 export const WORD_LENGTH_OPTIONS = [
   { value: 3, label: '3 letras' },
   { value: 4, label: '4 letras' },
   { value: 5, label: '5 letras' },
   { value: 6, label: '6 letras' },
-  { value: 'all', label: 'Mixto (3 a 6)' },
-]
-
-export const WORD_INTERVAL_OPTIONS = [
-  { value: 1, label: '1 s' },
-  { value: 2, label: '2 s' },
-  { value: 3, label: '3 s' },
-  { value: 4, label: '4 s' },
-  { value: 5, label: '5 s' },
+  { value: 'all', label: 'Aleatorio', icon: '🎲' },
 ]
 
 /**

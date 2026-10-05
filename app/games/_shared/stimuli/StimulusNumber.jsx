@@ -12,6 +12,7 @@
 export function StimulusNumber({
   number = '7',
   size = 'md',
+  sizePx,
   position,
   isPaused = false,
 }) {
@@ -29,7 +30,12 @@ export function StimulusNumber({
       role="img"
       aria-label={`Estímulo número ${displayVal}`}
     >
-      <span className="stimulusWordText">{displayVal}</span>
+      <span
+        className="stimulusWordText"
+        style={sizePx ? { fontSize: `${sizePx * 0.85}px` } : undefined}
+      >
+        {displayVal}
+      </span>
     </div>
   )
 }
