@@ -10,6 +10,11 @@
 import { ANIMALS_LIST } from './animals'
 import { FRUITS_LIST } from './fruits'
 import { FOOD_LIST } from './food'
+import { EMOJIS_LIST } from './emojis'
+import { VEHICLES_LIST } from './vehicles'
+import { OBJECTS_LIST } from './objects'
+import { NATURE_LIST } from './nature'
+import { FLAGS_LIST } from './flags'
 
 /**
  * Devuelve un elemento aleatorio de una lista de ilustraciones
@@ -56,6 +61,51 @@ export const ILLUSTRATION_CATEGORIES = {
     fallbackEmoji: '🍕',
     hintNoun: 'la comida',
     items: FOOD_LIST,
+  },
+  emojis: {
+    id: 'emojis',
+    label: 'Emojis',
+    description: 'Caras de emoji ilustradas aleatorias',
+    iconSrc: '/faces/emojione--smiling-face-with-smiling-eyes.svg',
+    fallbackEmoji: '😊',
+    hintNoun: 'el emoji',
+    items: EMOJIS_LIST,
+  },
+  vehicles: {
+    id: 'vehicles',
+    label: 'Vehículos',
+    description: 'Vehículos y medios de transporte ilustrados aleatorios',
+    iconSrc: '/vehicles/emojione--automobile.svg',
+    fallbackEmoji: '🚗',
+    hintNoun: 'el vehículo',
+    items: VEHICLES_LIST,
+  },
+  objects: {
+    id: 'objects',
+    label: 'Objetos',
+    description: 'Objetos cotidianos ilustrados aleatorios',
+    iconSrc: '/objects/emojione--light-bulb.svg',
+    fallbackEmoji: '💡',
+    hintNoun: 'el objeto',
+    items: OBJECTS_LIST,
+  },
+  nature: {
+    id: 'nature',
+    label: 'Naturaleza',
+    description: 'Elementos de la naturaleza ilustrados aleatorios',
+    iconSrc: '/nature/emojione--deciduous-tree.svg',
+    fallbackEmoji: '🌳',
+    hintNoun: 'el elemento natural',
+    items: NATURE_LIST,
+  },
+  flags: {
+    id: 'flags',
+    label: 'Banderas',
+    description: 'Banderas de países ilustradas aleatorias',
+    iconSrc: '/flags/emojione--flag-for-european-union.svg',
+    fallbackEmoji: '🚩',
+    hintNoun: 'la bandera',
+    items: FLAGS_LIST,
   },
 }
 

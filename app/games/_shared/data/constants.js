@@ -21,6 +21,11 @@ export const STIMULUS_TYPES = {
   ANIMALS: 'animals',
   FRUITS: 'fruits',
   FOOD: 'food',
+  EMOJIS: 'emojis',
+  VEHICLES: 'vehicles',
+  OBJECTS: 'objects',
+  NATURE: 'nature',
+  FLAGS: 'flags',
 }
 
 export const STIMULUS_OPTIONS = [
@@ -77,6 +82,36 @@ export const STIMULUS_OPTIONS = [
     label: 'Comida',
     iconType: 'food',
     description: 'Alimentos y comida ilustrada aleatoria',
+  },
+  {
+    value: 'emojis',
+    label: 'Emojis',
+    iconType: 'emojis',
+    description: 'Caras de emoji ilustradas aleatorias',
+  },
+  {
+    value: 'vehicles',
+    label: 'Vehículos',
+    iconType: 'vehicles',
+    description: 'Vehículos y medios de transporte ilustrados aleatorios',
+  },
+  {
+    value: 'objects',
+    label: 'Objetos',
+    iconType: 'objects',
+    description: 'Objetos cotidianos ilustrados aleatorios',
+  },
+  {
+    value: 'nature',
+    label: 'Naturaleza',
+    iconType: 'nature',
+    description: 'Elementos de la naturaleza ilustrados aleatorios',
+  },
+  {
+    value: 'flags',
+    label: 'Banderas',
+    iconType: 'flags',
+    description: 'Banderas de países ilustradas aleatorias',
   },
 ]
 
@@ -142,5 +177,10 @@ export * from './arrows'
 export * from './animals'
 export * from './fruits'
 export * from './food'
+export * from './emojis'
+export * from './vehicles'
+export * from './objects'
+export * from './nature'
+export * from './flags'
 export * from './illustrationsRegistry'
 export * from './periphery'
