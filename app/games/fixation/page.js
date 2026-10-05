@@ -10,7 +10,6 @@ import {
   useGameSession,
   useStimulusManager,
   CADENCE_STEPS,
-  getGameHint,
 } from '../_shared'
 
 // Punto fijo en el centro de la pantalla
@@ -99,7 +98,7 @@ export default function FixationGame() {
   return (
     <GameShell
       title="Fijación"
-      hint={getGameHint('fixation', stimulus.stimulusType) || 'Mantén la mirada fija en el punto central sin mover los ojos ni la cabeza.'}
+      hint="Mantener la mirada fija en el estímulo central sin mover los ojos ni la cabeza."
       session={session}
       speedControl={{
         id: 'change-interval',

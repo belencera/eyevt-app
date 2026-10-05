@@ -10,7 +10,6 @@ import {
   useGameSession,
   useStimulusManager,
   isIllustrationCategory,
-  getGameHint,
 } from '../_shared'
 
 const MIN = 2
@@ -187,7 +186,7 @@ export default function EyeTrackingGame() {
   return (
     <GameShell
       title="Seguimientos"
-      hint={getGameHint('eye-tracking', stimulus.stimulusType) || 'Sigue el punto con la mirada sin mover la cabeza.'}
+      hint="Seguir el estímulo con la mirada sin mover la cabeza."
       session={session}
       speedControl={{
         id: 'speed',

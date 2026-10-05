@@ -1,10 +1,7 @@
 /**
  * Registro centralizado y extensible de colecciones de ilustraciones vectoriales.
- * Permite registrar nuevas categorías de SVGs (ej. animales, frutas, comida, vehículos...)
+ * Permite registrar nuevas categorías de SVGs (animales, frutas, comida, emojis, vehículos, objetos, naturaleza, banderas...)
  * sin necesidad de modificar el código de los juegos ni duplicar lógica en componentes.
- *
- * También centraliza las instrucciones de ayuda (hints) para todos los tipos de estímulo
- * en cada juego, eliminando la necesidad de definir mapas HINTS locales en cada página.
  */
 
 import { ANIMALS_LIST } from './animals'
@@ -41,7 +38,6 @@ export const ILLUSTRATION_CATEGORIES = {
     description: 'Animales ilustrados aleatorios',
     iconSrc: '/animals/lion.svg',
     fallbackEmoji: '🦁',
-    hintNoun: 'el animal',
     items: ANIMALS_LIST,
   },
   fruits: {
@@ -50,7 +46,6 @@ export const ILLUSTRATION_CATEGORIES = {
     description: 'Frutas ilustradas aleatorias',
     iconSrc: '/fruits/strawberry.svg',
     fallbackEmoji: '🍓',
-    hintNoun: 'la fruta',
     items: FRUITS_LIST,
   },
   food: {
@@ -59,7 +54,6 @@ export const ILLUSTRATION_CATEGORIES = {
     description: 'Alimentos y comida ilustrada aleatoria',
     iconSrc: '/food/pizza.svg',
     fallbackEmoji: '🍕',
-    hintNoun: 'la comida',
     items: FOOD_LIST,
   },
   emojis: {
@@ -68,7 +62,6 @@ export const ILLUSTRATION_CATEGORIES = {
     description: 'Caras de emoji ilustradas aleatorias',
     iconSrc: '/faces/emojione--smiling-face-with-smiling-eyes.svg',
     fallbackEmoji: '😊',
-    hintNoun: 'el emoji',
     items: EMOJIS_LIST,
   },
   vehicles: {
@@ -77,7 +70,6 @@ export const ILLUSTRATION_CATEGORIES = {
     description: 'Vehículos y medios de transporte ilustrados aleatorios',
     iconSrc: '/vehicles/emojione--automobile.svg',
     fallbackEmoji: '🚗',
-    hintNoun: 'el vehículo',
     items: VEHICLES_LIST,
   },
   objects: {
@@ -86,7 +78,6 @@ export const ILLUSTRATION_CATEGORIES = {
     description: 'Objetos cotidianos ilustrados aleatorios',
     iconSrc: '/objects/emojione--light-bulb.svg',
     fallbackEmoji: '💡',
-    hintNoun: 'el objeto',
     items: OBJECTS_LIST,
   },
   nature: {
@@ -95,7 +86,6 @@ export const ILLUSTRATION_CATEGORIES = {
     description: 'Elementos de la naturaleza ilustrados aleatorios',
     iconSrc: '/nature/emojione--deciduous-tree.svg',
     fallbackEmoji: '🌳',
-    hintNoun: 'el elemento natural',
     items: NATURE_LIST,
   },
   flags: {
@@ -104,7 +94,6 @@ export const ILLUSTRATION_CATEGORIES = {
     description: 'Banderas de países ilustradas aleatorias',
     iconSrc: '/flags/emojione--flag-for-european-union.svg',
     fallbackEmoji: '🚩',
-    hintNoun: 'la bandera',
     items: FLAGS_LIST,
   },
 }
@@ -131,63 +120,3 @@ export function getRandomIllustrationByCategory(type, prevItem = null) {
   if (!cat) return null
   return getRandomIllustration(prevItem, cat.items)
 }
-
-/* ── Hints centralizados para todos los tipos de estímulo en cada juego ── */
-
-const GAME_HINTS = {
-  fixation: {
-    classic: 'Mantén la mirada fija en el punto central sin mover los ojos ni la cabeza.',
-    colors: 'Mantén la mirada fija en el centro y di el color en voz alta cada vez que cambie.',
-    letters: 'Mantén la mirada fija en el centro y nombra la letra en voz alta cada vez que cambie.',
-    words: 'Mantén la mirada fija en el centro y lee la palabra en voz alta cada vez que cambie.',
-    numbers: 'Mantén la mirada fija en el centro y di el número en voz alta cada vez que cambie.',
-    arrows: 'Mantén la mirada fija en el centro e indica la dirección de la flecha en voz alta cada vez que cambie.',
-  },
-  'eye-tracking': {
-    classic: 'Sigue el punto con la mirada sin mover la cabeza.',
-    colors: 'Sigue el punto con los ojos sin mover la cabeza y di el color activo en voz alta cada vez que cambie.',
-    letters: 'Sigue la letra con la mirada sin mover la cabeza y nómbrala en voz alta cada vez que cambie.',
-    words: 'Sigue la palabra con la vista sin mover la cabeza y léela en voz alta cada vez que cambie.',
-    numbers: 'Sigue el número con la mirada sin mover la cabeza y dilo en voz alta cada vez que cambie.',
-    arrows: 'Sigue la flecha con los ojos sin mover la cabeza e indica su dirección en voz alta cada vez que cambie.',
-  },
-  sacades: {
-    classic: 'Mueve los ojos con precisión entre los diferentes puntos sin mover la cabeza.',
-    colors: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el color cambie de posición y di el color en voz alta.',
-    letters: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la letra cambie de posición y léela en voz alta.',
-    words: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la palabra cambie de posición y léela en voz alta.',
-    numbers: 'Mueve los ojos con precisión sin mover la cabeza cada vez que el número cambie de posición y dilo en voz alta.',
-    arrows: 'Mueve los ojos con precisión sin mover la cabeza cada vez que la flecha cambie de posición e indica su dirección en voz alta.',
-  },
-}
-
-/**
- * Devuelve la instrucción de ayuda para cualquier combinación de juego y tipo de estímulo.
- * Para categorías de ilustración registradas, genera el hint dinámicamente usando el nombre de la categoría.
- * Para tipos estándar, devuelve el hint estático del mapa centralizado.
- *
- * @param {string} gameKey - Clave del juego ('fixation' | 'eye-tracking' | 'sacades')
- * @param {string} stimulusType - Tipo de estímulo activo
- * @returns {string | null}
- */
-export function getGameHint(gameKey, stimulusType) {
-  // Para categorías de ilustración, generar dinámicamente
-  const cat = ILLUSTRATION_CATEGORIES[stimulusType]
-  if (cat) {
-    switch (gameKey) {
-      case 'fixation':
-        return `Mantén la mirada fija en el centro y nombra ${cat.hintNoun} en voz alta cada vez que cambie.`
-      case 'eye-tracking':
-        return `Sigue ${cat.hintNoun} con la mirada sin mover la cabeza y nómbralo en voz alta cada vez que cambie.`
-      case 'sacades':
-        return `Mueve los ojos con precisión sin mover la cabeza cada vez que ${cat.hintNoun} cambie de posición y nómbralo en voz alta.`
-      default:
-        return null
-    }
-  }
-  // Para tipos estándar, usar el mapa estático
-  return GAME_HINTS[gameKey]?.[stimulusType] ?? null
-}
-
-// Alias retrocompatible — se puede eliminar en el futuro
-export const getIllustrationHint = getGameHint

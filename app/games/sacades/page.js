@@ -10,7 +10,6 @@ import {
   useGameSession,
   useStimulusManager,
   CADENCE_STEPS,
-  getGameHint,
 } from '../_shared'
 
 const MIN = 2
@@ -130,7 +129,7 @@ export default function SacadesGame() {
   return (
     <GameShell
       title="Sacádicos"
-      hint={getGameHint('sacades', stimulus.stimulusType) || 'Mueve los ojos con precisión entre los diferentes puntos sin mover la cabeza.'}
+      hint="Mover los ojos con precisión hacia el estímulo sin mover la cabeza."
       session={session}
       speedControl={{
         id: 'sacade-interval',

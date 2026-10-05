@@ -14,12 +14,11 @@ import {
   CADENCE_STEPS,
   getRandomPeripheralPosition,
   IconClick,
-  CHANGE_INTERVAL_OPTIONS,
 } from '../_shared'
 
 const HINTS = {
-  'name-and-tap': 'Mantén la mirada fija en el punto central, nombra en voz alta los estímulos que aparezcan y pulsa los puntos que aparecen alrededor con el dedo o el ratón.',
-  'central-focus': 'Mantén la mirada fija en el punto central e identifica los estímulos que aparecen en tu campo periférico.',
+  'name-and-tap': 'Mantener la mirada fija en el punto central y pulsar los puntos que aparecen alrededor.',
+  'central-focus': 'Mantener la mirada fija en el punto central e identificar el estímulo que aparece en el campo periférico.',
 }
 
 export default function PeripheryGame() {
@@ -214,23 +213,11 @@ export default function PeripheryGame() {
   // Controles de estímulo específicos: tamaño + intervalo de color (caso especial de Periferia)
   const buildExtraControls = () => {
     return (
-      <>
-        {stimulus.stimulusType === 'colors' && (
-          <OptionPicker
-            id="periphery-color-interval"
-            label="Intervalo de cambio"
-            value={stimulus.colorInterval}
-            options={CHANGE_INTERVAL_OPTIONS}
-            disabled={!session.isIdle}
-            onChange={stimulus.setColorInterval}
-          />
-        )}
-        <StimulusExtraControls
-          stimulus={stimulus}
-          disabled={!session.isIdle}
-          prefix="periphery"
-        />
-      </>
+      <StimulusExtraControls
+        stimulus={stimulus}
+        disabled={!session.isIdle}
+        prefix="periphery"
+      />
     )
   }
 
