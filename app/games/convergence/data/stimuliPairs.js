@@ -29,19 +29,22 @@ function renderSingleItem(src, alt, scale = 1, shadow, size = 70) {
  * Renderiza la vista previa compuesta (miniatura) de una pareja de estímulos.
  */
 function renderComposedPreview(base, overlay, size = 46) {
+  const baseSize = Math.round(size * (base.scale || 1))
   const overlaySize = Math.round(size * (overlay.scale || 0.5))
   return (
     <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <img
         src={base.src}
         alt={base.alt}
-        width={size}
-        height={size}
+        width={baseSize}
+        height={baseSize}
         style={{
-          position: 'absolute',
+          position: base.pos?.position || 'absolute',
           inset: 0,
+          margin: 'auto',
           objectFit: 'contain',
           filter: `drop-shadow(0 0 4px ${base.shadow})`,
+          ...base.pos,
         }}
         draggable={false}
       />
@@ -52,6 +55,8 @@ function renderComposedPreview(base, overlay, size = 46) {
         height={overlaySize}
         style={{
           position: overlay.pos?.position || 'absolute',
+          inset: 0,
+          margin: 'auto',
           objectFit: 'contain',
           filter: `drop-shadow(0 0 4px ${overlay.shadow})`,
           ...overlay.pos,
@@ -61,6 +66,7 @@ function renderComposedPreview(base, overlay, size = 46) {
     </div>
   )
 }
+
 
 /**
  * Factoría para crear parejas de estímulos basadas en imágenes SVG sin duplicar JSX.
@@ -77,20 +83,38 @@ function createStimulusPair({ id, name, category = 'percepcion-simultanea', left
     renderLeft: (size = 70) => renderSingleItem(left.src, left.alt, left.scale ?? 1, left.shadow, size),
     renderRight: (size = 70) => renderSingleItem(right.src, right.alt, right.scale ?? 1, right.shadow, size),
     renderPreview: (size = 46) =>
-      renderComposedPreview(
-        {
-          src: baseItem.src,
-          alt: baseItem.alt,
-          shadow: preview.baseShadow || baseItem.previewShadow || baseItem.shadow,
-        },
-        {
-          src: overlayItem.src,
-          alt: overlayItem.alt,
-          scale: preview.overlayScale,
-          shadow: preview.overlayShadow || overlayItem.previewShadow || overlayItem.shadow,
-          pos: preview.overlayPos,
-        },
-        size
+      preview.fullSrc ? (
+        <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <img
+            src={preview.fullSrc}
+            alt={name}
+            width={Math.round(size * (preview.baseScale || 0.82))}
+            height={Math.round(size * (preview.baseScale || 0.82))}
+            style={{
+              objectFit: 'contain',
+              filter: `drop-shadow(0 0 4px ${preview.baseShadow || baseItem.previewShadow || baseItem.shadow})`,
+            }}
+            draggable={false}
+          />
+        </div>
+      ) : (
+        renderComposedPreview(
+          {
+            src: baseItem.src,
+            alt: baseItem.alt,
+            scale: preview.baseScale || 1,
+            shadow: preview.baseShadow || baseItem.previewShadow || baseItem.shadow,
+            pos: preview.basePos,
+          },
+          {
+            src: overlayItem.src,
+            alt: overlayItem.alt,
+            scale: preview.overlayScale,
+            shadow: preview.overlayShadow || overlayItem.previewShadow || overlayItem.shadow,
+            pos: preview.overlayPos,
+          },
+          size
+        )
       ),
   }
 }
@@ -192,6 +216,85 @@ export const STIMULI_PAIRS = [
     left: { src: '/vergence/tennis-ball.svg', alt: 'Pelota de tenis', scale: 0.58, shadow: 'rgba(199, 231, 85, 0.55)', previewShadow: 'rgba(199, 231, 85, 0.6)' },
     right: { src: '/vergence/tennis-racket.svg', alt: 'Raqueta de tenis', scale: 1, shadow: 'rgba(255, 113, 127, 0.45)', previewShadow: 'rgba(255, 113, 127, 0.35)' },
     preview: { base: 'right', overlayScale: 0.42, overlayPos: { top: '2px', left: '2px' } },
+  }),
+
+  // ─── CATEGORÍA: FUSIÓN PLANA ──────────────────────────────
+  createStimulusPair({
+    id: 'suns-fusion',
+    name: 'Sol',
+    category: 'fusion-plana',
+    left: { src: '/vergence/sun-a.svg', alt: 'Sol 1', scale: 1, shadow: 'rgba(255, 206, 49, 0.45)', previewShadow: 'rgba(255, 206, 49, 0.35)' },
+    right: { src: '/vergence/sun-b.svg', alt: 'Sol 2', scale: 1, shadow: 'rgba(255, 206, 49, 0.45)', previewShadow: 'rgba(255, 206, 49, 0.35)' },
+    preview: { base: 'left', baseScale: 0.82, overlayScale: 0.82 },
+  }),
+
+  createStimulusPair({
+    id: 'tulip-fusion',
+    name: 'Tulipán',
+    category: 'fusion-plana',
+    left: { src: '/vergence/tulip-a.svg', alt: 'Tulipán 1', scale: 1, shadow: 'rgba(232, 77, 136, 0.45)', previewShadow: 'rgba(232, 77, 136, 0.35)' },
+    right: { src: '/vergence/tulip-b.svg', alt: 'Tulipán 2', scale: 1, shadow: 'rgba(232, 77, 136, 0.45)', previewShadow: 'rgba(232, 77, 136, 0.35)' },
+    preview: { base: 'left', baseScale: 0.82, overlayScale: 0.82 },
+  }),
+
+  createStimulusPair({
+    id: 'rabbit-fusion',
+    name: 'Conejo',
+    category: 'fusion-plana',
+    left: { src: '/vergence/rabbit-a.svg', alt: 'Conejo 1', scale: 1, shadow: 'rgba(178, 182, 184, 0.45)', previewShadow: 'rgba(178, 182, 184, 0.35)' },
+    right: { src: '/vergence/rabbit-b.svg', alt: 'Conejo 2', scale: 1, shadow: 'rgba(178, 182, 184, 0.45)', previewShadow: 'rgba(178, 182, 184, 0.35)' },
+    preview: {
+      base: 'left',
+      baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'inset(0 50% 0 0)' },
+      overlayShadow: 'transparent',
+    },
+  }),
+
+  createStimulusPair({
+    id: 'avocado-fusion',
+    name: 'Aguacate',
+    category: 'fusion-plana',
+    left: { src: '/vergence/avocado-a.svg', alt: 'Aguacate sin hueso', scale: 1, shadow: 'rgba(105, 150, 53, 0.45)', previewShadow: 'rgba(105, 150, 53, 0.35)' },
+    right: { src: '/vergence/avocado-b.svg', alt: 'Aguacate con hueso', scale: 1, shadow: 'rgba(105, 150, 53, 0.45)', previewShadow: 'rgba(105, 150, 53, 0.35)' },
+    preview: { base: 'left', baseScale: 0.82, overlayScale: 0.82 },
+  }),
+
+  createStimulusPair({
+    id: 'pizza-fusion',
+    name: 'Pizza',
+    category: 'fusion-plana',
+    left: { src: '/vergence/pizza-a.svg', alt: 'Pizza con ingredientes', scale: 1, shadow: 'rgba(201, 142, 82, 0.45)', previewShadow: 'rgba(201, 142, 82, 0.35)' },
+    right: { src: '/vergence/pizza-b.svg', alt: 'Pizza sin ingredientes', scale: 1, shadow: 'rgba(201, 142, 82, 0.45)', previewShadow: 'rgba(201, 142, 82, 0.35)' },
+    preview: { base: 'right', baseScale: 0.82, overlayScale: 0.82 },
+  }),
+
+  createStimulusPair({
+    id: 'robot-fusion',
+    name: 'Robot',
+    category: 'fusion-plana',
+    left: { src: '/vergence/robot-a.svg', alt: 'Robot 1', scale: 1, shadow: 'rgba(0, 185, 241, 0.45)', previewShadow: 'rgba(0, 185, 241, 0.35)' },
+    right: { src: '/vergence/robot-b.svg', alt: 'Robot 2', scale: 1, shadow: 'rgba(0, 185, 241, 0.45)', previewShadow: 'rgba(0, 185, 241, 0.35)' },
+    preview: {
+      base: 'left',
+      baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'inset(0 50% 0 0)' },
+      overlayShadow: 'transparent',
+    },
+  }),
+
+  createStimulusPair({
+    id: 'palette-fusion',
+    name: 'Pintura',
+    category: 'fusion-plana',
+    left: { src: '/vergence/palette-a.svg', alt: 'Pintura 1', scale: 1, shadow: 'rgba(246, 199, 153, 0.45)', previewShadow: 'rgba(246, 199, 153, 0.35)' },
+    right: { src: '/vergence/palette-b.svg', alt: 'Pintura 2', scale: 1, shadow: 'rgba(246, 199, 153, 0.45)', previewShadow: 'rgba(246, 199, 153, 0.35)' },
+    preview: {
+      fullSrc: '/vergence/palette-full.svg',
+      baseScale: 0.82,
+    },
   }),
 ]
 
