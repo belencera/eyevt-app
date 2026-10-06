@@ -42,6 +42,12 @@ export const STIMULUS_OPTIONS = [
     description: 'Cambio dinámico de color',
   },
   {
+    value: 'numbers',
+    label: 'Números',
+    iconType: 'numbers',
+    description: 'Cifras numéricas aleatorias (1 a 5 cifras)',
+  },
+  {
     value: 'letters',
     label: 'Letras',
     iconType: 'letters',
@@ -52,12 +58,6 @@ export const STIMULUS_OPTIONS = [
     label: 'Palabras',
     iconType: 'words',
     description: 'Palabras de 3 a 6 letras en mayúscula',
-  },
-  {
-    value: 'numbers',
-    label: 'Números',
-    iconType: 'numbers',
-    description: 'Cifras numéricas aleatorias (1 a 5 cifras)',
   },
   {
     value: 'arrows',
