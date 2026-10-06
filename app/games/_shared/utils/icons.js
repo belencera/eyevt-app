@@ -40,3 +40,27 @@ export function IconClick() {
     </svg>
   )
 }
+
+export function IconTarget() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#38bdf8"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      style={{
+        width: '20px',
+        height: '20px',
+        display: 'block',
+        filter: 'drop-shadow(0 0 6px rgba(56, 189, 248, 0.75))',
+      }}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="12" cy="12" r="6" />
+      <circle cx="12" cy="12" r="2" fill="#38bdf8" />
+    </svg>
+  )
+}

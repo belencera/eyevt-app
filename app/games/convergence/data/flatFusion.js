@@ -205,6 +205,45 @@ export function createLetterStimulusPair(initialLetter = 'E') {
 export const WORD_FUSION_ID = 'word-fusion'
 
 /**
+ * Genera conjuntos de índices de letras para supresión dicóptica complementaria.
+ * Para cada palabra de 2 o más letras:
+ * - Ojo izquierdo oculta exactamente 1 letra aleatoria.
+ * - Ojo derecho oculta exactamente 1 letra aleatoria distinta.
+ * Las letras ocultas se mantienen en el DOM SVG con 'fill="transparent"' y 'visibility: hidden'
+ * para garantizar métrica espacial y kerning 100% idénticos entre ambos ojos.
+ */
+export function getDichopticSuppressionIndices(text, seed = 0) {
+  if (!text || typeof text !== 'string') return { left: new Set(), right: new Set() }
+
+  const wordRegex = /[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]+/gi
+  let match
+  const left = new Set()
+  const right = new Set()
+
+  let s = Math.abs(seed) + 1
+  const nextRandom = () => {
+    s = (s * 9301 + 49297) % 233280
+    return s / 233280
+  }
+
+  while ((match = wordRegex.exec(text)) !== null) {
+    const word = match[0]
+    const startIndex = match.index
+    const len = word.length
+    if (len >= 2) {
+      const leftRel = Math.floor(nextRandom() * len)
+      const offset = 1 + Math.floor(nextRandom() * (len - 1))
+      const rightRel = (leftRel + offset) % len
+
+      left.add(startIndex + leftRel)
+      right.add(startIndex + rightRel)
+    }
+  }
+
+  return { left, right }
+}
+
+/**
  * Estímulo de palabra con control antisupresión para fusión plana:
  * - Ojo izquierdo: Palabra con raya horizontal superior.
  * - Ojo derecho: Misma palabra con raya vertical superior.
@@ -216,11 +255,15 @@ export function createWordStimulusPair(initialWord = 'CASA') {
     name: 'Palabras',
     category: 'fusion-plana',
     isDynamicWord: true,
-    renderLeft: (size = 70, word) => {
+    renderLeft: (size = 70, word, options = {}) => {
       const text = (typeof word === 'string' && word.trim() ? word : initialWord).trim().toUpperCase() || 'CASA'
       const baseW = Math.max(76, text.length * 17 + 24)
       const midX = baseW / 2
       const svgW = Math.round(size * (baseW / 60))
+      const suppressed = options?.letterSuppression
+        ? getDichopticSuppressionIndices(text, options.seed || 0).left
+        : null
+
       return (
         <svg
           viewBox={`0 0 ${baseW} 60`}
@@ -243,16 +286,30 @@ export function createWordStimulusPair(initialWord = 'CASA') {
             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             style={{ userSelect: 'none' }}
           >
-            {text}
+            {suppressed
+              ? text.split('').map((char, i) => (
+                  <tspan
+                    key={i}
+                    fill={suppressed.has(i) ? 'transparent' : '#38bdf8'}
+                    style={suppressed.has(i) ? { visibility: 'hidden', opacity: 0 } : undefined}
+                  >
+                    {char}
+                  </tspan>
+                ))
+              : text}
           </text>
         </svg>
       )
     },
-    renderRight: (size = 70, word) => {
+    renderRight: (size = 70, word, options = {}) => {
       const text = (typeof word === 'string' && word.trim() ? word : initialWord).trim().toUpperCase() || 'CASA'
       const baseW = Math.max(76, text.length * 17 + 24)
       const midX = baseW / 2
       const svgW = Math.round(size * (baseW / 60))
+      const suppressed = options?.letterSuppression
+        ? getDichopticSuppressionIndices(text, options.seed || 0).right
+        : null
+
       return (
         <svg
           viewBox={`0 0 ${baseW} 60`}
@@ -275,7 +332,17 @@ export function createWordStimulusPair(initialWord = 'CASA') {
             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             style={{ userSelect: 'none' }}
           >
-            {text}
+            {suppressed
+              ? text.split('').map((char, i) => (
+                  <tspan
+                    key={i}
+                    fill={suppressed.has(i) ? 'transparent' : '#38bdf8'}
+                    style={suppressed.has(i) ? { visibility: 'hidden', opacity: 0 } : undefined}
+                  >
+                    {char}
+                  </tspan>
+                ))
+              : text}
           </text>
         </svg>
       )
@@ -351,7 +418,7 @@ export function createPhraseStimulusPair(initialPhrase = 'ENTRENA TU VISIÓN') {
     name: 'Frase',
     category: 'fusion-plana',
     isDynamicPhrase: true,
-    renderLeft: (size = 70, phrase) => {
+    renderLeft: (size = 70, phrase, options = {}) => {
       const lines = splitPhraseIntoLines(phrase || initialPhrase)
       const maxLen = Math.max(...lines.map((l) => l.length), 8)
       const baseW = Math.max(92, maxLen * 13 + 30)
@@ -373,26 +440,42 @@ export function createPhraseStimulusPair(initialPhrase = 'ENTRENA TU VISIÓN') {
           {/* Raya horizontal superior pequeña (Ojo izquierdo) con clara separación */}
           <line x1={midX - 7} y1="8" x2={midX + 7} y2="8" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
           {/* Frase distribuida en renglones holgados */}
-          {lines.map((lineText, idx) => (
-            <text
-              key={idx}
-              x={midX}
-              y={textStartY + idx * lineHeight}
-              textAnchor="middle"
-              fill="#38bdf8"
-              fontSize="20"
-              fontWeight="bold"
-              letterSpacing="0.8px"
-              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-              style={{ userSelect: 'none' }}
-            >
-              {lineText}
-            </text>
-          ))}
+          {lines.map((lineText, idx) => {
+            const suppressed = options?.letterSuppression
+              ? getDichopticSuppressionIndices(lineText, (options.seed || 0) + idx * 101).left
+              : null
+
+            return (
+              <text
+                key={idx}
+                x={midX}
+                y={textStartY + idx * lineHeight}
+                textAnchor="middle"
+                fill="#38bdf8"
+                fontSize="20"
+                fontWeight="bold"
+                letterSpacing="0.8px"
+                fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                style={{ userSelect: 'none' }}
+              >
+                {suppressed
+                  ? lineText.split('').map((char, charIdx) => (
+                      <tspan
+                        key={charIdx}
+                        fill={suppressed.has(charIdx) ? 'transparent' : '#38bdf8'}
+                        style={suppressed.has(charIdx) ? { visibility: 'hidden', opacity: 0 } : undefined}
+                      >
+                        {char}
+                      </tspan>
+                    ))
+                  : lineText}
+              </text>
+            )
+          })}
         </svg>
       )
     },
-    renderRight: (size = 70, phrase) => {
+    renderRight: (size = 70, phrase, options = {}) => {
       const lines = splitPhraseIntoLines(phrase || initialPhrase)
       const maxLen = Math.max(...lines.map((l) => l.length), 8)
       const baseW = Math.max(92, maxLen * 13 + 30)
@@ -414,22 +497,38 @@ export function createPhraseStimulusPair(initialPhrase = 'ENTRENA TU VISIÓN') {
           {/* Raya vertical superior pequeña (Ojo derecho) con clara separación */}
           <line x1={midX} y1="2" x2={midX} y2="14" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
           {/* Frase distribuida en renglones holgados */}
-          {lines.map((lineText, idx) => (
-            <text
-              key={idx}
-              x={midX}
-              y={textStartY + idx * lineHeight}
-              textAnchor="middle"
-              fill="#38bdf8"
-              fontSize="20"
-              fontWeight="bold"
-              letterSpacing="0.8px"
-              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-              style={{ userSelect: 'none' }}
-            >
-              {lineText}
-            </text>
-          ))}
+          {lines.map((lineText, idx) => {
+            const suppressed = options?.letterSuppression
+              ? getDichopticSuppressionIndices(lineText, (options.seed || 0) + idx * 101).right
+              : null
+
+            return (
+              <text
+                key={idx}
+                x={midX}
+                y={textStartY + idx * lineHeight}
+                textAnchor="middle"
+                fill="#38bdf8"
+                fontSize="20"
+                fontWeight="bold"
+                letterSpacing="0.8px"
+                fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+                style={{ userSelect: 'none' }}
+              >
+                {suppressed
+                  ? lineText.split('').map((char, charIdx) => (
+                      <tspan
+                        key={charIdx}
+                        fill={suppressed.has(charIdx) ? 'transparent' : '#38bdf8'}
+                        style={suppressed.has(charIdx) ? { visibility: 'hidden', opacity: 0 } : undefined}
+                      >
+                        {char}
+                      </tspan>
+                    ))
+                  : lineText}
+              </text>
+            )
+          })}
         </svg>
       )
     },

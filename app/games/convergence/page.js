@@ -110,6 +110,8 @@ export default function ConvergenceGame() {
   const [stimulusPhrase, setStimulusPhrase] = useState('ENTRENA TU VISIÓN')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
   const [speed, setSpeed] = useState(1) // velocidad inicial muy baja (progresiva en partida)
+  const [letterSuppression, setLetterSuppression] = useState(false)
+  const [suppressionSeed, setSuppressionSeed] = useState(1)
 
   // ── Estados de Juego (Distancia y Tamaño continuos en píxeles) ──
   const [stimulusSize, setStimulusSize] = useState(76) // px (recorrido amplio de 36px a 160px)
@@ -144,6 +146,7 @@ export default function ConvergenceGame() {
     setStimulusSize(76)
     setSpeed(1)
     setMotionActive(false)
+    setSuppressionSeed((s) => s + 1)
   }, [])
 
   // ── Sesión de Juego ──
@@ -492,120 +495,208 @@ export default function ConvergenceGame() {
       </div>
     </div>
   ) : activePair.isDynamicWord ? (
-    <div className="dashDurationBlock">
-      <span className="controlLabel" id="conv-word-label">
-        Palabra del estímulo
-      </span>
-      <div
-        className="durationRow"
-        role="radiogroup"
-        aria-labelledby="conv-word-label"
-      >
-        {PRESET_WORDS.map((w) => {
-          const isSelected = stimulusWord === w
-          return (
-            <button
-              key={w}
-              type="button"
-              role="radio"
-              aria-checked={isSelected}
+    <>
+      <div className="dashDurationBlock">
+        <span className="controlLabel" id="conv-word-label">
+          Palabra del estímulo
+        </span>
+        <div
+          className="durationRow"
+          role="radiogroup"
+          aria-labelledby="conv-word-label"
+        >
+          {PRESET_WORDS.map((w) => {
+            const isSelected = stimulusWord === w
+            return (
+              <button
+                key={w}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                disabled={!session.isIdle}
+                className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+                onClick={() => setStimulusWord(w)}
+                title={`Elegir palabra ${w}`}
+              >
+                {w}
+              </button>
+            )
+          })}
+
+          <div
+            className={`dashPillBtn convWordInputPill ${
+              !PRESET_WORDS.includes(stimulusWord) ? 'dashPillBtnActive' : ''
+            }`}
+            onClick={() => {
+              const el = document.getElementById('custom-word-input')
+              if (el) el.focus()
+            }}
+          >
+            <label htmlFor="custom-word-input" className="convLetterInputPillLabel">
+              Escribir:
+            </label>
+            <input
+              id="custom-word-input"
+              type="text"
+              maxLength={8}
+              value={stimulusWord}
+              onChange={(e) => {
+                const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '').toUpperCase()
+                if (val) {
+                  setStimulusWord(val)
+                }
+              }}
+              onFocus={(e) => e.target.select()}
+              className="convWordInlineInput"
+              placeholder="CASA"
+              title="Haz clic para escribir cualquier palabra"
               disabled={!session.isIdle}
-              className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
-              onClick={() => setStimulusWord(w)}
-              title={`Elegir palabra ${w}`}
-            >
-              {w}
-            </button>
-          )
-        })}
-
-        <div
-          className={`dashPillBtn convWordInputPill ${
-            !PRESET_WORDS.includes(stimulusWord) ? 'dashPillBtnActive' : ''
-          }`}
-          onClick={() => {
-            const el = document.getElementById('custom-word-input')
-            if (el) el.focus()
-          }}
-        >
-          <label htmlFor="custom-word-input" className="convLetterInputPillLabel">
-            Escribir:
-          </label>
-          <input
-            id="custom-word-input"
-            type="text"
-            maxLength={8}
-            value={stimulusWord}
-            onChange={(e) => {
-              const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '').toUpperCase()
-              if (val) {
-                setStimulusWord(val)
-              }
-            }}
-            onFocus={(e) => e.target.select()}
-            className="convWordInlineInput"
-            placeholder="CASA"
-            title="Haz clic para escribir cualquier palabra"
-            disabled={!session.isIdle}
-          />
+            />
+          </div>
         </div>
       </div>
-    </div>
+
+      <div className="dashDurationBlock">
+        <div className="convModeHeader">
+          <span className="controlLabel" id="conv-suppression-label-word">
+            Supresión de letras
+          </span>
+          <span className="convModeSubtext">
+            Control antisupresión eliminando letras de manera aleatoria
+          </span>
+        </div>
+        <div
+          className="durationRow"
+          role="radiogroup"
+          aria-labelledby="conv-suppression-label-word"
+        >
+          <button
+            type="button"
+            role="radio"
+            aria-checked={!letterSuppression}
+            disabled={!session.isIdle}
+            className={`dashPillBtn ${!letterSuppression ? 'dashPillBtnActive' : ''}`}
+            onClick={() => setLetterSuppression(false)}
+            title="Mostrar la palabra completa en ambos ojos"
+          >
+            Desactivada
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={letterSuppression}
+            disabled={!session.isIdle}
+            className={`dashPillBtn ${letterSuppression ? 'dashPillBtnActive' : ''}`}
+            onClick={() => {
+              setLetterSuppression(true)
+              setSuppressionSeed((s) => s + 1)
+            }}
+            title="Ocultar aleatoriamente una letra por ojo para control antisupresión"
+          >
+            Activa
+          </button>
+        </div>
+      </div>
+    </>
   ) : activePair.isDynamicPhrase ? (
-    <div className="dashDurationBlock">
-      <span className="controlLabel" id="conv-phrase-label">
-        Frase del estímulo
-      </span>
-      <div
-        className="durationRow"
-        role="radiogroup"
-        aria-labelledby="conv-phrase-label"
-      >
-        <button
-          type="button"
-          role="radio"
-          aria-checked={stimulusPhrase === 'ENTRENA TU VISIÓN'}
-          disabled={!session.isIdle}
-          className={`dashPillBtn ${stimulusPhrase === 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''}`}
-          onClick={() => setStimulusPhrase('ENTRENA TU VISIÓN')}
-          title="Elegir frase de ejemplo: ENTRENA TU VISIÓN"
-          style={{ flex: 1.2 }}
-        >
-          ENTRENA TU VISIÓN
-        </button>
-
+    <>
+      <div className="dashDurationBlock">
+        <span className="controlLabel" id="conv-phrase-label">
+          Frase del estímulo
+        </span>
         <div
-          className={`dashPillBtn convPhraseInputPill ${
-            stimulusPhrase !== 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''
-          }`}
-          onClick={() => {
-            const el = document.getElementById('custom-phrase-input')
-            if (el) el.focus()
-          }}
+          className="durationRow"
+          role="radiogroup"
+          aria-labelledby="conv-phrase-label"
         >
-          <label htmlFor="custom-phrase-input" className="convLetterInputPillLabel">
-            Escribir:
-          </label>
-          <input
-            id="custom-phrase-input"
-            type="text"
-            maxLength={45}
-            value={stimulusPhrase}
-            onChange={(e) => {
-              const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,¡!¿?]/g, '').toUpperCase()
-              if (val) {
-                setStimulusPhrase(val)
-              }
-            }}
-            onFocus={(e) => e.target.select()}
-            className="convPhraseInlineInput"
-            placeholder="ENTRENA TU VISIÓN"
-            title="Escribe cualquier frase personalizada (se distribuirá en renglones)"
+          <button
+            type="button"
+            role="radio"
+            aria-checked={stimulusPhrase === 'ENTRENA TU VISIÓN'}
             disabled={!session.isIdle}
-          />
+            className={`dashPillBtn ${stimulusPhrase === 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''}`}
+            onClick={() => setStimulusPhrase('ENTRENA TU VISIÓN')}
+            title="Elegir frase de ejemplo: ENTRENA TU VISIÓN"
+            style={{ flex: 1.2 }}
+          >
+            ENTRENA TU VISIÓN
+          </button>
+
+          <div
+            className={`dashPillBtn convPhraseInputPill ${
+              stimulusPhrase !== 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''
+            }`}
+            onClick={() => {
+              const el = document.getElementById('custom-phrase-input')
+              if (el) el.focus()
+            }}
+          >
+            <label htmlFor="custom-phrase-input" className="convLetterInputPillLabel">
+              Escribir:
+            </label>
+            <input
+              id="custom-phrase-input"
+              type="text"
+              maxLength={45}
+              value={stimulusPhrase}
+              onChange={(e) => {
+                const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,¡!¿?]/g, '').toUpperCase()
+                if (val) {
+                  setStimulusPhrase(val)
+                }
+              }}
+              onFocus={(e) => e.target.select()}
+              className="convPhraseInlineInput"
+              placeholder="ENTRENA TU VISIÓN"
+              title="Escribe cualquier frase personalizada (se distribuirá en renglones)"
+              disabled={!session.isIdle}
+            />
+          </div>
         </div>
       </div>
-    </div>
+
+      <div className="dashDurationBlock">
+        <div className="convModeHeader">
+          <span className="controlLabel" id="conv-suppression-label-phrase">
+            Supresión de letras
+          </span>
+          <span className="convModeSubtext">
+            Control antisupresión eliminando letras de manera aleatoria
+          </span>
+        </div>
+        <div
+          className="durationRow"
+          role="radiogroup"
+          aria-labelledby="conv-suppression-label-phrase"
+        >
+          <button
+            type="button"
+            role="radio"
+            aria-checked={!letterSuppression}
+            disabled={!session.isIdle}
+            className={`dashPillBtn ${!letterSuppression ? 'dashPillBtnActive' : ''}`}
+            onClick={() => setLetterSuppression(false)}
+            title="Mostrar todas las letras en ambos ojos"
+          >
+            Desactivada
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={letterSuppression}
+            disabled={!session.isIdle}
+            className={`dashPillBtn ${letterSuppression ? 'dashPillBtnActive' : ''}`}
+            onClick={() => {
+              setLetterSuppression(true)
+              setSuppressionSeed((s) => s + 1)
+            }}
+            title="Ocultar aleatoriamente una letra por palabra en cada ojo para control antisupresión"
+          >
+            Activa
+          </button>
+        </div>
+      </div>
+    </>
   ) : null
 
   // ── Atajos de Teclado (Fila Inferior · Ancho completo) ──
@@ -644,7 +735,11 @@ export default function ConvergenceGame() {
             }}
           >
             {activePair.renderLeft
-              ? activePair.renderLeft(currentSizePx, activePair.isDynamicPhrase ? stimulusPhrase : activePair.isDynamicWord ? stimulusWord : stimulusLetter)
+              ? activePair.renderLeft(
+                  currentSizePx,
+                  activePair.isDynamicPhrase ? stimulusPhrase : activePair.isDynamicWord ? stimulusWord : stimulusLetter,
+                  { letterSuppression, seed: suppressionSeed }
+                )
               : null}
           </div>
 
@@ -656,7 +751,11 @@ export default function ConvergenceGame() {
             }}
           >
             {activePair.renderRight
-              ? activePair.renderRight(currentSizePx, activePair.isDynamicPhrase ? stimulusPhrase : activePair.isDynamicWord ? stimulusWord : stimulusLetter)
+              ? activePair.renderRight(
+                  currentSizePx,
+                  activePair.isDynamicPhrase ? stimulusPhrase : activePair.isDynamicWord ? stimulusWord : stimulusLetter,
+                  { letterSuppression, seed: suppressionSeed }
+                )
               : null}
           </div>
         </div>

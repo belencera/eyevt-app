@@ -27,4 +27,4 @@ export * from './data/constants'
 
 // Utilidades
 export { formatTime } from './utils/formatTime'
-export { IconPlay, IconPause, IconReset, IconClick } from './utils/icons'
+export { IconPlay, IconPause, IconReset, IconClick, IconTarget } from './utils/icons'
