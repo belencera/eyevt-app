@@ -14,6 +14,7 @@ import {
   CADENCE_STEPS,
   getRandomPeripheralPosition,
   IconClick,
+  IconTarget,
 } from '../_shared'
 
 const PERIPHERY_HINT =
@@ -281,7 +282,7 @@ export default function PeripheryGame() {
                     title={m.description}
                   >
                     <div className="modeCardIcon">
-                      {m.icon === 'click' ? <IconClick /> : <span>{m.icon}</span>}
+                      {m.icon === 'click' ? <IconClick /> : m.icon === 'target' ? <IconTarget /> : <span>{m.icon}</span>}
                     </div>
                     <span className="modeCardLabel">{m.label}</span>
                   </button>

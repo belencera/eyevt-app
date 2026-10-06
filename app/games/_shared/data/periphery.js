@@ -13,7 +13,7 @@ export const PERIPHERY_MODES = [
     value: 'central-focus',
     label: 'Foco Central',
     description: 'Fija la mirada en el centro e identifica lo que sale en la periferia',
-    icon: '🎯',
+    icon: 'target',
   },
 ]
 
