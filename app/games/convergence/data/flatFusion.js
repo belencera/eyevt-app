@@ -118,7 +118,93 @@ function createStimulusPair({ id, name, left, right, preview }) {
   }
 }
 
+export const LETTER_FUSION_ID = 'letter-fusion'
+
+/**
+ * Estímulo de letra con control antisupresión para fusión plana:
+ * - Ojo izquierdo: Letra con raya horizontal superior.
+ * - Ojo derecho: Misma letra con raya vertical superior.
+ * - Fusión / Vista previa: Letra coronada por una cruz completa (+).
+ */
+export function createLetterStimulusPair(initialLetter = 'E') {
+  return {
+    id: LETTER_FUSION_ID,
+    name: 'Letra',
+    category: 'fusion-plana',
+    isDynamicLetter: true,
+    renderLeft: (size = 70, letter) => {
+      const char = (typeof letter === 'string' && letter.trim() ? letter : initialLetter).trim().charAt(0).toUpperCase() || 'E'
+      return (
+        <svg viewBox="0 0 60 60" width={size} height={size} fill="none" style={{ overflow: 'visible' }}>
+          {/* Raya horizontal superior pequeña (Ojo izquierdo) */}
+          <line x1="23" y1="8" x2="37" y2="8" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Letra centrada dominante */}
+          <text
+            x="30"
+            y="49"
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="36"
+            fontWeight="bold"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            {char}
+          </text>
+        </svg>
+      )
+    },
+    renderRight: (size = 70, letter) => {
+      const char = (typeof letter === 'string' && letter.trim() ? letter : initialLetter).trim().charAt(0).toUpperCase() || 'E'
+      return (
+        <svg viewBox="0 0 60 60" width={size} height={size} fill="none" style={{ overflow: 'visible' }}>
+          {/* Raya vertical superior pequeña (Ojo derecho) */}
+          <line x1="30" y1="2" x2="30" y2="14" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Letra centrada dominante */}
+          <text
+            x="30"
+            y="49"
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="36"
+            fontWeight="bold"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            {char}
+          </text>
+        </svg>
+      )
+    },
+    renderPreview: (size = 46, letter) => {
+      const char = (typeof letter === 'string' && letter.trim() ? letter : initialLetter).trim().charAt(0).toUpperCase() || 'E'
+      return (
+        <svg viewBox="0 0 60 60" width={size} height={size} fill="none" style={{ overflow: 'visible' }}>
+          {/* Cruz pequeña (+) superior al fusionar */}
+          <line x1="23" y1="8" x2="37" y2="8" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          <line x1="30" y1="2" x2="30" y2="14" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Letra centrada dominante */}
+          <text
+            x="30"
+            y="49"
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="36"
+            fontWeight="bold"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            {char}
+          </text>
+        </svg>
+      )
+    },
+  }
+}
+
 export const FLAT_FUSION_PAIRS = [
+  createLetterStimulusPair('E'),
+
   createStimulusPair({
     id: 'suns-fusion',
     name: 'Sol',

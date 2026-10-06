@@ -105,6 +105,7 @@ export default function ConvergenceGame() {
   // ── Estados de Configuración ──
   const [selectedCategory, setSelectedCategory] = useState('percepcion-simultanea')
   const [selectedPairId, setSelectedPairId] = useState('cross')
+  const [stimulusLetter, setStimulusLetter] = useState('E')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
   const [speed, setSpeed] = useState(1) // velocidad inicial muy baja (progresiva en partida)
 
@@ -359,7 +360,7 @@ export default function ConvergenceGame() {
                 }}
               >
                 <div className="convPairPreview">
-                  {pair.renderPreview ? pair.renderPreview(38) : null}
+                  {pair.renderPreview ? pair.renderPreview(38, stimulusLetter) : null}
                 </div>
                 <span className="convPairName">{pair.name}</span>
               </div>
@@ -378,49 +379,116 @@ export default function ConvergenceGame() {
 
   // ── Configuración (Columna 2 · Derecha) ──
   const gameControls = (
-    <div className="modeGridContainer">
-      <div className="convModeHeader">
-        <span className="controlLabel" id="conv-mode-label">
-          Modo de ejercicio
-        </span>
-        <span className="convModeSubtext">
-          {mode === 'fixed'
-            ? 'Distancia constante entre estímulos'
-            : 'Los estímulos se separan lentamente'}
-        </span>
+    <div>
+      <div className="modeGridContainer">
+        <div className="convModeHeader">
+          <span className="controlLabel" id="conv-mode-label">
+            Modo de ejercicio
+          </span>
+          <span className="convModeSubtext">
+            {mode === 'fixed'
+              ? 'Distancia constante entre estímulos'
+              : 'Los estímulos se separan lentamente'}
+          </span>
+        </div>
+        <div
+          className="modeGrid"
+          role="radiogroup"
+          aria-labelledby="conv-mode-label"
+        >
+          {CONVERGENCE_MODES.map((m) => {
+            const isSelected = m.value === mode
+            return (
+              <button
+                key={m.value}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                disabled={!session.isIdle}
+                className={`modeCard ${isSelected ? 'modeCardActive' : ''}`}
+                onClick={() => {
+                  if (session.isIdle) {
+                    setMode(m.value)
+                  }
+                }}
+                title={m.description}
+              >
+                <div className="modeCardIcon">
+                  {m.value === 'fixed' ? <IconModeFixed /> : <IconModeMotion />}
+                </div>
+                <span className="modeCardLabel">{m.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
+    </div>
+  )
+
+  // ── Ajustes Adicionales (Debajo de Duración de la sesión) ──
+  const PRESET_LETTERS = ['E', 'A', 'O', 'X']
+
+  const extraControls = activePair.isDynamicLetter ? (
+    <div className="dashDurationBlock">
+      <span className="controlLabel" id="conv-letter-label">
+        Letra del estímulo
+      </span>
       <div
-        className="modeGrid"
+        className="durationRow"
         role="radiogroup"
-        aria-labelledby="conv-mode-label"
+        aria-labelledby="conv-letter-label"
       >
-        {CONVERGENCE_MODES.map((m) => {
-          const isSelected = m.value === mode
+        {PRESET_LETTERS.map((char) => {
+          const isSelected = stimulusLetter === char
           return (
             <button
-              key={m.value}
+              key={char}
               type="button"
               role="radio"
               aria-checked={isSelected}
               disabled={!session.isIdle}
-              className={`modeCard ${isSelected ? 'modeCardActive' : ''}`}
-              onClick={() => {
-                if (session.isIdle) {
-                  setMode(m.value)
-                }
-              }}
-              title={m.description}
+              className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+              onClick={() => setStimulusLetter(char)}
+              title={`Elegir letra ${char}`}
             >
-              <div className="modeCardIcon">
-                {m.value === 'fixed' ? <IconModeFixed /> : <IconModeMotion />}
-              </div>
-              <span className="modeCardLabel">{m.label}</span>
+              {char}
             </button>
           )
         })}
+
+        <div
+          className={`dashPillBtn convLetterInputPill ${
+            !PRESET_LETTERS.includes(stimulusLetter) ? 'dashPillBtnActive' : ''
+          }`}
+          onClick={() => {
+            const el = document.getElementById('custom-letter-input')
+            if (el) el.focus()
+          }}
+        >
+          <label htmlFor="custom-letter-input" className="convLetterInputPillLabel">
+            Escribir:
+          </label>
+          <input
+            id="custom-letter-input"
+            type="text"
+            maxLength={2}
+            value={stimulusLetter}
+            onChange={(e) => {
+              const char = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(-1)
+              if (char) {
+                setStimulusLetter(char)
+              }
+            }}
+            onFocus={(e) => e.target.select()}
+            className="convLetterInlineInput"
+            placeholder="E"
+            title="Haz clic para escribir cualquier letra o número"
+            disabled={!session.isIdle}
+          />
+        </div>
       </div>
     </div>
-  )
+  ) : null
 
   // ── Atajos de Teclado (Fila Inferior · Ancho completo) ──
   const shortcuts = [
@@ -438,6 +506,7 @@ export default function ConvergenceGame() {
       split="wide"
       stimulusGrid={stimulusSelector}
       gameControls={gameControls}
+      extraControls={extraControls}
       shortcuts={shortcuts}
       shortcutsHint={
         mode === 'fixed'
@@ -456,7 +525,7 @@ export default function ConvergenceGame() {
               transform: `translateX(-${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
           >
-            {activePair.renderLeft ? activePair.renderLeft(currentSizePx) : null}
+            {activePair.renderLeft ? activePair.renderLeft(currentSizePx, stimulusLetter) : null}
           </div>
 
           {/* Estímulo Ojo Derecho */}
@@ -466,7 +535,7 @@ export default function ConvergenceGame() {
               transform: `translateX(${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
           >
-            {activePair.renderRight ? activePair.renderRight(currentSizePx) : null}
+            {activePair.renderRight ? activePair.renderRight(currentSizePx, stimulusLetter) : null}
           </div>
         </div>
 
