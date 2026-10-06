@@ -107,6 +107,7 @@ export default function ConvergenceGame() {
   const [selectedPairId, setSelectedPairId] = useState('cross')
   const [stimulusLetter, setStimulusLetter] = useState('E')
   const [stimulusWord, setStimulusWord] = useState('CASA')
+  const [stimulusPhrase, setStimulusPhrase] = useState('ENTRENA TU VISIÓN')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
   const [speed, setSpeed] = useState(1) // velocidad inicial muy baja (progresiva en partida)
 
@@ -361,7 +362,7 @@ export default function ConvergenceGame() {
                 }}
               >
                 <div className="convPairPreview">
-                  {pair.renderPreview ? pair.renderPreview(38, pair.isDynamicWord ? stimulusWord : stimulusLetter) : null}
+                  {pair.renderPreview ? pair.renderPreview(38, pair.isDynamicPhrase ? stimulusPhrase : pair.isDynamicWord ? stimulusWord : stimulusLetter) : null}
                 </div>
                 <span className="convPairName">{pair.name}</span>
               </div>
@@ -550,6 +551,61 @@ export default function ConvergenceGame() {
         </div>
       </div>
     </div>
+  ) : activePair.isDynamicPhrase ? (
+    <div className="dashDurationBlock">
+      <span className="controlLabel" id="conv-phrase-label">
+        Frase del estímulo
+      </span>
+      <div
+        className="durationRow"
+        role="radiogroup"
+        aria-labelledby="conv-phrase-label"
+      >
+        <button
+          type="button"
+          role="radio"
+          aria-checked={stimulusPhrase === 'ENTRENA TU VISIÓN'}
+          disabled={!session.isIdle}
+          className={`dashPillBtn ${stimulusPhrase === 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''}`}
+          onClick={() => setStimulusPhrase('ENTRENA TU VISIÓN')}
+          title="Elegir frase de ejemplo: ENTRENA TU VISIÓN"
+          style={{ flex: 1.2 }}
+        >
+          ENTRENA TU VISIÓN
+        </button>
+
+        <div
+          className={`dashPillBtn convPhraseInputPill ${
+            stimulusPhrase !== 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''
+          }`}
+          onClick={() => {
+            const el = document.getElementById('custom-phrase-input')
+            if (el) el.focus()
+          }}
+        >
+          <label htmlFor="custom-phrase-input" className="convLetterInputPillLabel">
+            Escribir:
+          </label>
+          <input
+            id="custom-phrase-input"
+            type="text"
+            maxLength={45}
+            value={stimulusPhrase}
+            onChange={(e) => {
+              const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,¡!¿?]/g, '').toUpperCase()
+              if (val) {
+                setStimulusPhrase(val)
+              }
+            }}
+            onFocus={(e) => e.target.select()}
+            className="convPhraseInlineInput"
+            placeholder="ENTRENA TU VISIÓN"
+            title="Escribe cualquier frase personalizada (se distribuirá en renglones)"
+            disabled={!session.isIdle}
+          />
+        </div>
+      </div>
+    </div>
   ) : null
 
   // ── Atajos de Teclado (Fila Inferior · Ancho completo) ──
@@ -588,7 +644,7 @@ export default function ConvergenceGame() {
             }}
           >
             {activePair.renderLeft
-              ? activePair.renderLeft(currentSizePx, activePair.isDynamicWord ? stimulusWord : stimulusLetter)
+              ? activePair.renderLeft(currentSizePx, activePair.isDynamicPhrase ? stimulusPhrase : activePair.isDynamicWord ? stimulusWord : stimulusLetter)
               : null}
           </div>
 
@@ -600,7 +656,7 @@ export default function ConvergenceGame() {
             }}
           >
             {activePair.renderRight
-              ? activePair.renderRight(currentSizePx, activePair.isDynamicWord ? stimulusWord : stimulusLetter)
+              ? activePair.renderRight(currentSizePx, activePair.isDynamicPhrase ? stimulusPhrase : activePair.isDynamicWord ? stimulusWord : stimulusLetter)
               : null}
           </div>
         </div>

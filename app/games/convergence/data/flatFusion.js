@@ -313,6 +313,170 @@ export function createWordStimulusPair(initialWord = 'CASA') {
   }
 }
 
+export const PHRASE_FUSION_ID = 'phrase-fusion'
+
+/**
+ * Divide una frase en 2 o 3 renglones equilibrados para facilitar la fusión binocular.
+ */
+function splitPhraseIntoLines(phrase) {
+  const clean = (typeof phrase === 'string' && phrase.trim() ? phrase : 'ENTRENA TU VISIÓN').trim().toUpperCase()
+  const words = clean.split(/\s+/).filter(Boolean)
+  if (words.length <= 1) return [clean]
+  if (words.length === 2) return [words[0], words[1]]
+  if (words.length === 3) return [words[0], `${words[1]} ${words[2]}`]
+  if (words.length === 4) return [`${words[0]} ${words[1]}`, `${words[2]} ${words[3]}`]
+  if (words.length >= 6) {
+    const p1 = Math.ceil(words.length / 3)
+    const p2 = Math.ceil((words.length * 2) / 3)
+    return [
+      words.slice(0, p1).join(' '),
+      words.slice(p1, p2).join(' '),
+      words.slice(p2).join(' '),
+    ]
+  }
+  const mid = Math.ceil(words.length / 2)
+  return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')]
+}
+
+/**
+ * Estímulo de frase en varios renglones con control antisupresión para fusión plana:
+ * - Ojo izquierdo: Frase multilínea con raya horizontal superior.
+ * - Ojo derecho: Misma frase multilínea con raya vertical superior.
+ * - Fusión: Frase multilínea coronada por una cruz completa (+).
+ * - Miniatura: Fija en 'FRASE' con la misma cruz y escala destacada.
+ */
+export function createPhraseStimulusPair(initialPhrase = 'ENTRENA TU VISIÓN') {
+  return {
+    id: PHRASE_FUSION_ID,
+    name: 'Frase',
+    category: 'fusion-plana',
+    isDynamicPhrase: true,
+    renderLeft: (size = 70, phrase) => {
+      const lines = splitPhraseIntoLines(phrase || initialPhrase)
+      const maxLen = Math.max(...lines.map((l) => l.length), 8)
+      const baseW = Math.max(92, maxLen * 13 + 30)
+      const lineHeight = 24
+      const textStartY = 40
+      const baseH = textStartY + (lines.length - 1) * lineHeight + 18
+      const midX = baseW / 2
+      const svgW = Math.round(size * (baseW / 60))
+      const svgH = Math.round(size * (baseH / 60))
+
+      return (
+        <svg
+          viewBox={`0 0 ${baseW} ${baseH}`}
+          width={svgW}
+          height={svgH}
+          fill="none"
+          style={{ overflow: 'visible' }}
+        >
+          {/* Raya horizontal superior pequeña (Ojo izquierdo) con clara separación */}
+          <line x1={midX - 7} y1="8" x2={midX + 7} y2="8" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Frase distribuida en renglones holgados */}
+          {lines.map((lineText, idx) => (
+            <text
+              key={idx}
+              x={midX}
+              y={textStartY + idx * lineHeight}
+              textAnchor="middle"
+              fill="#38bdf8"
+              fontSize="20"
+              fontWeight="bold"
+              letterSpacing="0.8px"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+              style={{ userSelect: 'none' }}
+            >
+              {lineText}
+            </text>
+          ))}
+        </svg>
+      )
+    },
+    renderRight: (size = 70, phrase) => {
+      const lines = splitPhraseIntoLines(phrase || initialPhrase)
+      const maxLen = Math.max(...lines.map((l) => l.length), 8)
+      const baseW = Math.max(92, maxLen * 13 + 30)
+      const lineHeight = 24
+      const textStartY = 40
+      const baseH = textStartY + (lines.length - 1) * lineHeight + 18
+      const midX = baseW / 2
+      const svgW = Math.round(size * (baseW / 60))
+      const svgH = Math.round(size * (baseH / 60))
+
+      return (
+        <svg
+          viewBox={`0 0 ${baseW} ${baseH}`}
+          width={svgW}
+          height={svgH}
+          fill="none"
+          style={{ overflow: 'visible' }}
+        >
+          {/* Raya vertical superior pequeña (Ojo derecho) con clara separación */}
+          <line x1={midX} y1="2" x2={midX} y2="14" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Frase distribuida en renglones holgados */}
+          {lines.map((lineText, idx) => (
+            <text
+              key={idx}
+              x={midX}
+              y={textStartY + idx * lineHeight}
+              textAnchor="middle"
+              fill="#38bdf8"
+              fontSize="20"
+              fontWeight="bold"
+              letterSpacing="0.8px"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+              style={{ userSelect: 'none' }}
+            >
+              {lineText}
+            </text>
+          ))}
+        </svg>
+      )
+    },
+    renderPreview: (size = 46) => {
+      // Miniatura fija en 'ENTRENA TU VISIÓN': texto más grande, holgura con la cruz y pegado abajo junto a 'Frase'
+      return (
+        <svg
+          viewBox="0 0 68 66"
+          fill="none"
+          style={{ overflow: 'visible', transform: 'translateY(2px)' }}
+        >
+          {/* Cruz (+) de fusión completa en la cúspide (alineada con la cruz de otras tarjetas) */}
+          <line x1="26" y1="5" x2="42" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          <line x1="34" y1="0" x2="34" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Frase en dos renglones: más grande, con separación de la cruz y cercana al título 'Frase' */}
+          <text
+            x="34"
+            y="37"
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="18.5"
+            fontWeight="bold"
+            letterSpacing="0.3px"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            ENTRENA
+          </text>
+          <text
+            x="34"
+            y="63"
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="17"
+            fontWeight="bold"
+            letterSpacing="0.3px"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            TU VISIÓN
+          </text>
+        </svg>
+      )
+    },
+  }
+}
+
 export const FLAT_FUSION_PAIRS = [
   createLetterStimulusPair('E'),
 
@@ -480,4 +644,5 @@ export const FLAT_FUSION_PAIRS = [
   }),
 
   createWordStimulusPair('CASA'),
+  createPhraseStimulusPair('ENTRENA TU VISIÓN'),
 ]
