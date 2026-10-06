@@ -27,10 +27,11 @@ function renderSingleItem(src, alt, scale = 1, shadow, size = 70) {
 
 /**
  * Renderiza la vista previa compuesta (miniatura) de una pareja de estímulos.
+ * Admite uno o varios overlays compuestos usando exclusivamente los 2 SVG de la pareja.
  */
-function renderComposedPreview(base, overlay, size = 46) {
+function renderComposedPreview(base, overlayOrList, size = 46) {
   const baseSize = Math.round(size * (base.scale || 1))
-  const overlaySize = Math.round(size * (overlay.scale || 0.5))
+  const overlayList = Array.isArray(overlayOrList) ? overlayOrList : [overlayOrList]
   return (
     <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <img
@@ -43,26 +44,32 @@ function renderComposedPreview(base, overlay, size = 46) {
           inset: 0,
           margin: 'auto',
           objectFit: 'contain',
-          filter: `drop-shadow(0 0 4px ${base.shadow})`,
+          filter: base.shadow === 'transparent' ? 'none' : `drop-shadow(0 0 4px ${base.shadow})`,
           ...base.pos,
         }}
         draggable={false}
       />
-      <img
-        src={overlay.src}
-        alt={overlay.alt}
-        width={overlaySize}
-        height={overlaySize}
-        style={{
-          position: overlay.pos?.position || 'absolute',
-          inset: 0,
-          margin: 'auto',
-          objectFit: 'contain',
-          filter: `drop-shadow(0 0 4px ${overlay.shadow})`,
-          ...overlay.pos,
-        }}
-        draggable={false}
-      />
+      {overlayList.map((overlay, index) => {
+        const overlaySize = Math.round(size * (overlay.scale || 0.5))
+        return (
+          <img
+            key={index}
+            src={overlay.src}
+            alt={overlay.alt}
+            width={overlaySize}
+            height={overlaySize}
+            style={{
+              position: overlay.pos?.position || 'absolute',
+              inset: 0,
+              margin: 'auto',
+              objectFit: 'contain',
+              filter: overlay.shadow === 'transparent' ? 'none' : `drop-shadow(0 0 4px ${overlay.shadow})`,
+              ...overlay.pos,
+            }}
+            draggable={false}
+          />
+        )
+      })}
     </div>
   )
 }
@@ -76,6 +83,25 @@ function createStimulusPair({ id, name, category = 'percepcion-simultanea', left
   const baseItem = isBaseRight ? right : left
   const overlayItem = isBaseRight ? left : right
 
+  let overlayParam
+  if (Array.isArray(preview.overlays)) {
+    overlayParam = preview.overlays.map((ov) => ({
+      src: (ov.fromBase ? baseItem : overlayItem).src,
+      alt: (ov.fromBase ? baseItem : overlayItem).alt,
+      scale: ov.scale ?? preview.overlayScale ?? preview.baseScale ?? 1,
+      shadow: ov.shadow ?? preview.overlayShadow ?? overlayItem.previewShadow ?? overlayItem.shadow,
+      pos: ov.pos ?? preview.overlayPos,
+    }))
+  } else {
+    overlayParam = {
+      src: overlayItem.src,
+      alt: overlayItem.alt,
+      scale: preview.overlayScale ?? 1,
+      shadow: preview.overlayShadow || overlayItem.previewShadow || overlayItem.shadow,
+      pos: preview.overlayPos,
+    }
+  }
+
   return {
     id,
     name,
@@ -83,38 +109,16 @@ function createStimulusPair({ id, name, category = 'percepcion-simultanea', left
     renderLeft: (size = 70) => renderSingleItem(left.src, left.alt, left.scale ?? 1, left.shadow, size),
     renderRight: (size = 70) => renderSingleItem(right.src, right.alt, right.scale ?? 1, right.shadow, size),
     renderPreview: (size = 46) =>
-      preview.fullSrc ? (
-        <div style={{ position: 'relative', width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <img
-            src={preview.fullSrc}
-            alt={name}
-            width={Math.round(size * (preview.baseScale || 0.82))}
-            height={Math.round(size * (preview.baseScale || 0.82))}
-            style={{
-              objectFit: 'contain',
-              filter: `drop-shadow(0 0 4px ${preview.baseShadow || baseItem.previewShadow || baseItem.shadow})`,
-            }}
-            draggable={false}
-          />
-        </div>
-      ) : (
-        renderComposedPreview(
-          {
-            src: baseItem.src,
-            alt: baseItem.alt,
-            scale: preview.baseScale || 1,
-            shadow: preview.baseShadow || baseItem.previewShadow || baseItem.shadow,
-            pos: preview.basePos,
-          },
-          {
-            src: overlayItem.src,
-            alt: overlayItem.alt,
-            scale: preview.overlayScale,
-            shadow: preview.overlayShadow || overlayItem.previewShadow || overlayItem.shadow,
-            pos: preview.overlayPos,
-          },
-          size
-        )
+      renderComposedPreview(
+        {
+          src: baseItem.src,
+          alt: baseItem.alt,
+          scale: preview.baseScale || 1,
+          shadow: preview.baseShadow || baseItem.previewShadow || baseItem.shadow,
+          pos: preview.basePos,
+        },
+        overlayParam,
+        size
       ),
   }
 }
@@ -259,8 +263,11 @@ export const STIMULI_PAIRS = [
     left: { src: '/vergence/emoji-a.svg', alt: 'Emoji sin lengua', scale: 1, shadow: 'rgba(255, 221, 103, 0.45)', previewShadow: 'rgba(255, 221, 103, 0.35)' },
     right: { src: '/vergence/emoji-b.svg', alt: 'Emoji sin pupila', scale: 1, shadow: 'rgba(255, 221, 103, 0.45)', previewShadow: 'rgba(255, 221, 103, 0.35)' },
     preview: {
-      fullSrc: '/vergence/emoji-full.svg',
+      base: 'right',
       baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'inset(0 0 50% 0)' },
+      overlayShadow: 'transparent',
     },
   }),
 
@@ -280,8 +287,11 @@ export const STIMULI_PAIRS = [
     left: { src: '/vergence/eye-a.svg', alt: 'Ojo 1', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
     right: { src: '/vergence/eye-b.svg', alt: 'Ojo 2', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
     preview: {
-      fullSrc: '/vergence/eye-full.svg',
+      base: 'right',
       baseScale: 1.05,
+      overlayScale: 1.05,
+      overlayPos: { clipPath: 'circle(13% at 50% 50%)' },
+      overlayShadow: 'transparent',
     },
   }),
 
@@ -301,8 +311,11 @@ export const STIMULI_PAIRS = [
     left: { src: '/vergence/traffic-light-a.svg', alt: 'Semáforo 1', scale: 1, shadow: 'rgba(255, 230, 46, 0.45)', previewShadow: 'rgba(255, 230, 46, 0.35)' },
     right: { src: '/vergence/traffic-light-b.svg', alt: 'Semáforo 2', scale: 1, shadow: 'rgba(255, 230, 46, 0.45)', previewShadow: 'rgba(255, 230, 46, 0.35)' },
     preview: {
-      fullSrc: '/vergence/traffic-light-full.svg',
+      base: 'left',
       baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'inset(34% 0 34% 0)' },
+      overlayShadow: 'transparent',
     },
   }),
 
@@ -313,8 +326,11 @@ export const STIMULI_PAIRS = [
     left: { src: '/vergence/rocket-a.svg', alt: 'Cohete 1', scale: 1, shadow: 'rgba(201, 71, 71, 0.45)', previewShadow: 'rgba(201, 71, 71, 0.35)' },
     right: { src: '/vergence/rocket-b.svg', alt: 'Cohete 2', scale: 1, shadow: 'rgba(201, 71, 71, 0.45)', previewShadow: 'rgba(201, 71, 71, 0.35)' },
     preview: {
-      fullSrc: '/vergence/rocket-full.svg',
+      base: 'left',
       baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'inset(0 0 58% 0)' },
+      overlayShadow: 'transparent',
     },
   }),
 
@@ -340,8 +356,18 @@ export const STIMULI_PAIRS = [
     left: { src: '/vergence/palette-a.svg', alt: 'Pintura 1', scale: 1, shadow: 'rgba(246, 199, 153, 0.45)', previewShadow: 'rgba(246, 199, 153, 0.35)' },
     right: { src: '/vergence/palette-b.svg', alt: 'Pintura 2', scale: 1, shadow: 'rgba(246, 199, 153, 0.45)', previewShadow: 'rgba(246, 199, 153, 0.35)' },
     preview: {
-      fullSrc: '/vergence/palette-full.svg',
+      base: 'left',
       baseScale: 0.82,
+      overlays: [
+        {
+          pos: { clipPath: 'inset(0 0 68% 28%)' },
+          shadow: 'transparent',
+        },
+        {
+          pos: { clipPath: 'inset(48% 66% 28% 8%)' },
+          shadow: 'transparent',
+        },
+      ],
     },
   }),
 
@@ -365,8 +391,11 @@ export const STIMULI_PAIRS = [
     left: { src: '/vergence/city-a.svg', alt: 'Ciudad sin luna', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
     right: { src: '/vergence/city-b.svg', alt: 'Ciudad sin luces', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
     preview: {
-      fullSrc: '/vergence/city-full.svg',
+      base: 'left',
       baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'inset(0 0 65% 60%)' },
+      overlayShadow: 'transparent',
     },
   }),
 ]
