@@ -105,6 +105,9 @@ export default function ConvergenceGame() {
   // ── Estados de Configuración ──
   const [selectedCategory, setSelectedCategory] = useState('percepcion-simultanea')
   const [selectedPairId, setSelectedPairId] = useState('cross')
+  const [stimulusLetter, setStimulusLetter] = useState('E')
+  const [stimulusWord, setStimulusWord] = useState('CASA')
+  const [stimulusPhrase, setStimulusPhrase] = useState('ENTRENA TU VISIÓN')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
   const [speed, setSpeed] = useState(1) // velocidad inicial muy baja (progresiva en partida)
 
@@ -359,7 +362,7 @@ export default function ConvergenceGame() {
                 }}
               >
                 <div className="convPairPreview">
-                  {pair.renderPreview ? pair.renderPreview(38) : null}
+                  {pair.renderPreview ? pair.renderPreview(38, pair.isDynamicPhrase ? stimulusPhrase : pair.isDynamicWord ? stimulusWord : stimulusLetter) : null}
                 </div>
                 <span className="convPairName">{pair.name}</span>
               </div>
@@ -378,49 +381,232 @@ export default function ConvergenceGame() {
 
   // ── Configuración (Columna 2 · Derecha) ──
   const gameControls = (
-    <div className="modeGridContainer">
-      <div className="convModeHeader">
-        <span className="controlLabel" id="conv-mode-label">
-          Modo de ejercicio
-        </span>
-        <span className="convModeSubtext">
-          {mode === 'fixed'
-            ? 'Distancia constante entre estímulos'
-            : 'Los estímulos se separan lentamente'}
-        </span>
+    <div>
+      <div className="modeGridContainer">
+        <div className="convModeHeader">
+          <span className="controlLabel" id="conv-mode-label">
+            Modo de ejercicio
+          </span>
+          <span className="convModeSubtext">
+            {mode === 'fixed'
+              ? 'Distancia constante entre estímulos'
+              : 'Los estímulos se separan lentamente'}
+          </span>
+        </div>
+        <div
+          className="modeGrid"
+          role="radiogroup"
+          aria-labelledby="conv-mode-label"
+        >
+          {CONVERGENCE_MODES.map((m) => {
+            const isSelected = m.value === mode
+            return (
+              <button
+                key={m.value}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                disabled={!session.isIdle}
+                className={`modeCard ${isSelected ? 'modeCardActive' : ''}`}
+                onClick={() => {
+                  if (session.isIdle) {
+                    setMode(m.value)
+                  }
+                }}
+                title={m.description}
+              >
+                <div className="modeCardIcon">
+                  {m.value === 'fixed' ? <IconModeFixed /> : <IconModeMotion />}
+                </div>
+                <span className="modeCardLabel">{m.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
+    </div>
+  )
+
+  // ── Ajustes Adicionales (Debajo de Duración de la sesión) ──
+  const PRESET_LETTERS = ['E', 'A', 'O', 'X']
+  const PRESET_WORDS = ['CASA', 'LUNA', 'LUZ']
+
+  const extraControls = activePair.isDynamicLetter ? (
+    <div className="dashDurationBlock">
+      <span className="controlLabel" id="conv-letter-label">
+        Letra del estímulo
+      </span>
       <div
-        className="modeGrid"
+        className="durationRow"
         role="radiogroup"
-        aria-labelledby="conv-mode-label"
+        aria-labelledby="conv-letter-label"
       >
-        {CONVERGENCE_MODES.map((m) => {
-          const isSelected = m.value === mode
+        {PRESET_LETTERS.map((char) => {
+          const isSelected = stimulusLetter === char
           return (
             <button
-              key={m.value}
+              key={char}
               type="button"
               role="radio"
               aria-checked={isSelected}
               disabled={!session.isIdle}
-              className={`modeCard ${isSelected ? 'modeCardActive' : ''}`}
-              onClick={() => {
-                if (session.isIdle) {
-                  setMode(m.value)
-                }
-              }}
-              title={m.description}
+              className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+              onClick={() => setStimulusLetter(char)}
+              title={`Elegir letra ${char}`}
             >
-              <div className="modeCardIcon">
-                {m.value === 'fixed' ? <IconModeFixed /> : <IconModeMotion />}
-              </div>
-              <span className="modeCardLabel">{m.label}</span>
+              {char}
             </button>
           )
         })}
+
+        <div
+          className={`dashPillBtn convLetterInputPill ${
+            !PRESET_LETTERS.includes(stimulusLetter) ? 'dashPillBtnActive' : ''
+          }`}
+          onClick={() => {
+            const el = document.getElementById('custom-letter-input')
+            if (el) el.focus()
+          }}
+        >
+          <label htmlFor="custom-letter-input" className="convLetterInputPillLabel">
+            Escribir:
+          </label>
+          <input
+            id="custom-letter-input"
+            type="text"
+            maxLength={2}
+            value={stimulusLetter}
+            onChange={(e) => {
+              const char = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(-1)
+              if (char) {
+                setStimulusLetter(char)
+              }
+            }}
+            onFocus={(e) => e.target.select()}
+            className="convLetterInlineInput"
+            placeholder="E"
+            title="Haz clic para escribir cualquier letra o número"
+            disabled={!session.isIdle}
+          />
+        </div>
       </div>
     </div>
-  )
+  ) : activePair.isDynamicWord ? (
+    <div className="dashDurationBlock">
+      <span className="controlLabel" id="conv-word-label">
+        Palabra del estímulo
+      </span>
+      <div
+        className="durationRow"
+        role="radiogroup"
+        aria-labelledby="conv-word-label"
+      >
+        {PRESET_WORDS.map((w) => {
+          const isSelected = stimulusWord === w
+          return (
+            <button
+              key={w}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              disabled={!session.isIdle}
+              className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+              onClick={() => setStimulusWord(w)}
+              title={`Elegir palabra ${w}`}
+            >
+              {w}
+            </button>
+          )
+        })}
+
+        <div
+          className={`dashPillBtn convWordInputPill ${
+            !PRESET_WORDS.includes(stimulusWord) ? 'dashPillBtnActive' : ''
+          }`}
+          onClick={() => {
+            const el = document.getElementById('custom-word-input')
+            if (el) el.focus()
+          }}
+        >
+          <label htmlFor="custom-word-input" className="convLetterInputPillLabel">
+            Escribir:
+          </label>
+          <input
+            id="custom-word-input"
+            type="text"
+            maxLength={8}
+            value={stimulusWord}
+            onChange={(e) => {
+              const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '').toUpperCase()
+              if (val) {
+                setStimulusWord(val)
+              }
+            }}
+            onFocus={(e) => e.target.select()}
+            className="convWordInlineInput"
+            placeholder="CASA"
+            title="Haz clic para escribir cualquier palabra"
+            disabled={!session.isIdle}
+          />
+        </div>
+      </div>
+    </div>
+  ) : activePair.isDynamicPhrase ? (
+    <div className="dashDurationBlock">
+      <span className="controlLabel" id="conv-phrase-label">
+        Frase del estímulo
+      </span>
+      <div
+        className="durationRow"
+        role="radiogroup"
+        aria-labelledby="conv-phrase-label"
+      >
+        <button
+          type="button"
+          role="radio"
+          aria-checked={stimulusPhrase === 'ENTRENA TU VISIÓN'}
+          disabled={!session.isIdle}
+          className={`dashPillBtn ${stimulusPhrase === 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''}`}
+          onClick={() => setStimulusPhrase('ENTRENA TU VISIÓN')}
+          title="Elegir frase de ejemplo: ENTRENA TU VISIÓN"
+          style={{ flex: 1.2 }}
+        >
+          ENTRENA TU VISIÓN
+        </button>
+
+        <div
+          className={`dashPillBtn convPhraseInputPill ${
+            stimulusPhrase !== 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''
+          }`}
+          onClick={() => {
+            const el = document.getElementById('custom-phrase-input')
+            if (el) el.focus()
+          }}
+        >
+          <label htmlFor="custom-phrase-input" className="convLetterInputPillLabel">
+            Escribir:
+          </label>
+          <input
+            id="custom-phrase-input"
+            type="text"
+            maxLength={45}
+            value={stimulusPhrase}
+            onChange={(e) => {
+              const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,¡!¿?]/g, '').toUpperCase()
+              if (val) {
+                setStimulusPhrase(val)
+              }
+            }}
+            onFocus={(e) => e.target.select()}
+            className="convPhraseInlineInput"
+            placeholder="ENTRENA TU VISIÓN"
+            title="Escribe cualquier frase personalizada (se distribuirá en renglones)"
+            disabled={!session.isIdle}
+          />
+        </div>
+      </div>
+    </div>
+  ) : null
 
   // ── Atajos de Teclado (Fila Inferior · Ancho completo) ──
   const shortcuts = [
@@ -438,6 +624,7 @@ export default function ConvergenceGame() {
       split="wide"
       stimulusGrid={stimulusSelector}
       gameControls={gameControls}
+      extraControls={extraControls}
       shortcuts={shortcuts}
       shortcutsHint={
         mode === 'fixed'
@@ -456,7 +643,9 @@ export default function ConvergenceGame() {
               transform: `translateX(-${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
           >
-            {activePair.renderLeft ? activePair.renderLeft(currentSizePx) : null}
+            {activePair.renderLeft
+              ? activePair.renderLeft(currentSizePx, activePair.isDynamicPhrase ? stimulusPhrase : activePair.isDynamicWord ? stimulusWord : stimulusLetter)
+              : null}
           </div>
 
           {/* Estímulo Ojo Derecho */}
@@ -466,7 +655,9 @@ export default function ConvergenceGame() {
               transform: `translateX(${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
           >
-            {activePair.renderRight ? activePair.renderRight(currentSizePx) : null}
+            {activePair.renderRight
+              ? activePair.renderRight(currentSizePx, activePair.isDynamicPhrase ? stimulusPhrase : activePair.isDynamicWord ? stimulusWord : stimulusLetter)
+              : null}
           </div>
         </div>
 
