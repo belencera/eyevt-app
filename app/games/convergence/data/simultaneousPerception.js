@@ -197,4 +197,12 @@ export const SIMULTANEOUS_PERCEPTION_PAIRS = [
     right: { src: '/vergence/hibiscus.svg', alt: 'Flor', scale: 1, shadow: 'rgba(244, 63, 94, 0.45)', previewShadow: 'rgba(244, 63, 94, 0.35)' },
     preview: { base: 'right', baseScale: 1.15, overlayScale: 0.70, overlayPos: { top: '-2px', right: '-2px' } },
   }),
+
+  createSimultaneousPair({
+    id: 'target-arrow',
+    name: 'Diana · Flecha',
+    left: { src: '/vergence/target.svg', alt: 'Diana', scale: 1, shadow: 'rgba(66, 139, 193, 0.45)', previewShadow: 'rgba(66, 139, 193, 0.4)' },
+    right: { src: '/vergence/arrow.svg', alt: 'Flecha', scale: 1, shadow: 'rgba(242, 178, 0, 0.45)', previewShadow: 'rgba(242, 178, 0, 0.55)' },
+    preview: { base: 'left', baseScale: 1., overlayScale: 1, overlayPos: { inset: 0, margin: 'auto' } },
+  }),
 ]
