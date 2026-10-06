@@ -16,9 +16,12 @@ import {
   IconClick,
 } from '../_shared'
 
-const HINTS = {
-  'name-and-tap': 'Mantener la mirada fija en el punto central y pulsar los puntos que aparecen alrededor.',
-  'central-focus': 'Mantener la mirada fija en el punto central e identificar el estímulo que aparece en el campo periférico.',
+const PERIPHERY_HINT =
+  'Mantener la mirada fija en el punto central y percibir los estímulos del campo visual periférico'
+
+const MODE_DESCRIPTIONS = {
+  'name-and-tap': 'Decir en voz alta el centro y hacer clic en los puntos de alrededor',
+  'central-focus': 'Identificar el estímulo que aparece en la periferia manteniendo la mirada en el punto central',
 }
 
 export default function PeripheryGame() {
@@ -224,7 +227,7 @@ export default function PeripheryGame() {
   return (
     <GameShell
       title="Periferia"
-      hint={HINTS[mode]}
+      hint={PERIPHERY_HINT}
       session={shellSession}
       speedControl={{
         id: 'periphery-cadence',
@@ -246,9 +249,14 @@ export default function PeripheryGame() {
         <>
           {/* Selector de modo interactivo en cuadrícula idéntica a estímulos */}
           <div className="modeGridContainer">
-            <span className="controlLabel" id="periphery-mode-label">
-              Modo de juego
-            </span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap', marginBottom: '4px' }}>
+              <span className="controlLabel" id="periphery-mode-label" style={{ marginBottom: 0 }}>
+                Modo de juego
+              </span>
+              <span style={{ fontSize: '0.73rem', fontWeight: 500, color: '#94a3b8' }}>
+                · {MODE_DESCRIPTIONS[mode]}
+              </span>
+            </div>
             <div
               className="modeGrid"
               role="radiogroup"
