@@ -106,6 +106,7 @@ export default function ConvergenceGame() {
   const [selectedCategory, setSelectedCategory] = useState('percepcion-simultanea')
   const [selectedPairId, setSelectedPairId] = useState('cross')
   const [stimulusLetter, setStimulusLetter] = useState('E')
+  const [stimulusWord, setStimulusWord] = useState('CASA')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
   const [speed, setSpeed] = useState(1) // velocidad inicial muy baja (progresiva en partida)
 
@@ -360,7 +361,7 @@ export default function ConvergenceGame() {
                 }}
               >
                 <div className="convPairPreview">
-                  {pair.renderPreview ? pair.renderPreview(38, stimulusLetter) : null}
+                  {pair.renderPreview ? pair.renderPreview(38, pair.isDynamicWord ? stimulusWord : stimulusLetter) : null}
                 </div>
                 <span className="convPairName">{pair.name}</span>
               </div>
@@ -427,6 +428,7 @@ export default function ConvergenceGame() {
 
   // ── Ajustes Adicionales (Debajo de Duración de la sesión) ──
   const PRESET_LETTERS = ['E', 'A', 'O', 'X']
+  const PRESET_WORDS = ['CASA', 'LUNA', 'LUZ']
 
   const extraControls = activePair.isDynamicLetter ? (
     <div className="dashDurationBlock">
@@ -488,6 +490,66 @@ export default function ConvergenceGame() {
         </div>
       </div>
     </div>
+  ) : activePair.isDynamicWord ? (
+    <div className="dashDurationBlock">
+      <span className="controlLabel" id="conv-word-label">
+        Palabra del estímulo
+      </span>
+      <div
+        className="durationRow"
+        role="radiogroup"
+        aria-labelledby="conv-word-label"
+      >
+        {PRESET_WORDS.map((w) => {
+          const isSelected = stimulusWord === w
+          return (
+            <button
+              key={w}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              disabled={!session.isIdle}
+              className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+              onClick={() => setStimulusWord(w)}
+              title={`Elegir palabra ${w}`}
+            >
+              {w}
+            </button>
+          )
+        })}
+
+        <div
+          className={`dashPillBtn convWordInputPill ${
+            !PRESET_WORDS.includes(stimulusWord) ? 'dashPillBtnActive' : ''
+          }`}
+          onClick={() => {
+            const el = document.getElementById('custom-word-input')
+            if (el) el.focus()
+          }}
+        >
+          <label htmlFor="custom-word-input" className="convLetterInputPillLabel">
+            Escribir:
+          </label>
+          <input
+            id="custom-word-input"
+            type="text"
+            maxLength={8}
+            value={stimulusWord}
+            onChange={(e) => {
+              const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '').toUpperCase()
+              if (val) {
+                setStimulusWord(val)
+              }
+            }}
+            onFocus={(e) => e.target.select()}
+            className="convWordInlineInput"
+            placeholder="CASA"
+            title="Haz clic para escribir cualquier palabra"
+            disabled={!session.isIdle}
+          />
+        </div>
+      </div>
+    </div>
   ) : null
 
   // ── Atajos de Teclado (Fila Inferior · Ancho completo) ──
@@ -525,7 +587,9 @@ export default function ConvergenceGame() {
               transform: `translateX(-${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
           >
-            {activePair.renderLeft ? activePair.renderLeft(currentSizePx, stimulusLetter) : null}
+            {activePair.renderLeft
+              ? activePair.renderLeft(currentSizePx, activePair.isDynamicWord ? stimulusWord : stimulusLetter)
+              : null}
           </div>
 
           {/* Estímulo Ojo Derecho */}
@@ -535,7 +599,9 @@ export default function ConvergenceGame() {
               transform: `translateX(${currentDistance / 2}px) translate(-50%, -50%)`,
             }}
           >
-            {activePair.renderRight ? activePair.renderRight(currentSizePx, stimulusLetter) : null}
+            {activePair.renderRight
+              ? activePair.renderRight(currentSizePx, activePair.isDynamicWord ? stimulusWord : stimulusLetter)
+              : null}
           </div>
         </div>
 

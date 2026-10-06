@@ -180,21 +180,132 @@ export function createLetterStimulusPair(initialLetter = 'E') {
       const char = (typeof letter === 'string' && letter.trim() ? letter : initialLetter).trim().charAt(0).toUpperCase() || 'E'
       return (
         <svg viewBox="0 0 60 60" width={size} height={size} fill="none" style={{ overflow: 'visible' }}>
-          {/* Cruz pequeña (+) superior al fusionar */}
-          <line x1="23" y1="8" x2="37" y2="8" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          <line x1="30" y1="2" x2="30" y2="14" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          {/* Letra centrada dominante */}
+          {/* Cruz pequeña (+) superior al fusionar con holgura respecto a la letra */}
+          <line x1="24" y1="4" x2="36" y2="4" stroke="#38bdf8" strokeWidth="2.6" strokeLinecap="round" />
+          <line x1="30" y1="0" x2="30" y2="8" stroke="#38bdf8" strokeWidth="2.6" strokeLinecap="round" />
+          {/* Letra centrada dominante manteniendo su tamaño grande */}
           <text
             x="30"
-            y="49"
+            y="54"
             textAnchor="middle"
             fill="#38bdf8"
-            fontSize="36"
+            fontSize="37"
             fontWeight="bold"
             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
             style={{ userSelect: 'none' }}
           >
             {char}
+          </text>
+        </svg>
+      )
+    },
+  }
+}
+
+export const WORD_FUSION_ID = 'word-fusion'
+
+/**
+ * Estímulo de palabra con control antisupresión para fusión plana:
+ * - Ojo izquierdo: Palabra con raya horizontal superior.
+ * - Ojo derecho: Misma palabra con raya vertical superior.
+ * - Fusión / Vista previa: Palabra coronada por una cruz completa (+).
+ */
+export function createWordStimulusPair(initialWord = 'CASA') {
+  return {
+    id: WORD_FUSION_ID,
+    name: 'Palabras',
+    category: 'fusion-plana',
+    isDynamicWord: true,
+    renderLeft: (size = 70, word) => {
+      const text = (typeof word === 'string' && word.trim() ? word : initialWord).trim().toUpperCase() || 'CASA'
+      const baseW = Math.max(76, text.length * 17 + 24)
+      const midX = baseW / 2
+      const svgW = Math.round(size * (baseW / 60))
+      return (
+        <svg
+          viewBox={`0 0 ${baseW} 60`}
+          width={svgW}
+          height={size}
+          fill="none"
+          style={{ overflow: 'visible' }}
+        >
+          {/* Raya horizontal superior pequeña (Ojo izquierdo) */}
+          <line x1={midX - 7} y1="8" x2={midX + 7} y2="8" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Palabra centrada dominante */}
+          <text
+            x={midX}
+            y="48"
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="26"
+            fontWeight="bold"
+            letterSpacing="1px"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            {text}
+          </text>
+        </svg>
+      )
+    },
+    renderRight: (size = 70, word) => {
+      const text = (typeof word === 'string' && word.trim() ? word : initialWord).trim().toUpperCase() || 'CASA'
+      const baseW = Math.max(76, text.length * 17 + 24)
+      const midX = baseW / 2
+      const svgW = Math.round(size * (baseW / 60))
+      return (
+        <svg
+          viewBox={`0 0 ${baseW} 60`}
+          width={svgW}
+          height={size}
+          fill="none"
+          style={{ overflow: 'visible' }}
+        >
+          {/* Raya vertical superior pequeña (Ojo derecho) */}
+          <line x1={midX} y1="2" x2={midX} y2="14" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Palabra centrada dominante */}
+          <text
+            x={midX}
+            y="48"
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="26"
+            fontWeight="bold"
+            letterSpacing="1px"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            {text}
+          </text>
+        </svg>
+      )
+    },
+    renderPreview: (size = 46) => {
+      // Miniatura fija siempre en 'CASA', ampliada de tamaño con separación de la cruz
+      const text = 'CASA'
+      return (
+        <svg
+          viewBox="0 0 72 54"
+          className="convWordThumbSvg"
+          fill="none"
+          style={{ overflow: 'visible' }}
+        >
+          {/* Cruz (+) de fusión completa */}
+          <line x1="29" y1="5" x2="43" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          <line x1="36" y1="0" x2="36" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+          {/* Palabra centrada dominante de gran tamaño */}
+          <text
+            x="36"
+            y="48"
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="28"
+            fontWeight="bold"
+            letterSpacing="0.8px"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            {text}
           </text>
         </svg>
       )
@@ -367,4 +478,6 @@ export const FLAT_FUSION_PAIRS = [
       overlayShadow: 'transparent',
     },
   }),
+
+  createWordStimulusPair('CASA'),
 ]

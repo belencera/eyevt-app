@@ -372,5 +372,47 @@
   border-color: rgba(148, 163, 184, 0.2);
 }
 
+/* ── Ajustes de Palabra Dinámica (Integrado en dashDurationBlock) ── */
+.convWordInputPill {
+  flex: 2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 4px 10px !important;
+  cursor: text !important;
+}
+
+.convWordInlineInput {
+  min-width: 62px;
+  max-width: 90px;
+  height: 26px;
+  border-radius: 6px;
+  background: #020617;
+  border: 1.5px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  outline: none;
+  transition: all 0.14s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  cursor: text;
+}
+
+.convWordInlineInput:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4), inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  background: #0b1329;
+}
+
+.convWordInlineInput:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
 
 
