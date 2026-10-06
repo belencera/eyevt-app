@@ -253,6 +253,18 @@ export const STIMULI_PAIRS = [
   }),
 
   createStimulusPair({
+    id: 'emoji-fusion',
+    name: 'Emoji',
+    category: 'fusion-plana',
+    left: { src: '/vergence/emoji-a.svg', alt: 'Emoji sin lengua', scale: 1, shadow: 'rgba(255, 221, 103, 0.45)', previewShadow: 'rgba(255, 221, 103, 0.35)' },
+    right: { src: '/vergence/emoji-b.svg', alt: 'Emoji sin pupila', scale: 1, shadow: 'rgba(255, 221, 103, 0.45)', previewShadow: 'rgba(255, 221, 103, 0.35)' },
+    preview: {
+      fullSrc: '/vergence/emoji-full.svg',
+      baseScale: 0.82,
+    },
+  }),
+
+  createStimulusPair({
     id: 'avocado-fusion',
     name: 'Aguacate',
     category: 'fusion-plana',
@@ -262,12 +274,48 @@ export const STIMULI_PAIRS = [
   }),
 
   createStimulusPair({
+    id: 'eye-fusion',
+    name: 'Ojo',
+    category: 'fusion-plana',
+    left: { src: '/vergence/eye-a.svg', alt: 'Ojo 1', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    right: { src: '/vergence/eye-b.svg', alt: 'Ojo 2', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    preview: {
+      fullSrc: '/vergence/eye-full.svg',
+      baseScale: 1.05,
+    },
+  }),
+
+  createStimulusPair({
     id: 'pizza-fusion',
     name: 'Pizza',
     category: 'fusion-plana',
     left: { src: '/vergence/pizza-a.svg', alt: 'Pizza con ingredientes', scale: 1, shadow: 'rgba(201, 142, 82, 0.45)', previewShadow: 'rgba(201, 142, 82, 0.35)' },
     right: { src: '/vergence/pizza-b.svg', alt: 'Pizza sin ingredientes', scale: 1, shadow: 'rgba(201, 142, 82, 0.45)', previewShadow: 'rgba(201, 142, 82, 0.35)' },
     preview: { base: 'right', baseScale: 0.82, overlayScale: 0.82 },
+  }),
+
+  createStimulusPair({
+    id: 'traffic-light-fusion',
+    name: 'Semáforo',
+    category: 'fusion-plana',
+    left: { src: '/vergence/traffic-light-a.svg', alt: 'Semáforo 1', scale: 1, shadow: 'rgba(255, 230, 46, 0.45)', previewShadow: 'rgba(255, 230, 46, 0.35)' },
+    right: { src: '/vergence/traffic-light-b.svg', alt: 'Semáforo 2', scale: 1, shadow: 'rgba(255, 230, 46, 0.45)', previewShadow: 'rgba(255, 230, 46, 0.35)' },
+    preview: {
+      fullSrc: '/vergence/traffic-light-full.svg',
+      baseScale: 0.82,
+    },
+  }),
+
+  createStimulusPair({
+    id: 'rocket-fusion',
+    name: 'Cohete',
+    category: 'fusion-plana',
+    left: { src: '/vergence/rocket-a.svg', alt: 'Cohete 1', scale: 1, shadow: 'rgba(201, 71, 71, 0.45)', previewShadow: 'rgba(201, 71, 71, 0.35)' },
+    right: { src: '/vergence/rocket-b.svg', alt: 'Cohete 2', scale: 1, shadow: 'rgba(201, 71, 71, 0.45)', previewShadow: 'rgba(201, 71, 71, 0.35)' },
+    preview: {
+      fullSrc: '/vergence/rocket-full.svg',
+      baseScale: 0.82,
+    },
   }),
 
   createStimulusPair({
@@ -293,6 +341,31 @@ export const STIMULI_PAIRS = [
     right: { src: '/vergence/palette-b.svg', alt: 'Pintura 2', scale: 1, shadow: 'rgba(246, 199, 153, 0.45)', previewShadow: 'rgba(246, 199, 153, 0.35)' },
     preview: {
       fullSrc: '/vergence/palette-full.svg',
+      baseScale: 0.82,
+    },
+  }),
+
+  createStimulusPair({
+    id: 'ski-fusion',
+    name: 'Ski',
+    category: 'fusion-plana',
+    left: { src: '/vergence/ski-a.svg', alt: 'Ski sin bufanda', scale: 1, shadow: 'rgba(237, 76, 92, 0.45)', previewShadow: 'rgba(237, 76, 92, 0.35)' },
+    right: { src: '/vergence/ski-b.svg', alt: 'Ski con bufanda', scale: 1, shadow: 'rgba(237, 76, 92, 0.45)', previewShadow: 'rgba(237, 76, 92, 0.35)' },
+    preview: {
+      base: 'left',
+      baseScale: 0.82,
+      overlayScale: 0.82,
+    },
+  }),
+
+  createStimulusPair({
+    id: 'city-fusion',
+    name: 'Ciudad',
+    category: 'fusion-plana',
+    left: { src: '/vergence/city-a.svg', alt: 'Ciudad sin luna', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    right: { src: '/vergence/city-b.svg', alt: 'Ciudad sin luces', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    preview: {
+      fullSrc: '/vergence/city-full.svg',
       baseScale: 0.82,
     },
   }),
