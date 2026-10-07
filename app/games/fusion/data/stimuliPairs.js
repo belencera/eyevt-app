@@ -19,7 +19,7 @@ export const STIMULI_PAIRS = [
   ...FLAT_FUSION_PAIRS,
 ]
 
-export const CONVERGENCE_MODES = [
+export const FUSION_MODES = [
   {
     value: 'fixed',
     label: 'Fijo',
@@ -29,8 +29,21 @@ export const CONVERGENCE_MODES = [
   {
     value: 'motion',
     label: 'En movimiento',
-    description: 'Los estímulos se separan lentamente',
+    description: 'Estímulos dinámicos en pantalla',
     icon: 'motion',
+  },
+]
+
+export const MOTION_TYPES = [
+  {
+    value: 'continuous',
+    label: 'Continuo',
+    description: 'Separación constante',
+  },
+  {
+    value: 'alternating',
+    label: 'Alternante',
+    description: 'Ciclos continuos de apertura y cierre',
   },
 ]
 
