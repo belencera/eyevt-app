@@ -1,4 +1,5 @@
 import React from 'react'
+import { renderWordPreview } from './flatFusion'
 
 /**
  * Renderiza el estímulo vectorial de anillos concéntricos con disparidad horizontal.
@@ -189,6 +190,123 @@ export function createStereoPair({
         shadowColor={shadowColor}
       />
     ),
+  }
+}
+
+export const WORD_STEREOPSIS_ID = 'word-stereopsis'
+
+/**
+ * Obtiene los índices de las letras que tendrán disparidad en la palabra:
+ * - Palabras de 4 letras o menos: exactamente 1 letra aleatoria.
+ * - Palabras de más de 4 letras: exactamente 2 letras aleatorias distintas.
+ */
+export function getStereoWordDisparityIndices(text, seed = 0) {
+  if (!text || typeof text !== 'string') return new Set()
+
+  const len = text.length
+  if (len === 0) return new Set()
+  if (len === 1) return new Set([0])
+
+  let s = Math.abs(seed) + 1
+  const nextRandom = () => {
+    s = (s * 9301 + 49297) % 233280
+    return s / 233280
+  }
+
+  const indices = new Set()
+  if (len <= 4) {
+    indices.add(Math.floor(nextRandom() * len))
+  } else {
+    const idx1 = Math.floor(nextRandom() * len)
+    const offset = 1 + Math.floor(nextRandom() * (len - 1))
+    const idx2 = (idx1 + offset) % len
+    indices.add(idx1)
+    indices.add(idx2)
+  }
+
+  return indices
+}
+
+/**
+ * Renderiza la palabra con disparidad estereoscópica en letras seleccionadas.
+ */
+export function renderStereoWordSVG({ size = 70, word = 'CASA', eye = 'left', options = {} }) {
+  const text = (typeof word === 'string' && word.trim() ? word : 'CASA').trim().toUpperCase() || 'CASA'
+  const baseW = Math.max(76, text.length * 17 + 24)
+  const midX = baseW / 2
+  const svgW = Math.round(size * (baseW / 60))
+
+  // La disparidad en letras de Estereopsis siempre está activa
+  const targetIndices = getStereoWordDisparityIndices(text, options?.seed || 0)
+
+  // Desplazamiento horizontal para la letra con relieve:
+  // - Ojo izquierdo: -1.8px (relieve hacia adelante)
+  // - Ojo derecho: +1.8px
+  const targetShift = eye === 'left' ? -1.8 : 1.8
+
+  // Cálculo diferencial dx acumulativo: dx_i = d_i - d_{i-1}
+  // para que únicamente la letra seleccionada se mueva sin alterar la posición ni kerning de las demás.
+  let prevD = 0
+  const tspans = text.split('').map((char, i) => {
+    const currentD = targetIndices.has(i) ? targetShift : 0
+    const deltaX = currentD - prevD
+    prevD = currentD
+
+    return (
+      <tspan
+        key={i}
+        {...(deltaX !== 0 ? { dx: Number(deltaX.toFixed(3)) } : {})}
+        fill="#38bdf8"
+      >
+        {char}
+      </tspan>
+    )
+  })
+
+  return (
+    <svg
+      viewBox={`0 0 ${baseW} 60`}
+      width={svgW}
+      height={size}
+      fill="none"
+      style={{ overflow: 'visible' }}
+    >
+      {/* Marcas de alineación cardinal / bloqueo de fusión */}
+      {eye === 'left' ? (
+        <line x1={midX - 7} y1="8" x2={midX + 7} y2="8" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      ) : (
+        <line x1={midX} y1="2" x2={midX} y2="14" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      )}
+      {/* Palabra con disparidad diferencial */}
+      <text
+        x={midX}
+        y="48"
+        textAnchor="middle"
+        fill="#38bdf8"
+        fontSize="26"
+        fontWeight="bold"
+        letterSpacing="1px"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        style={{ userSelect: 'none' }}
+      >
+        {tspans}
+      </text>
+    </svg>
+  )
+}
+
+export function createStereoWordStimulusPair(initialWord = 'CASA') {
+  return {
+    id: WORD_STEREOPSIS_ID,
+    name: 'Palabras',
+    category: 'estereopsis',
+    description: 'Palabra con letras aleatorias flotando en relieve 3D sobre el plano de lectura.',
+    isDynamicWord: true,
+    renderLeft: (size = 70, word, options = {}) =>
+      renderStereoWordSVG({ size, word: word || initialWord, eye: 'left', options }),
+    renderRight: (size = 70, word, options = {}) =>
+      renderStereoWordSVG({ size, word: word || initialWord, eye: 'right', options }),
+    renderPreview: renderWordPreview,
   }
 }
 
@@ -796,4 +914,7 @@ export const STEREOPSIS_PAIRS = [
     disparity: 1.8,
     shadowColor: 'rgba(219, 180, 113, 0.45)',
   }),
+
+  // Estímulo de Palabras con disparidad 3D siempre activa en letras aleatorias (situado detrás de camping)
+  createStereoWordStimulusPair(),
 ]

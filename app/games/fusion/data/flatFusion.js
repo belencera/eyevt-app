@@ -347,37 +347,42 @@ export function createWordStimulusPair(initialWord = 'CASA') {
         </svg>
       )
     },
-    renderPreview: (size = 46) => {
-      // Miniatura fija siempre en 'CASA', ampliada de tamaño con separación de la cruz
-      const text = 'CASA'
-      return (
-        <svg
-          viewBox="0 0 72 54"
-          className="convWordThumbSvg"
-          fill="none"
-          style={{ overflow: 'visible' }}
-        >
-          {/* Cruz (+) de fusión completa */}
-          <line x1="29" y1="5" x2="43" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          <line x1="36" y1="0" x2="36" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          {/* Palabra centrada dominante de gran tamaño */}
-          <text
-            x="36"
-            y="48"
-            textAnchor="middle"
-            fill="#38bdf8"
-            fontSize="28"
-            fontWeight="bold"
-            letterSpacing="0.8px"
-            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-            style={{ userSelect: 'none' }}
-          >
-            {text}
-          </text>
-        </svg>
-      )
-    },
+    renderPreview: renderWordPreview,
   }
+}
+
+/**
+ * Miniatura estándar para el estímulo de Palabras, compartida entre Fusión Plana y Estereopsis.
+ */
+export function renderWordPreview(size = 46) {
+  // Miniatura fija siempre en 'CASA', ampliada de tamaño con separación de la cruz
+  const text = 'CASA'
+  return (
+    <svg
+      viewBox="0 0 72 54"
+      className="convWordThumbSvg"
+      fill="none"
+      style={{ overflow: 'visible' }}
+    >
+      {/* Cruz (+) de fusión completa */}
+      <line x1="29" y1="5" x2="43" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="36" y1="0" x2="36" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      {/* Palabra centrada dominante de gran tamaño */}
+      <text
+        x="36"
+        y="48"
+        textAnchor="middle"
+        fill="#38bdf8"
+        fontSize="28"
+        fontWeight="bold"
+        letterSpacing="0.8px"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        style={{ userSelect: 'none' }}
+      >
+        {text}
+      </text>
+    </svg>
+  )
 }
 
 export const PHRASE_FUSION_ID = 'phrase-fusion'

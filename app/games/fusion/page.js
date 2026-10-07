@@ -620,47 +620,49 @@ export default function FusionGame() {
         </div>
       </div>
 
-      <div className="dashDurationBlock">
-        <div className="convModeHeader">
-          <span className="controlLabel" id="conv-suppression-label-word">
-            Supresión de letras
-          </span>
-          <span className="convModeSubtext">
-            Control antisupresión eliminando letras de manera aleatoria
-          </span>
-        </div>
-        <div
-          className="durationRow"
-          role="radiogroup"
-          aria-labelledby="conv-suppression-label-word"
-        >
-          <button
-            type="button"
-            role="radio"
-            aria-checked={!letterSuppression}
-            disabled={!session.isIdle}
-            className={`dashPillBtn ${!letterSuppression ? 'dashPillBtnActive' : ''}`}
-            onClick={() => setLetterSuppression(false)}
-            title="Mostrar la palabra completa en ambos ojos"
+      {activePair.category !== 'estereopsis' && (
+        <div className="dashDurationBlock">
+          <div className="convModeHeader">
+            <span className="controlLabel" id="conv-suppression-label-word">
+              Supresión de letras
+            </span>
+            <span className="convModeSubtext">
+              Control antisupresión eliminando letras de manera aleatoria
+            </span>
+          </div>
+          <div
+            className="durationRow"
+            role="radiogroup"
+            aria-labelledby="conv-suppression-label-word"
           >
-            Desactivada
-          </button>
-          <button
-            type="button"
-            role="radio"
-            aria-checked={letterSuppression}
-            disabled={!session.isIdle}
-            className={`dashPillBtn ${letterSuppression ? 'dashPillBtnActive' : ''}`}
-            onClick={() => {
-              setLetterSuppression(true)
-              setSuppressionSeed((s) => s + 1)
-            }}
-            title="Ocultar aleatoriamente una letra por ojo para control antisupresión"
-          >
-            Activa
-          </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={!letterSuppression}
+              disabled={!session.isIdle}
+              className={`dashPillBtn ${!letterSuppression ? 'dashPillBtnActive' : ''}`}
+              onClick={() => setLetterSuppression(false)}
+              title="Mostrar la palabra completa en ambos ojos"
+            >
+              Desactivada
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={letterSuppression}
+              disabled={!session.isIdle}
+              className={`dashPillBtn ${letterSuppression ? 'dashPillBtnActive' : ''}`}
+              onClick={() => {
+                setLetterSuppression(true)
+                setSuppressionSeed((s) => s + 1)
+              }}
+              title="Ocultar aleatoriamente una letra por ojo para control antisupresión"
+            >
+              Activa
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </>
   ) : activePair.isDynamicPhrase ? (
     <>
