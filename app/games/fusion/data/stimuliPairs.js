@@ -1,8 +1,10 @@
 import { SIMULTANEOUS_PERCEPTION_PAIRS } from './simultaneousPerception'
 import { FLAT_FUSION_PAIRS } from './flatFusion'
+import { STEREOPSIS_PAIRS } from './stereopsis'
 
 export { SIMULTANEOUS_PERCEPTION_PAIRS } from './simultaneousPerception'
 export { FLAT_FUSION_PAIRS } from './flatFusion'
+export { STEREOPSIS_PAIRS } from './stereopsis'
 
 export const STIMULI_CATEGORIES = [
   { id: 'percepcion-simultanea', label: 'Percepción simultánea' },
@@ -11,12 +13,13 @@ export const STIMULI_CATEGORIES = [
 ]
 
 /**
- * Catálogo completo de parejas de estímulos para convergencia.
+ * Catálogo completo de parejas de estímulos para Fusión.
  * Agrupa los módulos especializados por grado de visión binocular.
  */
 export const STIMULI_PAIRS = [
   ...SIMULTANEOUS_PERCEPTION_PAIRS,
   ...FLAT_FUSION_PAIRS,
+  ...STEREOPSIS_PAIRS,
 ]
 
 export const FUSION_MODES = [
