@@ -59,19 +59,16 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
   - Tiempo de cambio / cadencia (0.3 s a 5 s).
   - Duración de sesión y pantalla resumen de resultados al finalizar.
 
-### 5. Convergencia (`/games/convergence`)
+### 5. Fusión (`/games/fusion`)
 - **Categoría:** Binocularidad
-- **Objetivo:** Control de vergencias frente a estímulos con demanda convergente.
+- **Objetivo:** Integración y coordinación binocular mediante la fusión de estímulos en convergencia, divergencia y flexibilidad.
+- **Modos:**
+  - **Fijo:** Fusión estática con ajuste libre y continuo de distancia y tamaño.
+  - **En movimiento:** Dinámica con velocidad regulable en dos variantes:
+    - *Continuo:* Separación constante hacia afuera.
+    - *Alternante:* Ciclos continuos de apertura y cierre (ida y vuelta).
 
-### 6. Divergencia (`/games/divergence`)
-- **Categoría:** Binocularidad
-- **Objetivo:** Control de vergencias frente a estímulos con demandas divergentes.
-
-### 7. Flexibilidad (`/games/vergence-flexibility`)
-- **Categoría:** Binocularidad
-- **Objetivo:** Alternancia entre demandas de convergencia y divergencia con distintos niveles de dificultad.
-
-### 8. Memoria visual (`/games/visual-memory`)
+### 6. Memoria visual (`/games/visual-memory`)
 - **Categoría:** Percepción Visual
 - **Objetivo:** Reconocimiento y memorización de distintos patrones visuales fijos.
 
@@ -130,13 +127,11 @@ eyevt/
 │   │   │   ├── stimuli/          # Componentes de renderizado de estímulos
 │   │   │   ├── utils/            # Formateadores e iconos SVG
 │   │   │   └── index.js          # Exportaciones centralizadas de _shared
-│   │   ├── convergence/          # Actividad de Convergencia
-│   │   ├── divergence/           # Actividad de Divergencia
 │   │   ├── eye-tracking/         # Actividad de Seguimientos
 │   │   ├── fixation/             # Actividad de Fijación
+│   │   ├── fusion/               # Actividad de Fusión (convergencia, divergencia y flexibilidad)
 │   │   ├── periphery/            # Actividad de Periferia
 │   │   ├── sacades/              # Actividad de Sacádicos
-│   │   ├── vergence-flexibility/ # Actividad de Flexibilidad
 │   │   └── visual-memory/        # Actividad de Memoria Visual
 │   ├── favicon.ico
 │   ├── globals.css               # Estilos globales y tokens de diseño

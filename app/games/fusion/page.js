@@ -13,9 +13,10 @@ import {
 import {
   STIMULI_CATEGORIES,
   STIMULI_PAIRS,
-  CONVERGENCE_MODES,
+  FUSION_MODES,
+  MOTION_TYPES,
 } from './data/stimuliPairs'
-import './convergence.css'
+import './fusion.css'
 
 // ── Niveles de Velocidad Progresiva (Modo Movimiento) ──
 // Comienza en velocidad muy baja (3.5 px/s) para facilitar la fusión inicial
@@ -101,7 +102,7 @@ function IconGauge() {
   )
 }
 
-export default function ConvergenceGame() {
+export default function FusionGame() {
   // ── Estados de Configuración ──
   const [selectedCategory, setSelectedCategory] = useState('percepcion-simultanea')
   const [selectedPairId, setSelectedPairId] = useState('cross')
@@ -109,6 +110,7 @@ export default function ConvergenceGame() {
   const [stimulusWord, setStimulusWord] = useState('CASA')
   const [stimulusPhrase, setStimulusPhrase] = useState('ENTRENA TU VISIÓN')
   const [mode, setMode] = useState('fixed') // 'fixed' | 'motion'
+  const [motionType, setMotionType] = useState('continuous') // 'continuous' | 'alternating'
   const [speed, setSpeed] = useState(1) // velocidad inicial muy baja (progresiva en partida)
   const [letterSuppression, setLetterSuppression] = useState(false)
   const [suppressionSeed, setSuppressionSeed] = useState(1)
@@ -128,6 +130,9 @@ export default function ConvergenceGame() {
   const motionActiveRef = useRef(motionActive)
   motionActiveRef.current = motionActive
 
+  // Dirección para el movimiento alternante (1: alejando, -1: acercando)
+  const motionDirectionRef = useRef(1)
+
   // Pareja de estímulos seleccionada
   const activePair =
     STIMULI_PAIRS.find((p) => p.id === selectedPairId) || STIMULI_PAIRS[0]
@@ -146,6 +151,7 @@ export default function ConvergenceGame() {
     setStimulusSize(76)
     setSpeed(1)
     setMotionActive(false)
+    motionDirectionRef.current = 1
     setSuppressionSeed((s) => s + 1)
   }, [])
 
@@ -179,6 +185,7 @@ export default function ConvergenceGame() {
   const handleInGameReset = useCallback(() => {
     setCurrentDistance(140)
     setSpeed(1)
+    motionDirectionRef.current = 1
     if (session.isPlaying && !session.isPaused) {
       setMotionActive(true)
     }
@@ -243,20 +250,37 @@ export default function ConvergenceGame() {
       const progressiveMultiplier = 1 + Math.min(distTraveled / 400, 1) * 0.5
       const effectiveSpeed = basePxPerSec * progressiveMultiplier
 
-      const nextDist = currentDistanceRef.current + effectiveSpeed * dt
+      if (motionType === 'alternating') {
+        const minBounceDist = 60
+        const maxBounceDist = Math.min(360, maxDist)
+        let nextDist = currentDistanceRef.current + motionDirectionRef.current * effectiveSpeed * dt
 
-      if (nextDist >= maxDist) {
-        setCurrentDistance(maxDist)
-        setMotionActive(false)
-      } else {
+        if (nextDist >= maxBounceDist) {
+          nextDist = maxBounceDist
+          motionDirectionRef.current = -1
+        } else if (nextDist <= minBounceDist) {
+          nextDist = minBounceDist
+          motionDirectionRef.current = 1
+        }
+
         setCurrentDistance(nextDist)
         frameId = requestAnimationFrame(animate)
+      } else {
+        const nextDist = currentDistanceRef.current + effectiveSpeed * dt
+
+        if (nextDist >= maxDist) {
+          setCurrentDistance(maxDist)
+          setMotionActive(false)
+        } else {
+          setCurrentDistance(nextDist)
+          frameId = requestAnimationFrame(animate)
+        }
       }
     }
 
     frameId = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(frameId)
-  }, [mode, session.isPlaying, session.isPaused, motionActive])
+  }, [mode, motionType, session.isPlaying, session.isPaused, motionActive])
 
   // ── Atajos de Teclado en la Zona de Juego ──
   useEffect(() => {
@@ -393,7 +417,9 @@ export default function ConvergenceGame() {
           <span className="convModeSubtext">
             {mode === 'fixed'
               ? 'Distancia constante entre estímulos'
-              : 'Los estímulos se separan lentamente'}
+              : motionType === 'continuous'
+              ? 'Separación constante hacia afuera'
+              : 'Ciclos continuos de apertura y cierre'}
           </span>
         </div>
         <div
@@ -401,7 +427,7 @@ export default function ConvergenceGame() {
           role="radiogroup"
           aria-labelledby="conv-mode-label"
         >
-          {CONVERGENCE_MODES.map((m) => {
+          {FUSION_MODES.map((m) => {
             const isSelected = m.value === mode
             return (
               <button
@@ -427,6 +453,44 @@ export default function ConvergenceGame() {
           })}
         </div>
       </div>
+
+      {mode === 'motion' && (
+        <div className="dashDurationBlock" style={{ marginTop: '16px' }}>
+          <div className="convModeHeader">
+            <span className="controlLabel" id="fusion-motion-type-label">
+              Tipo de movimiento
+            </span>
+            <span className="convModeSubtext">
+              {motionType === 'continuous'
+                ? 'Separación constante'
+                : 'Ciclos continuos de apertura y cierre'}
+            </span>
+          </div>
+          <div
+            className="durationRow"
+            role="radiogroup"
+            aria-labelledby="fusion-motion-type-label"
+          >
+            {MOTION_TYPES.map((mt) => {
+              const isSelected = mt.value === motionType
+              return (
+                <button
+                  key={mt.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={isSelected}
+                  disabled={!session.isIdle}
+                  className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
+                  onClick={() => setMotionType(mt.value)}
+                  title={mt.description}
+                >
+                  {mt.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
     </div>
   )
 
@@ -709,8 +773,8 @@ export default function ConvergenceGame() {
 
   return (
     <GameShell
-      title="Convergencia"
-      hint="Converge hasta fusionar los dos estímulos en una única imagen central nítida."
+      title="Fusión"
+      hint="Fusionar los dos estímulos hasta ver una única imagen central nítida."
       session={session}
       split="wide"
       stimulusGrid={stimulusSelector}
@@ -720,7 +784,9 @@ export default function ConvergenceGame() {
       shortcutsHint={
         mode === 'fixed'
           ? 'Inicio: 140 px · 76 px'
-          : 'Inicio: 140 px · 76 px · Vel. baja progresiva'
+          : motionType === 'continuous'
+          ? 'Inicio: 140 px · Continuo'
+          : 'Inicio: 140 px · Alternante (60–360 px)'
       }
       startDisabled={categoryPairs.length === 0}
     >
@@ -829,8 +895,8 @@ export default function ConvergenceGame() {
                     type="button"
                     className={`convCircleBtn ${motionActive ? 'convCircleBtnPrimary' : ''}`}
                     onClick={toggleMotionPlay}
-                    title={motionActive ? 'Pausar alejamiento (Espacio)' : 'Iniciar alejamiento (Espacio)'}
-                    aria-label={motionActive ? 'Pausar alejamiento' : 'Iniciar alejamiento'}
+                    title={motionActive ? 'Pausar movimiento (Espacio)' : 'Iniciar movimiento (Espacio)'}
+                    aria-label={motionActive ? 'Pausar movimiento' : 'Iniciar movimiento'}
                   >
                     {motionActive ? <IconPause /> : <IconPlay />}
                   </button>

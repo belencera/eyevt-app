@@ -40,24 +40,10 @@ export const CATEGORIES = [
     description: 'Coordinación visual mediante diferentes posiciones y configuraciones de estímulos',
     games: [
       {
-        id: 'convergence',
-        title: 'Convergencia',
-        href: '/games/convergence',
-        description: 'Percepción simultánea y fusión en convergencia',
-        previewKey: 'convergence',
-      },
-      {
-        id: 'divergence',
-        title: 'Divergencia',
-        href: '/games/divergence',
-        description: 'Percepción simultánea y fusión en divergencia',
-        previewKey: 'divergence',
-      },
-      {
-        id: 'vergence-flexibility',
-        title: 'Flexibilidad',
-        href: '/games/vergence-flexibility',
-        description: 'Alternancia convergencia y divergencia',
+        id: 'fusion',
+        title: 'Fusión',
+        href: '/games/fusion',
+        description: 'Fusión de estímulos en convergencia, divergencia y flexibilidad.',
         previewKey: 'flexibility',
       },
     ],
