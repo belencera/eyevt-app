@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderWordPreview } from './flatFusion'
+import { renderWordPreview, renderPhrasePreview, splitPhraseIntoLines } from './flatFusion'
 
 /**
  * Renderiza el estímulo vectorial de anillos concéntricos con disparidad horizontal.
@@ -307,6 +307,137 @@ export function createStereoWordStimulusPair(initialWord = 'CASA') {
     renderRight: (size = 70, word, options = {}) =>
       renderStereoWordSVG({ size, word: word || initialWord, eye: 'right', options }),
     renderPreview: renderWordPreview,
+  }
+}
+
+export const PHRASE_STEREOPSIS_ID = 'phrase-stereopsis'
+
+/**
+ * Obtiene los índices de las letras que tendrán disparidad en una línea o renglón de texto:
+ * Aplica la misma regla que Palabras para cada palabra encontrada:
+ * - Palabras de 4 letras o menos: exactamente 1 letra aleatoria con disparidad.
+ * - Palabras de más de 4 letras: exactamente 2 letras aleatorias distintas con disparidad.
+ */
+export function getStereoPhraseDisparityIndices(lineText, seed = 0) {
+  if (!lineText || typeof lineText !== 'string') return new Set()
+
+  const wordRegex = /[a-záéíóúüñA-ZÁÉÍÓÚÜÑ]+/gi
+  let match
+  const indices = new Set()
+
+  let s = Math.abs(seed) + 1
+  const nextRandom = () => {
+    s = (s * 9301 + 49297) % 233280
+    return s / 233280
+  }
+
+  while ((match = wordRegex.exec(lineText)) !== null) {
+    const word = match[0]
+    const startIndex = match.index
+    const len = word.length
+
+    if (len <= 4) {
+      const rel = Math.floor(nextRandom() * len)
+      indices.add(startIndex + rel)
+    } else {
+      const rel1 = Math.floor(nextRandom() * len)
+      const offset = 1 + Math.floor(nextRandom() * (len - 1))
+      const rel2 = (rel1 + offset) % len
+      indices.add(startIndex + rel1)
+      indices.add(startIndex + rel2)
+    }
+  }
+
+  return indices
+}
+
+/**
+ * Renderiza la frase multilínea con disparidad estereoscópica en letras seleccionadas.
+ */
+export function renderStereoPhraseSVG({ size = 70, phrase, eye = 'left', options = {} }) {
+  const lines = splitPhraseIntoLines(phrase || 'ENTRENA TU VISIÓN')
+  const maxLen = Math.max(...lines.map((l) => l.length), 8)
+  const baseW = Math.max(92, maxLen * 13 + 30)
+  const lineHeight = 24
+  const textStartY = 40
+  const baseH = textStartY + (lines.length - 1) * lineHeight + 18
+  const midX = baseW / 2
+  const svgW = Math.round(size * (baseW / 60))
+  const svgH = Math.round(size * (baseH / 60))
+
+  const targetShift = eye === 'left' ? -1.8 : 1.8
+
+  return (
+    <svg
+      viewBox={`0 0 ${baseW} ${baseH}`}
+      width={svgW}
+      height={svgH}
+      fill="none"
+      style={{ overflow: 'visible' }}
+    >
+      {/* Marcas de alineación cardinal / bloqueo de fusión */}
+      {eye === 'left' ? (
+        <line x1={midX - 7} y1="8" x2={midX + 7} y2="8" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      ) : (
+        <line x1={midX} y1="2" x2={midX} y2="14" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      )}
+      {/* Frase distribuida en renglones con disparidad diferencial */}
+      {lines.map((lineText, idx) => {
+        const targetIndices = getStereoPhraseDisparityIndices(
+          lineText,
+          (options?.seed || 0) + idx * 101
+        )
+
+        let prevD = 0
+        const tspans = lineText.split('').map((char, charIdx) => {
+          const currentD = targetIndices.has(charIdx) ? targetShift : 0
+          const deltaX = currentD - prevD
+          prevD = currentD
+
+          return (
+            <tspan
+              key={charIdx}
+              {...(deltaX !== 0 ? { dx: Number(deltaX.toFixed(3)) } : {})}
+              fill="#38bdf8"
+            >
+              {char}
+            </tspan>
+          )
+        })
+
+        return (
+          <text
+            key={idx}
+            x={midX}
+            y={textStartY + idx * lineHeight}
+            textAnchor="middle"
+            fill="#38bdf8"
+            fontSize="20"
+            fontWeight="bold"
+            letterSpacing="0.8px"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+            style={{ userSelect: 'none' }}
+          >
+            {tspans}
+          </text>
+        )
+      })}
+    </svg>
+  )
+}
+
+export function createStereoPhraseStimulusPair(initialPhrase = 'ENTRENA TU VISIÓN') {
+  return {
+    id: PHRASE_STEREOPSIS_ID,
+    name: 'Frase',
+    category: 'estereopsis',
+    description: 'Frase multilínea con letras aleatorias flotando en relieve 3D sobre el plano de lectura.',
+    isDynamicPhrase: true,
+    renderLeft: (size = 70, phrase, options = {}) =>
+      renderStereoPhraseSVG({ size, phrase: phrase || initialPhrase, eye: 'left', options }),
+    renderRight: (size = 70, phrase, options = {}) =>
+      renderStereoPhraseSVG({ size, phrase: phrase || initialPhrase, eye: 'right', options }),
+    renderPreview: renderPhrasePreview,
   }
 }
 
@@ -917,4 +1048,7 @@ export const STEREOPSIS_PAIRS = [
 
   // Estímulo de Palabras con disparidad 3D siempre activa en letras aleatorias (situado detrás de camping)
   createStereoWordStimulusPair(),
+
+  // Estímulo de Frases con disparidad 3D siempre activa en letras aleatorias (situado detrás de Palabras)
+  createStereoPhraseStimulusPair(),
 ]

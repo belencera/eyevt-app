@@ -390,7 +390,7 @@ export const PHRASE_FUSION_ID = 'phrase-fusion'
 /**
  * Divide una frase en 2 o 3 renglones equilibrados para facilitar la fusión binocular.
  */
-function splitPhraseIntoLines(phrase) {
+export function splitPhraseIntoLines(phrase) {
   const clean = (typeof phrase === 'string' && phrase.trim() ? phrase : 'ENTRENA TU VISIÓN').trim().toUpperCase()
   const words = clean.split(/\s+/).filter(Boolean)
   if (words.length <= 1) return [clean]
@@ -537,48 +537,53 @@ export function createPhraseStimulusPair(initialPhrase = 'ENTRENA TU VISIÓN') {
         </svg>
       )
     },
-    renderPreview: (size = 46) => {
-      // Miniatura fija en 'ENTRENA TU VISIÓN': texto más grande, holgura con la cruz y pegado abajo junto a 'Frase'
-      return (
-        <svg
-          viewBox="0 0 68 66"
-          fill="none"
-          style={{ overflow: 'visible', transform: 'translateY(2px)' }}
-        >
-          {/* Cruz (+) de fusión completa en la cúspide (alineada con la cruz de otras tarjetas) */}
-          <line x1="26" y1="5" x2="42" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          <line x1="34" y1="0" x2="34" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          {/* Frase en dos renglones: más grande, con separación de la cruz y cercana al título 'Frase' */}
-          <text
-            x="34"
-            y="37"
-            textAnchor="middle"
-            fill="#38bdf8"
-            fontSize="18.5"
-            fontWeight="bold"
-            letterSpacing="0.3px"
-            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-            style={{ userSelect: 'none' }}
-          >
-            ENTRENA
-          </text>
-          <text
-            x="34"
-            y="63"
-            textAnchor="middle"
-            fill="#38bdf8"
-            fontSize="17"
-            fontWeight="bold"
-            letterSpacing="0.3px"
-            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-            style={{ userSelect: 'none' }}
-          >
-            TU VISIÓN
-          </text>
-        </svg>
-      )
-    },
+    renderPreview: renderPhrasePreview,
   }
+}
+
+/**
+ * Miniatura estándar para el estímulo de Frase, compartida entre Fusión Plana y Estereopsis.
+ */
+export function renderPhrasePreview(size = 46) {
+  // Miniatura fija en 'ENTRENA TU VISIÓN': texto más grande, holgura con la cruz y pegado abajo junto a 'Frase'
+  return (
+    <svg
+      viewBox="0 0 68 66"
+      fill="none"
+      style={{ overflow: 'visible', transform: 'translateY(2px)' }}
+    >
+      {/* Cruz (+) de fusión completa en la cúspide (alineada con la cruz de otras tarjetas) */}
+      <line x1="26" y1="5" x2="42" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="34" y1="0" x2="34" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      {/* Frase en dos renglones: más grande, con separación de la cruz y cercana al título 'Frase' */}
+      <text
+        x="34"
+        y="37"
+        textAnchor="middle"
+        fill="#38bdf8"
+        fontSize="18.5"
+        fontWeight="bold"
+        letterSpacing="0.3px"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        style={{ userSelect: 'none' }}
+      >
+        ENTRENA
+      </text>
+      <text
+        x="34"
+        y="63"
+        textAnchor="middle"
+        fill="#38bdf8"
+        fontSize="17"
+        fontWeight="bold"
+        letterSpacing="0.3px"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        style={{ userSelect: 'none' }}
+      >
+        TU VISIÓN
+      </text>
+    </svg>
+  )
 }
 
 export const FLAT_FUSION_PAIRS = [
