@@ -469,5 +469,31 @@
   border-color: rgba(148, 163, 184, 0.2);
 }
 
+/* ── Fusión Plana: Control dicóptico por capas en SVG único ── */
+.flat-fusion-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.flat-fusion-item svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+
+.flat-fusion-item.fusion-eye-left #fusion-right,
+.flat-fusion-item.fusion-eye-left .fusion-right {
+  display: none !important;
+}
+
+.flat-fusion-item.fusion-eye-right #fusion-left,
+.flat-fusion-item.fusion-eye-right .fusion-left {
+  display: none !important;
+}
+
+
 
 
