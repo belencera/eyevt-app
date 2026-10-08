@@ -135,6 +135,14 @@ export const SIMULTANEOUS_PERCEPTION_PAIRS = [
   }),
 
   createSimultaneousPair({
+    id: 'spider-web',
+    name: 'Araña · Telaraña',
+    left: { src: '/vergence/spider.svg', alt: 'Araña', scale: 0.85, shadow: 'rgba(130, 130, 134, 0.45)', previewShadow: 'rgba(130, 130, 134, 0.4)' },
+    right: { src: '/vergence/spider-web.svg', alt: 'Telaraña', scale: 1, shadow: 'rgba(151, 151, 151, 0.4)', previewShadow: 'rgba(151, 151, 151, 0.35)' },
+    preview: { base: 'right', overlayScale: 0.65, overlayPos: { inset: 0, margin: 'auto' } },
+  }),
+
+  createSimultaneousPair({
     id: 'monkey-banana',
     name: 'Mono · Plátano',
     left: { src: '/vergence/monkey.svg', alt: 'Mono', scale: 1, shadow: 'rgba(180, 110, 60, 0.45)', previewShadow: 'rgba(180, 110, 60, 0.4)' },
@@ -159,6 +167,14 @@ export const SIMULTANEOUS_PERCEPTION_PAIRS = [
   }),
 
   createSimultaneousPair({
+    id: 'bus-stop',
+    name: 'Bus · Parada',
+    left: { src: '/vergence/bus.svg', alt: 'Bus', scale: 1, shadow: 'rgba(255, 206, 49, 0.45)', previewShadow: 'rgba(255, 206, 49, 0.55)' },
+    right: { src: '/vergence/bus-stop.svg', alt: 'Parada', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    preview: { base: 'left', baseScale: 0.82, overlayScale: 0.78, overlayPos: { bottom: '2px', right: '2px' } },
+  }),
+
+  createSimultaneousPair({
     id: 'map-magnifier',
     name: 'Lupa · Mapa',
     left: { src: '/vergence/magnifying-glass-tilted-left.svg', alt: 'Lupa', scale: 1, shadow: 'rgba(176, 189, 198, 0.5)', previewShadow: 'rgba(176, 189, 198, 0.6)' },
@@ -167,11 +183,35 @@ export const SIMULTANEOUS_PERCEPTION_PAIRS = [
   }),
 
   createSimultaneousPair({
+    id: 'pencil-paper',
+    name: 'Lápiz · Papel',
+    left: { src: '/vergence/memo-pencil.svg', alt: 'Lápiz', scale: 1, shadow: 'rgba(255, 206, 49, 0.45)', previewShadow: 'rgba(255, 206, 49, 0.55)' },
+    right: { src: '/vergence/memo-paper.svg', alt: 'Papel', scale: 1, shadow: 'rgba(239, 216, 177, 0.5)', previewShadow: 'rgba(239, 216, 177, 0.4)' },
+    preview: { base: 'right', baseScale: 0.92, overlayScale: 0.92, overlayPos: { inset: 0, margin: 'auto' } },
+  }),
+
+  createSimultaneousPair({
+    id: 'flan-plate',
+    name: 'Flan · Plato',
+    left: { src: '/vergence/custard-flan.svg', alt: 'Flan', scale: 1, shadow: 'rgba(255, 209, 112, 0.5)', previewShadow: 'rgba(255, 209, 112, 0.6)' },
+    right: { src: '/vergence/custard-plate.svg', alt: 'Plato', scale: 1, shadow: 'rgba(168, 82, 26, 0.45)', previewShadow: 'rgba(168, 82, 26, 0.35)' },
+    preview: { base: 'right', baseScale: 0.95, overlayScale: 0.95, overlayPos: { inset: 0, margin: 'auto' } },
+  }),
+
+  createSimultaneousPair({
     id: 'crab-shell',
     name: 'Cangrejo · Caracola',
     left: { src: '/vergence/crab.svg', alt: 'Cangrejo', scale: 0.9, shadow: 'rgba(237, 76, 92, 0.45)', previewShadow: 'rgba(237, 76, 92, 0.55)' },
     right: { src: '/vergence/spiral-shell.svg', alt: 'Caracola', scale: 1, shadow: 'rgba(221, 177, 153, 0.45)', previewShadow: 'rgba(221, 177, 153, 0.35)' },
     preview: { base: 'right', overlayScale: 0.65, overlayPos: { bottom: '2px', right: '2px' } },
+  }),
+
+  createSimultaneousPair({
+    id: 'dolphin-water',
+    name: 'Delfín · Agua',
+    left: { src: '/vergence/dolphin-animal.svg', alt: 'Delfín', scale: 1, shadow: 'rgba(56, 191, 214, 0.45)', previewShadow: 'rgba(56, 191, 214, 0.4)' },
+    right: { src: '/vergence/dolphin-water.svg', alt: 'Agua', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    preview: { base: 'right', baseScale: 0.95, overlayScale: 0.95, overlayPos: { inset: 0, margin: 'auto' } },
   }),
 
   createSimultaneousPair({
@@ -188,6 +228,14 @@ export const SIMULTANEOUS_PERCEPTION_PAIRS = [
     left: { src: '/vergence/tennis-ball.svg', alt: 'Pelota de tenis', scale: 0.58, shadow: 'rgba(199, 231, 85, 0.55)', previewShadow: 'rgba(199, 231, 85, 0.6)' },
     right: { src: '/vergence/tennis-racket.svg', alt: 'Raqueta de tenis', scale: 1, shadow: 'rgba(255, 113, 127, 0.45)', previewShadow: 'rgba(255, 113, 127, 0.35)' },
     preview: { base: 'right', overlayScale: 0.42, overlayPos: { top: '2px', left: '2px' } },
+  }),
+
+  createSimultaneousPair({
+    id: 'clown-circus',
+    name: 'Payaso · Circo',
+    left: { src: '/vergence/clown-face.svg', alt: 'Payaso', scale: 0.72, shadow: 'rgba(255, 82, 99, 0.5)', previewShadow: 'rgba(255, 82, 99, 0.6)' },
+    right: { src: '/vergence/circus-tent.svg', alt: 'Circo', scale: 1, shadow: 'rgba(237, 76, 92, 0.45)', previewShadow: 'rgba(237, 76, 92, 0.35)' },
+    preview: { base: 'right', overlayScale: 0.52, overlayPos: { bottom: '3px', left: 0, right: 0, margin: 'auto' } },
   }),
 
   createSimultaneousPair({
