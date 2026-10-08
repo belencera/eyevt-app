@@ -347,37 +347,42 @@ export function createWordStimulusPair(initialWord = 'CASA') {
         </svg>
       )
     },
-    renderPreview: (size = 46) => {
-      // Miniatura fija siempre en 'CASA', ampliada de tamaño con separación de la cruz
-      const text = 'CASA'
-      return (
-        <svg
-          viewBox="0 0 72 54"
-          className="convWordThumbSvg"
-          fill="none"
-          style={{ overflow: 'visible' }}
-        >
-          {/* Cruz (+) de fusión completa */}
-          <line x1="29" y1="5" x2="43" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          <line x1="36" y1="0" x2="36" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          {/* Palabra centrada dominante de gran tamaño */}
-          <text
-            x="36"
-            y="48"
-            textAnchor="middle"
-            fill="#38bdf8"
-            fontSize="28"
-            fontWeight="bold"
-            letterSpacing="0.8px"
-            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-            style={{ userSelect: 'none' }}
-          >
-            {text}
-          </text>
-        </svg>
-      )
-    },
+    renderPreview: renderWordPreview,
   }
+}
+
+/**
+ * Miniatura estándar para el estímulo de Palabras, compartida entre Fusión Plana y Estereopsis.
+ */
+export function renderWordPreview(size = 46) {
+  // Miniatura fija siempre en 'CASA', ampliada de tamaño con separación de la cruz
+  const text = 'CASA'
+  return (
+    <svg
+      viewBox="0 0 72 54"
+      className="convWordThumbSvg"
+      fill="none"
+      style={{ overflow: 'visible' }}
+    >
+      {/* Cruz (+) de fusión completa */}
+      <line x1="29" y1="5" x2="43" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="36" y1="0" x2="36" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      {/* Palabra centrada dominante de gran tamaño */}
+      <text
+        x="36"
+        y="48"
+        textAnchor="middle"
+        fill="#38bdf8"
+        fontSize="28"
+        fontWeight="bold"
+        letterSpacing="0.8px"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        style={{ userSelect: 'none' }}
+      >
+        {text}
+      </text>
+    </svg>
+  )
 }
 
 export const PHRASE_FUSION_ID = 'phrase-fusion'
@@ -385,7 +390,7 @@ export const PHRASE_FUSION_ID = 'phrase-fusion'
 /**
  * Divide una frase en 2 o 3 renglones equilibrados para facilitar la fusión binocular.
  */
-function splitPhraseIntoLines(phrase) {
+export function splitPhraseIntoLines(phrase) {
   const clean = (typeof phrase === 'string' && phrase.trim() ? phrase : 'ENTRENA TU VISIÓN').trim().toUpperCase()
   const words = clean.split(/\s+/).filter(Boolean)
   if (words.length <= 1) return [clean]
@@ -532,48 +537,53 @@ export function createPhraseStimulusPair(initialPhrase = 'ENTRENA TU VISIÓN') {
         </svg>
       )
     },
-    renderPreview: (size = 46) => {
-      // Miniatura fija en 'ENTRENA TU VISIÓN': texto más grande, holgura con la cruz y pegado abajo junto a 'Frase'
-      return (
-        <svg
-          viewBox="0 0 68 66"
-          fill="none"
-          style={{ overflow: 'visible', transform: 'translateY(2px)' }}
-        >
-          {/* Cruz (+) de fusión completa en la cúspide (alineada con la cruz de otras tarjetas) */}
-          <line x1="26" y1="5" x2="42" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          <line x1="34" y1="0" x2="34" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
-          {/* Frase en dos renglones: más grande, con separación de la cruz y cercana al título 'Frase' */}
-          <text
-            x="34"
-            y="37"
-            textAnchor="middle"
-            fill="#38bdf8"
-            fontSize="18.5"
-            fontWeight="bold"
-            letterSpacing="0.3px"
-            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-            style={{ userSelect: 'none' }}
-          >
-            ENTRENA
-          </text>
-          <text
-            x="34"
-            y="63"
-            textAnchor="middle"
-            fill="#38bdf8"
-            fontSize="17"
-            fontWeight="bold"
-            letterSpacing="0.3px"
-            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-            style={{ userSelect: 'none' }}
-          >
-            TU VISIÓN
-          </text>
-        </svg>
-      )
-    },
+    renderPreview: renderPhrasePreview,
   }
+}
+
+/**
+ * Miniatura estándar para el estímulo de Frase, compartida entre Fusión Plana y Estereopsis.
+ */
+export function renderPhrasePreview(size = 46) {
+  // Miniatura fija en 'ENTRENA TU VISIÓN': texto más grande, holgura con la cruz y pegado abajo junto a 'Frase'
+  return (
+    <svg
+      viewBox="0 0 68 66"
+      fill="none"
+      style={{ overflow: 'visible', transform: 'translateY(2px)' }}
+    >
+      {/* Cruz (+) de fusión completa en la cúspide (alineada con la cruz de otras tarjetas) */}
+      <line x1="26" y1="5" x2="42" y2="5" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      <line x1="34" y1="0" x2="34" y2="10" stroke="#38bdf8" strokeWidth="2.8" strokeLinecap="round" />
+      {/* Frase en dos renglones: más grande, con separación de la cruz y cercana al título 'Frase' */}
+      <text
+        x="34"
+        y="37"
+        textAnchor="middle"
+        fill="#38bdf8"
+        fontSize="18.5"
+        fontWeight="bold"
+        letterSpacing="0.3px"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        style={{ userSelect: 'none' }}
+      >
+        ENTRENA
+      </text>
+      <text
+        x="34"
+        y="63"
+        textAnchor="middle"
+        fill="#38bdf8"
+        fontSize="17"
+        fontWeight="bold"
+        letterSpacing="0.3px"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        style={{ userSelect: 'none' }}
+      >
+        TU VISIÓN
+      </text>
+    </svg>
+  )
 }
 
 export const FLAT_FUSION_PAIRS = [
@@ -668,6 +678,20 @@ export const FLAT_FUSION_PAIRS = [
   }),
 
   createStimulusPair({
+    id: 'alien-fusion',
+    name: 'Alien',
+    left: { src: '/vergence/alien-monster-a.svg', alt: 'Alien 1', scale: 1, shadow: 'rgba(98, 251, 246, 0.45)', previewShadow: 'rgba(98, 251, 246, 0.35)' },
+    right: { src: '/vergence/alien-monster-b.svg', alt: 'Alien 2', scale: 1, shadow: 'rgba(98, 251, 246, 0.45)', previewShadow: 'rgba(98, 251, 246, 0.35)' },
+    preview: {
+      base: 'left',
+      baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'inset(0 0 68% 0)' },
+      overlayShadow: 'transparent',
+    },
+  }),
+
+  createStimulusPair({
     id: 'rocket-fusion',
     name: 'Cohete',
     left: { src: '/vergence/rocket-a.svg', alt: 'Cohete 1', scale: 1, shadow: 'rgba(201, 71, 71, 0.45)', previewShadow: 'rgba(201, 71, 71, 0.35)' },
@@ -738,6 +762,20 @@ export const FLAT_FUSION_PAIRS = [
       baseScale: 0.82,
       overlayScale: 0.82,
       overlayPos: { clipPath: 'inset(0 0 65% 60%)' },
+      overlayShadow: 'transparent',
+    },
+  }),
+
+  createStimulusPair({
+    id: 'desert-island-fusion',
+    name: 'Isla',
+    left: { src: '/vergence/desert-island-a.svg', alt: 'Isla desierta sin sol', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    right: { src: '/vergence/desert-island-b.svg', alt: 'Isla desierta sin nubes', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    preview: {
+      base: 'left',
+      baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'circle(14% at 81.25% 18.75%)' },
       overlayShadow: 'transparent',
     },
   }),

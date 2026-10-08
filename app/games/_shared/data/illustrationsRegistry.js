@@ -12,6 +12,7 @@ import { VEHICLES_LIST } from './vehicles'
 import { OBJECTS_LIST } from './objects'
 import { NATURE_LIST } from './nature'
 import { FLAGS_LIST } from './flags'
+import { SPORTS_LIST } from './sports'
 
 /**
  * Devuelve un elemento aleatorio de una lista de ilustraciones
@@ -79,6 +80,14 @@ export const ILLUSTRATION_CATEGORIES = {
     iconSrc: '/objects/emojione--light-bulb.svg',
     fallbackEmoji: '💡',
     items: OBJECTS_LIST,
+  },
+  sports: {
+    id: 'sports',
+    label: 'Deportes',
+    description: 'Elementos y material deportivo ilustrados aleatorios',
+    iconSrc: '/sports/tennis.svg',
+    fallbackEmoji: '🎾',
+    items: SPORTS_LIST,
   },
   nature: {
     id: 'nature',
