@@ -678,6 +678,20 @@ export const FLAT_FUSION_PAIRS = [
   }),
 
   createStimulusPair({
+    id: 'alien-fusion',
+    name: 'Alien',
+    left: { src: '/vergence/alien-monster-a.svg', alt: 'Alien 1', scale: 1, shadow: 'rgba(98, 251, 246, 0.45)', previewShadow: 'rgba(98, 251, 246, 0.35)' },
+    right: { src: '/vergence/alien-monster-b.svg', alt: 'Alien 2', scale: 1, shadow: 'rgba(98, 251, 246, 0.45)', previewShadow: 'rgba(98, 251, 246, 0.35)' },
+    preview: {
+      base: 'left',
+      baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'inset(0 0 68% 0)' },
+      overlayShadow: 'transparent',
+    },
+  }),
+
+  createStimulusPair({
     id: 'rocket-fusion',
     name: 'Cohete',
     left: { src: '/vergence/rocket-a.svg', alt: 'Cohete 1', scale: 1, shadow: 'rgba(201, 71, 71, 0.45)', previewShadow: 'rgba(201, 71, 71, 0.35)' },
@@ -748,6 +762,20 @@ export const FLAT_FUSION_PAIRS = [
       baseScale: 0.82,
       overlayScale: 0.82,
       overlayPos: { clipPath: 'inset(0 0 65% 60%)' },
+      overlayShadow: 'transparent',
+    },
+  }),
+
+  createStimulusPair({
+    id: 'desert-island-fusion',
+    name: 'Isla',
+    left: { src: '/vergence/desert-island-a.svg', alt: 'Isla desierta sin sol', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    right: { src: '/vergence/desert-island-b.svg', alt: 'Isla desierta sin nubes', scale: 1, shadow: 'rgba(66, 173, 226, 0.45)', previewShadow: 'rgba(66, 173, 226, 0.35)' },
+    preview: {
+      base: 'left',
+      baseScale: 0.82,
+      overlayScale: 0.82,
+      overlayPos: { clipPath: 'circle(14% at 81.25% 18.75%)' },
       overlayShadow: 'transparent',
     },
   }),
