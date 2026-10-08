@@ -174,42 +174,6 @@ export default function PeripheryGame() {
     return () => clearCadenceTimer()
   }, [clearCadenceTimer])
 
-  // ── Atajos de Teclado durante la partida ──
-  useEffect(() => {
-    if (!session.started || showSummary) return
-
-    const handleKeyDown = (e) => {
-      // Espacio: Pausar y reanudar
-      if (e.code === 'Space') {
-        e.preventDefault()
-        shellSession.handleTogglePause()
-        return
-      }
-
-      // Tecla R: Reiniciar
-      if (e.key === 'r' || e.key === 'R') {
-        e.preventDefault()
-        shellSession.handleReset()
-        return
-      }
-
-      // Flechas Arriba / Abajo: Modificar tamaño del estímulo
-      if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        stimulus.increaseSize()
-        return
-      }
-      if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        stimulus.decreaseSize()
-        return
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [session.started, showSummary, shellSession])
-
   const isPlayingOrPaused = session.started && (session.isPlaying || session.isPaused)
   const distanceLabel =
     DISTANCE_OPTIONS.find((d) => d.value === distance)?.label ?? 'Media'
@@ -230,6 +194,7 @@ export default function PeripheryGame() {
       title="Periferia"
       hint={PERIPHERY_HINT}
       session={shellSession}
+      stimulus={stimulus}
       speedControl={{
         id: 'periphery-cadence',
         label: 'Tiempo de cambio',
@@ -303,11 +268,6 @@ export default function PeripheryGame() {
         </>
       }
       extraControls={buildExtraControls()}
-      shortcuts={[
-        { keys: ['Espacio'], label: 'Pausar y reanudar' },
-        { keys: ['R'], label: 'Reiniciar' },
-        { keys: ['↑', '↓'], label: 'Tamaño del estímulo' },
-      ]}
     >
       {/* Contador flotante de aciertos visible en la pantalla de juego durante la partida */}
       {session.started && mode === 'name-and-tap' && (

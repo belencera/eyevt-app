@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { DURATION_OPTIONS } from '../data/constants'
 import { formatTime } from '../utils/formatTime'
@@ -44,6 +45,9 @@ export function GameShell({
   shortcuts,
   shortcutsHint,
   bottomContent,
+  stimulus,
+  onIncreaseSize,
+  onDecreaseSize,
   hideDuration = false,
   split = 'compact',
   isFullscreen,
@@ -65,6 +69,125 @@ export function GameShell({
     showTimer,
     timerProgress,
   } = session
+
+  // ── Controles Globales de Teclado (ESC: Salir, Espacio: Pausar/Reanudar, R: Reiniciar, Flechas: Tamaño) ──
+  useEffect(() => {
+    if (!started && !isCountingDown) return
+
+    const handleKeyDown = (e) => {
+      // ESC: Salir de la partida y volver al menú
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        handleReset?.()
+        return
+      }
+
+      // Espacio: Pausar y reanudar (no durante cuenta atrás)
+      if (e.code === 'Space') {
+        if (isCountingDown) return
+        e.preventDefault()
+        handleTogglePause?.()
+        return
+      }
+
+      // Tecla R: Reiniciar con cuenta atrás 3-2-1 a configuración inicial
+      if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault()
+        handleStart?.()
+        return
+      }
+
+      // Flechas Arriba / Abajo: Modificar tamaño del estímulo
+      if (e.key === 'ArrowUp') {
+        if (onIncreaseSize) {
+          e.preventDefault()
+          onIncreaseSize()
+          return
+        }
+        if (stimulus?.increaseSize) {
+          e.preventDefault()
+          stimulus.increaseSize()
+          return
+        }
+      }
+
+      if (e.key === 'ArrowDown') {
+        if (onDecreaseSize) {
+          e.preventDefault()
+          onDecreaseSize()
+          return
+        }
+        if (stimulus?.decreaseSize) {
+          e.preventDefault()
+          stimulus.decreaseSize()
+          return
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [
+    started,
+    isCountingDown,
+    handleReset,
+    handleTogglePause,
+    handleStart,
+    stimulus,
+    onIncreaseSize,
+    onDecreaseSize,
+  ])
+
+  // Asegurar que 'Espacio', 'R', 'Tamaño' y 'Esc' siempre formen parte de la tarjeta de atajos
+  const resolvedShortcuts = useMemo(() => {
+    if (!shortcuts && !bottomContent && !stimulus && !onIncreaseSize) return null
+    if (bottomContent && !shortcuts) return null
+
+    const list = shortcuts ? [...shortcuts] : []
+
+    // 1. Espacio: Pausar (al principio si no está)
+    const hasSpace = list.some((item) =>
+      item.keys.some((k) => k.toLowerCase() === 'espacio' || k.toLowerCase() === 'space')
+    )
+    if (!hasSpace) {
+      list.unshift({ keys: ['Espacio'], label: 'Pausar' })
+    }
+
+    // 2. R: Reiniciar (tras Espacio si no está)
+    const hasR = list.some((item) =>
+      item.keys.some((k) => k.toLowerCase() === 'r')
+    )
+    if (!hasR) {
+      const spaceIdx = list.findIndex((item) =>
+        item.keys.some((k) => k.toLowerCase() === 'espacio' || k.toLowerCase() === 'space')
+      )
+      const insertIdx = spaceIdx !== -1 ? spaceIdx + 1 : 1
+      list.splice(insertIdx, 0, { keys: ['R'], label: 'Reiniciar' })
+    }
+
+    // 3. Tamaño: Flechas Arriba / Abajo (si el juego lo soporta y no está ya definido)
+    const hasSize = list.some((item) =>
+      item.keys.some((k) => k === '↑' || k === '↓')
+    )
+    const supportsSize = Boolean(onIncreaseSize || stimulus?.increaseSize)
+    if (!hasSize && supportsSize) {
+      const rIdx = list.findIndex((item) =>
+        item.keys.some((k) => k.toLowerCase() === 'r')
+      )
+      const insertIdx = rIdx !== -1 ? rIdx + 1 : list.length
+      list.splice(insertIdx, 0, { keys: ['↑', '↓'], label: 'Tamaño' })
+    }
+
+    // 4. Esc: Salir (al final si no está)
+    const hasEsc = list.some((item) =>
+      item.keys.some((k) => k.toLowerCase() === 'esc' || k.toLowerCase() === 'escape')
+    )
+    if (!hasEsc) {
+      list.push({ keys: ['Esc'], label: 'Salir' })
+    }
+
+    return list
+  }, [shortcuts, bottomContent, stimulus, onIncreaseSize])
 
   const isGameActive =
     isFullscreen !== undefined ? isFullscreen : started || isCountingDown
@@ -188,10 +311,10 @@ export function GameShell({
           </div>
 
           {/* ── FILA INFERIOR: Atajos de teclado a ancho completo ── */}
-          {(shortcuts || bottomContent) && (
+          {(resolvedShortcuts || bottomContent) && (
             <div className="dashCard dashShortcutsCard">
-              {shortcuts ? (
-                <KeyboardShortcutsBar shortcuts={shortcuts} hint={shortcutsHint} />
+              {resolvedShortcuts ? (
+                <KeyboardShortcutsBar shortcuts={resolvedShortcuts} hint={shortcutsHint} />
               ) : (
                 bottomContent
               )}

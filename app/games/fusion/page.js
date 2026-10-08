@@ -287,38 +287,8 @@ export default function FusionGame() {
     if (!session.started) return
 
     const handleKeyDown = (e) => {
-      // Espacio: Pausar y reanudar
-      if (e.code === 'Space') {
-        e.preventDefault()
-        session.handleTogglePause()
-        return
-      }
-
-      // Tecla R: Reiniciar
-      if (e.key === 'r' || e.key === 'R') {
-        e.preventDefault()
-        if (mode === 'fixed') {
-          resetToInitial()
-        } else {
-          handleInGameReset()
-        }
-        return
-      }
-
       // Si está en pausa, no modificar tamaño ni distancia
       if (session.isPaused) return
-
-      // Ajuste de tamaño continuo común para ambos modos con flechas vertical
-      if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        adjustSize(4)
-        return
-      }
-      if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        adjustSize(-4)
-        return
-      }
 
       if (mode === 'fixed') {
         if (e.key === 'ArrowLeft' || e.key === '-') {
@@ -341,7 +311,7 @@ export default function FusionGame() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [session.started, session.isPaused, session.handleTogglePause, mode, adjustDistance, adjustSpeed, adjustSize, resetToInitial, handleInGameReset])
+  }, [session.started, session.isPaused, mode, adjustDistance, adjustSpeed])
 
   // ── Selector de Estímulos (Columna 1 · Izquierda) ──
   const stimulusSelector = (
@@ -769,10 +739,7 @@ export default function FusionGame() {
 
   // ── Atajos de Teclado (Fila Inferior · Ancho completo) ──
   const shortcuts = [
-    { keys: ['↑', '↓'], label: 'Tamaño' },
     { keys: ['←', '→'], label: mode === 'fixed' ? 'Separación' : 'Velocidad' },
-    { keys: ['Espacio'], label: 'Pausar y reanudar' },
-    { keys: ['R'], label: 'Reiniciar' },
   ]
 
   return (
@@ -781,6 +748,8 @@ export default function FusionGame() {
       hint="Fusionar los dos estímulos hasta ver una única imagen central nítida."
       session={session}
       split="wide"
+      onIncreaseSize={() => adjustSize(4)}
+      onDecreaseSize={() => adjustSize(-4)}
       stimulusGrid={stimulusSelector}
       gameControls={gameControls}
       extraControls={extraControls}

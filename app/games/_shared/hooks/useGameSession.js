@@ -101,6 +101,9 @@ export function useGameSession(callbacks = {}) {
     setStarted(true)
     setTimeLeft(null)
 
+    callbacksRef.current.onReset?.()
+    callbacksRef.current.onStart?.()
+
     setCountdown(COUNTDOWN_START)
     let remaining = COUNTDOWN_START
 
@@ -172,6 +175,7 @@ export function useGameSession(callbacks = {}) {
     durationSetting,
     setDurationSetting,
     handleStart,
+    handleRestart: handleStart,
     handlePause,
     handleResume,
     handleReset,
