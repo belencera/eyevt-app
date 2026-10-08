@@ -24,6 +24,7 @@ export const STIMULUS_TYPES = {
   EMOJIS: 'emojis',
   VEHICLES: 'vehicles',
   OBJECTS: 'objects',
+  SPORTS: 'sports',
   NATURE: 'nature',
   FLAGS: 'flags',
 }
@@ -100,6 +101,12 @@ export const STIMULUS_OPTIONS = [
     label: 'Objetos',
     iconType: 'objects',
     description: 'Objetos cotidianos ilustrados aleatorios',
+  },
+  {
+    value: 'sports',
+    label: 'Deportes',
+    iconType: 'sports',
+    description: 'Elementos y material deportivo ilustrados aleatorios',
   },
   {
     value: 'nature',
@@ -182,5 +189,6 @@ export * from './vehicles'
 export * from './objects'
 export * from './nature'
 export * from './flags'
+export * from './sports'
 export * from './illustrationsRegistry'
 export * from './periphery'
