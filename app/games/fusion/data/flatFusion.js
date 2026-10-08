@@ -22,17 +22,19 @@ export function FlatFusionItem({ src, eye = 'both', size = 70, shadowColor = 'tr
   const [svgHtml, setSvgHtml] = React.useState(() => (src ? svgCache.get(src) || '' : ''))
 
   React.useEffect(() => {
-    if (!src) return
-    if (svgCache.has(src)) {
-      setSvgHtml(svgCache.get(src))
-    } else {
-      fetch(src)
-        .then((res) => res.text())
-        .then((text) => {
-          svgCache.set(src, text)
-          setSvgHtml(text)
-        })
-        .catch((err) => console.error('Error al cargar SVG de fusión:', src, err))
+    if (!src || svgCache.has(src)) return
+
+    let isMounted = true
+    fetch(src)
+      .then((res) => res.text())
+      .then((text) => {
+        svgCache.set(src, text)
+        if (isMounted) setSvgHtml(text)
+      })
+      .catch((err) => console.error('Error al cargar SVG de fusión:', src, err))
+
+    return () => {
+      isMounted = false
     }
   }, [src])
 

@@ -92,7 +92,9 @@ export default function SacadesGame() {
 
   // Referencias mutables para el seguimiento del paso de lectura y modo
   const movementModeRef = useRef(movementMode)
-  movementModeRef.current = movementMode
+  useEffect(() => {
+    movementModeRef.current = movementMode
+  }, [movementMode])
 
   const readingPosRef = useRef({ col: 0, row: 0 })
 

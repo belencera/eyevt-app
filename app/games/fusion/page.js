@@ -3,12 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   GameShell,
-  OptionPicker,
   useGameSession,
-  DURATION_OPTIONS,
-  IconPlay,
-  IconPause,
-  IconReset,
 } from '../_shared'
 import {
   STIMULI_CATEGORIES,
@@ -16,6 +11,9 @@ import {
   FUSION_MODES,
   MOTION_TYPES,
 } from './data/stimuliPairs'
+import { IconModeFixed, IconModeMotion } from './components/FusionIcons'
+import { FusionInGameBar } from './components/FusionInGameBar'
+import { FusionExtraControls } from './components/FusionExtraControls'
 import './fusion.css'
 
 // ── Niveles de Velocidad Progresiva (Modo Movimiento) ──
@@ -28,79 +26,6 @@ const MOTION_SPEED_LEVELS = [
   { level: 4, pxPerSec: 13, label: 'Moderada' },
   { level: 5, pxPerSec: 19, label: 'Media' },
 ]
-
-function IconTriangleLeft() {
-  return (
-    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden>
-      <polygon
-        points="16,5 7,12 16,19"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function IconTriangleRight() {
-  return (
-    <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden>
-      <polygon
-        points="8,5 17,12 8,19"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function IconMinus() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  )
-}
-
-function IconPlus() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  )
-}
-
-function IconModeFixed() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="5" y="11" width="14" height="10" rx="2" />
-      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-      <circle cx="12" cy="16" r="1.5" fill="currentColor" />
-    </svg>
-  )
-}
-
-function IconModeMotion() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M17 8l4 4-4 4" />
-      <path d="M7 16l-4-4 4-4" />
-      <line x1="3" y1="12" x2="21" y2="12" />
-    </svg>
-  )
-}
-
-function IconGauge() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M3.34 19a10 10 0 1 1 17.32 0" />
-      <path d="m12 14 4-4" />
-      <circle cx="12" cy="14" r="1.5" fill="currentColor" />
-    </svg>
-  )
-}
 
 export default function FusionGame() {
   // ── Estados de Configuración ──
@@ -120,18 +45,23 @@ export default function FusionGame() {
   const [currentDistance, setCurrentDistance] = useState(140) // px
   const [motionActive, setMotionActive] = useState(false)
 
-  // Referencias para el bucle de animación
+  // Referencias para el bucle de animación sin mutación directa durante el render
   const currentDistanceRef = useRef(currentDistance)
-  currentDistanceRef.current = currentDistance
-
   const speedRef = useRef(speed)
-  speedRef.current = speed
-
   const motionActiveRef = useRef(motionActive)
-  motionActiveRef.current = motionActive
-
-  // Dirección para el movimiento alternante (1: alejando, -1: acercando)
   const motionDirectionRef = useRef(1)
+
+  useEffect(() => {
+    currentDistanceRef.current = currentDistance
+  }, [currentDistance])
+
+  useEffect(() => {
+    speedRef.current = speed
+  }, [speed])
+
+  useEffect(() => {
+    motionActiveRef.current = motionActive
+  }, [motionActive])
 
   // Pareja de estímulos seleccionada
   const activePair =
@@ -200,7 +130,7 @@ export default function FusionGame() {
     }
   }
 
-  // ── Ajuste de Distancia (Paso de 10 px) ──
+  // ── Ajuste de Distancia (Paso de 4 px) ──
   const adjustDistance = useCallback((delta) => {
     setCurrentDistance((prev) => {
       const maxDist = typeof window !== 'undefined' ? window.innerWidth - 120 : 600
@@ -209,7 +139,7 @@ export default function FusionGame() {
     })
   }, [])
 
-  // ── Ajuste de Tamaño Continuo (Paso suave de 4 px, rango 36 px a 680 px) ──
+  // ── Ajuste de Tamaño Continuo (Paso de 4 px, rango 36 px a 680 px) ──
   const adjustSize = useCallback((delta) => {
     setStimulusSize((prev) => {
       const next = prev + delta
@@ -465,277 +395,21 @@ export default function FusionGame() {
   )
 
   // ── Ajustes Adicionales (Debajo de Duración de la sesión) ──
-  const PRESET_LETTERS = ['E', 'A', 'O', 'X']
-  const PRESET_WORDS = ['CASA', 'LUNA', 'LUZ']
-
-  const extraControls = activePair.isDynamicLetter ? (
-    <div className="dashDurationBlock">
-      <span className="controlLabel" id="conv-letter-label">
-        Letra del estímulo
-      </span>
-      <div
-        className="durationRow"
-        role="radiogroup"
-        aria-labelledby="conv-letter-label"
-      >
-        {PRESET_LETTERS.map((char) => {
-          const isSelected = stimulusLetter === char
-          return (
-            <button
-              key={char}
-              type="button"
-              role="radio"
-              aria-checked={isSelected}
-              disabled={!session.isIdle}
-              className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
-              onClick={() => setStimulusLetter(char)}
-              title={`Elegir letra ${char}`}
-            >
-              {char}
-            </button>
-          )
-        })}
-
-        <div
-          className={`dashPillBtn convLetterInputPill ${
-            !PRESET_LETTERS.includes(stimulusLetter) ? 'dashPillBtnActive' : ''
-          }`}
-          onClick={() => {
-            const el = document.getElementById('custom-letter-input')
-            if (el) el.focus()
-          }}
-        >
-          <label htmlFor="custom-letter-input" className="convLetterInputPillLabel">
-            Escribir:
-          </label>
-          <input
-            id="custom-letter-input"
-            type="text"
-            maxLength={2}
-            value={stimulusLetter}
-            onChange={(e) => {
-              const char = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(-1)
-              if (char) {
-                setStimulusLetter(char)
-              }
-            }}
-            onFocus={(e) => e.target.select()}
-            className="convLetterInlineInput"
-            placeholder="E"
-            title="Haz clic para escribir cualquier letra o número"
-            disabled={!session.isIdle}
-          />
-        </div>
-      </div>
-    </div>
-  ) : activePair.isDynamicWord ? (
-    <>
-      <div className="dashDurationBlock">
-        <span className="controlLabel" id="conv-word-label">
-          Palabra del estímulo
-        </span>
-        <div
-          className="durationRow"
-          role="radiogroup"
-          aria-labelledby="conv-word-label"
-        >
-          {PRESET_WORDS.map((w) => {
-            const isSelected = stimulusWord === w
-            return (
-              <button
-                key={w}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                disabled={!session.isIdle}
-                className={`dashPillBtn ${isSelected ? 'dashPillBtnActive' : ''}`}
-                onClick={() => setStimulusWord(w)}
-                title={`Elegir palabra ${w}`}
-              >
-                {w}
-              </button>
-            )
-          })}
-
-          <div
-            className={`dashPillBtn convWordInputPill ${
-              !PRESET_WORDS.includes(stimulusWord) ? 'dashPillBtnActive' : ''
-            }`}
-            onClick={() => {
-              const el = document.getElementById('custom-word-input')
-              if (el) el.focus()
-            }}
-          >
-            <label htmlFor="custom-word-input" className="convLetterInputPillLabel">
-              Escribir:
-            </label>
-            <input
-              id="custom-word-input"
-              type="text"
-              maxLength={8}
-              value={stimulusWord}
-              onChange={(e) => {
-                const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ]/g, '').toUpperCase()
-                if (val) {
-                  setStimulusWord(val)
-                }
-              }}
-              onFocus={(e) => e.target.select()}
-              className="convWordInlineInput"
-              placeholder="CASA"
-              title="Haz clic para escribir cualquier palabra"
-              disabled={!session.isIdle}
-            />
-          </div>
-        </div>
-      </div>
-
-      {activePair.category !== 'estereopsis' && (
-        <div className="dashDurationBlock">
-          <div className="convModeHeader">
-            <span className="controlLabel" id="conv-suppression-label-word">
-              Supresión de letras
-            </span>
-            <span className="convModeSubtext">
-              Control antisupresión eliminando letras de manera aleatoria
-            </span>
-          </div>
-          <div
-            className="durationRow"
-            role="radiogroup"
-            aria-labelledby="conv-suppression-label-word"
-          >
-            <button
-              type="button"
-              role="radio"
-              aria-checked={!letterSuppression}
-              disabled={!session.isIdle}
-              className={`dashPillBtn ${!letterSuppression ? 'dashPillBtnActive' : ''}`}
-              onClick={() => setLetterSuppression(false)}
-              title="Mostrar la palabra completa en ambos ojos"
-            >
-              Desactivada
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={letterSuppression}
-              disabled={!session.isIdle}
-              className={`dashPillBtn ${letterSuppression ? 'dashPillBtnActive' : ''}`}
-              onClick={() => {
-                setLetterSuppression(true)
-                setSuppressionSeed((s) => s + 1)
-              }}
-              title="Ocultar aleatoriamente una letra por ojo para control antisupresión"
-            >
-              Activa
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  ) : activePair.isDynamicPhrase ? (
-    <>
-      <div className="dashDurationBlock">
-        <span className="controlLabel" id="conv-phrase-label">
-          Frase del estímulo
-        </span>
-        <div
-          className="durationRow"
-          role="radiogroup"
-          aria-labelledby="conv-phrase-label"
-        >
-          <button
-            type="button"
-            role="radio"
-            aria-checked={stimulusPhrase === 'ENTRENA TU VISIÓN'}
-            disabled={!session.isIdle}
-            className={`dashPillBtn ${stimulusPhrase === 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''}`}
-            onClick={() => setStimulusPhrase('ENTRENA TU VISIÓN')}
-            title="Elegir frase de ejemplo: ENTRENA TU VISIÓN"
-            style={{ flex: 1.2 }}
-          >
-            ENTRENA TU VISIÓN
-          </button>
-
-          <div
-            className={`dashPillBtn convPhraseInputPill ${
-              stimulusPhrase !== 'ENTRENA TU VISIÓN' ? 'dashPillBtnActive' : ''
-            }`}
-            onClick={() => {
-              const el = document.getElementById('custom-phrase-input')
-              if (el) el.focus()
-            }}
-          >
-            <label htmlFor="custom-phrase-input" className="convLetterInputPillLabel">
-              Escribir:
-            </label>
-            <input
-              id="custom-phrase-input"
-              type="text"
-              maxLength={45}
-              value={stimulusPhrase}
-              onChange={(e) => {
-                const val = e.target.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s.,¡!¿?]/g, '').toUpperCase()
-                if (val) {
-                  setStimulusPhrase(val)
-                }
-              }}
-              onFocus={(e) => e.target.select()}
-              className="convPhraseInlineInput"
-              placeholder="ENTRENA TU VISIÓN"
-              title="Escribe cualquier frase personalizada (se distribuirá en renglones)"
-              disabled={!session.isIdle}
-            />
-          </div>
-        </div>
-      </div>
-
-      {activePair.category !== 'estereopsis' && (
-        <div className="dashDurationBlock">
-          <div className="convModeHeader">
-            <span className="controlLabel" id="conv-suppression-label-phrase">
-              Supresión de letras
-            </span>
-            <span className="convModeSubtext">
-              Control antisupresión eliminando letras de manera aleatoria
-            </span>
-          </div>
-          <div
-            className="durationRow"
-            role="radiogroup"
-            aria-labelledby="conv-suppression-label-phrase"
-          >
-            <button
-              type="button"
-              role="radio"
-              aria-checked={!letterSuppression}
-              disabled={!session.isIdle}
-              className={`dashPillBtn ${!letterSuppression ? 'dashPillBtnActive' : ''}`}
-              onClick={() => setLetterSuppression(false)}
-              title="Mostrar todas las letras en ambos ojos"
-            >
-              Desactivada
-            </button>
-            <button
-              type="button"
-              role="radio"
-              aria-checked={letterSuppression}
-              disabled={!session.isIdle}
-              className={`dashPillBtn ${letterSuppression ? 'dashPillBtnActive' : ''}`}
-              onClick={() => {
-                setLetterSuppression(true)
-                setSuppressionSeed((s) => s + 1)
-              }}
-              title="Ocultar aleatoriamente una letra por palabra en cada ojo para control antisupresión"
-            >
-              Activa
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  ) : null
+  const extraControls = (
+    <FusionExtraControls
+      activePair={activePair}
+      disabled={!session.isIdle}
+      stimulusLetter={stimulusLetter}
+      setStimulusLetter={setStimulusLetter}
+      stimulusWord={stimulusWord}
+      setStimulusWord={setStimulusWord}
+      stimulusPhrase={stimulusPhrase}
+      setStimulusPhrase={setStimulusPhrase}
+      letterSuppression={letterSuppression}
+      setLetterSuppression={setLetterSuppression}
+      setSuppressionSeed={setSuppressionSeed}
+    />
+  )
 
   // ── Atajos de Teclado (Fila Inferior · Ancho completo) ──
   const shortcuts = [
@@ -801,165 +475,19 @@ export default function FusionGame() {
 
         {/* ── Barra de Controles en Juego (Inferior Flotante Limpia) ── */}
         {session.started && (
-          <div className="convInGameBar">
-            <div className="convControlPill">
-              {mode === 'fixed' ? (
-                <>
-                  {/* Flecha Triangular Izquierda: Acercar estímulos */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={() => adjustDistance(-4)}
-                    title="Acercar estímulos (Flecha Izquierda o -)"
-                    aria-label="Acercar estímulos"
-                  >
-                    <IconTriangleLeft />
-                  </button>
-
-                  <span className="convDistanceBadge">
-                    {Math.round(currentDistance)} px
-                  </span>
-
-                  {/* Flecha Triangular Derecha: Alejar estímulos */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={() => adjustDistance(4)}
-                    title="Alejar estímulos (Flecha Derecha o +)"
-                    aria-label="Alejar estímulos"
-                  >
-                    <IconTriangleRight />
-                  </button>
-
-                  <div className="convBarDivider" aria-hidden="true" />
-
-                  {/* Reducir tamaño */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={() => adjustSize(-4)}
-                    disabled={stimulusSize <= 36}
-                    title="Reducir tamaño (Flecha Abajo)"
-                    aria-label="Reducir tamaño"
-                  >
-                    <IconMinus />
-                  </button>
-
-                  <span className="convDistanceBadge" style={{ minWidth: '60px' }}>
-                    {stimulusSize} px
-                  </span>
-
-                  {/* Aumentar tamaño */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={() => adjustSize(4)}
-                    disabled={stimulusSize >= 680}
-                    title="Aumentar tamaño (Flecha Arriba)"
-                    aria-label="Aumentar tamaño"
-                  >
-                    <IconPlus />
-                  </button>
-                </>
-              ) : (
-                <>
-                  {/* Play / Pausa */}
-                  <button
-                    type="button"
-                    className={`convCircleBtn ${motionActive ? 'convCircleBtnPrimary' : ''}`}
-                    onClick={toggleMotionPlay}
-                    title={motionActive ? 'Pausar movimiento (Espacio)' : 'Iniciar movimiento (Espacio)'}
-                    aria-label={motionActive ? 'Pausar movimiento' : 'Iniciar movimiento'}
-                  >
-                    {motionActive ? <IconPause /> : <IconPlay />}
-                  </button>
-
-                  {/* Distancia actual */}
-                  <span className="convDistanceBadge">
-                    {Math.round(currentDistance)} px
-                  </span>
-
-                  {/* Reiniciar distancia inicial */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={handleInGameReset}
-                    title="Reiniciar a distancia y velocidad iniciales (R)"
-                    aria-label="Reiniciar a distancia y velocidad iniciales"
-                  >
-                    <IconReset />
-                  </button>
-
-                  <div className="convBarDivider" aria-hidden="true" />
-
-                  {/* Reducir velocidad (-) */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={() => adjustSpeed(-1)}
-                    disabled={speed <= 1}
-                    title="Reducir velocidad"
-                    aria-label="Reducir velocidad"
-                  >
-                    <IconMinus />
-                  </button>
-
-                  {/* Símbolo e indicador numérico de velocidad */}
-                  <span
-                    className="convSpeedBadge"
-                    title={`Velocidad progresiva: Nivel ${speed} (${MOTION_SPEED_LEVELS[speed - 1]?.label || ''})`}
-                  >
-                    <IconGauge />
-                    <span className="convSpeedNum">
-                      {speed}
-                    </span>
-                  </span>
-
-                  {/* Aumentar velocidad (+) */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={() => adjustSpeed(1)}
-                    disabled={speed >= MOTION_SPEED_LEVELS.length}
-                    title="Aumentar velocidad"
-                    aria-label="Aumentar velocidad"
-                  >
-                    <IconPlus />
-                  </button>
-
-                  <div className="convBarDivider" aria-hidden="true" />
-
-                  {/* Reducir tamaño */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={() => adjustSize(-4)}
-                    disabled={stimulusSize <= 36}
-                    title="Reducir tamaño (Flecha Abajo)"
-                    aria-label="Reducir tamaño"
-                  >
-                    <IconMinus />
-                  </button>
-
-                  <span className="convDistanceBadge" style={{ minWidth: '60px' }}>
-                    {stimulusSize} px
-                  </span>
-
-                  {/* Aumentar tamaño */}
-                  <button
-                    type="button"
-                    className="convCircleBtn"
-                    onClick={() => adjustSize(4)}
-                    disabled={stimulusSize >= 680}
-                    title="Aumentar tamaño (Flecha Arriba)"
-                    aria-label="Aumentar tamaño"
-                  >
-                    <IconPlus />
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+          <FusionInGameBar
+            mode={mode}
+            currentDistance={currentDistance}
+            adjustDistance={adjustDistance}
+            stimulusSize={stimulusSize}
+            adjustSize={adjustSize}
+            motionActive={motionActive}
+            toggleMotionPlay={toggleMotionPlay}
+            handleInGameReset={handleInGameReset}
+            speed={speed}
+            adjustSpeed={adjustSpeed}
+            motionSpeedLevels={MOTION_SPEED_LEVELS}
+          />
         )}
       </div>
     </GameShell>
