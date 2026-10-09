@@ -59,47 +59,12 @@ export default function FixationGame() {
     return () => clearTimer()
   }, [session.isPlaying, session.isPaused, changeInterval, stimulus.stimulusType])
 
-  // ── Atajos de Teclado durante la partida ──
-  useEffect(() => {
-    if (!session.started) return
-
-    const handleKeyDown = (e) => {
-      // Espacio: Pausar y reanudar
-      if (e.code === 'Space') {
-        e.preventDefault()
-        session.handleTogglePause()
-        return
-      }
-
-      // Tecla R: Reiniciar
-      if (e.key === 'r' || e.key === 'R') {
-        e.preventDefault()
-        session.handleReset()
-        return
-      }
-
-      // Flechas Arriba / Abajo: Modificar tamaño del estímulo
-      if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        stimulus.increaseSize()
-        return
-      }
-      if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        stimulus.decreaseSize()
-        return
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [session.started, session.handleTogglePause, session.handleReset])
-
   return (
     <GameShell
       title="Fijación"
       hint="Mantener la mirada fija en el estímulo central sin mover los ojos ni la cabeza."
       session={session}
+      stimulus={stimulus}
       speedControl={{
         id: 'change-interval',
         label: 'Tiempo de cambio',
@@ -124,11 +89,6 @@ export default function FixationGame() {
           ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="fixation" />
           : null
       }
-      shortcuts={[
-        { keys: ['Espacio'], label: 'Pausar y reanudar' },
-        { keys: ['R'], label: 'Reiniciar' },
-        { keys: ['↑', '↓'], label: 'Tamaño del estímulo' },
-      ]}
     >
       <StimulusDot
         position={CENTER_POSITION}

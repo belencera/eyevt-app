@@ -92,7 +92,9 @@ export default function SacadesGame() {
 
   // Referencias mutables para el seguimiento del paso de lectura y modo
   const movementModeRef = useRef(movementMode)
-  movementModeRef.current = movementMode
+  useEffect(() => {
+    movementModeRef.current = movementMode
+  }, [movementMode])
 
   const readingPosRef = useRef({ col: 0, row: 0 })
 
@@ -182,31 +184,6 @@ export default function SacadesGame() {
     if (!session.started) return
 
     const handleKeyDown = (e) => {
-      // Espacio: Pausar y reanudar
-      if (e.code === 'Space') {
-        e.preventDefault()
-        session.handleTogglePause()
-        return
-      }
-
-      // Tecla R: Reiniciar
-      if (e.key === 'r' || e.key === 'R') {
-        e.preventDefault()
-        session.handleReset()
-        return
-      }
-
-      // Flechas Arriba / Abajo: Modificar tamaño del estímulo
-      if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        stimulus.increaseSize()
-        return
-      } else if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        stimulus.decreaseSize()
-        return
-      }
-
       if (session.isPaused) return
 
       if (e.key === 'ArrowLeft' || e.key === '-') {
@@ -226,7 +203,7 @@ export default function SacadesGame() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [session.started, session.isPaused, session.handleTogglePause, session.handleReset])
+  }, [session.started, session.isPaused])
 
   const showDot = session.started && (session.isPlaying || session.isPaused)
 
@@ -235,6 +212,7 @@ export default function SacadesGame() {
       title="Sacádicos"
       hint="Mover los ojos con precisión hacia el estímulo sin mover la cabeza."
       session={session}
+      stimulus={stimulus}
       gameControls={
         <div className="modeGridContainer">
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap', marginBottom: '4px' }}>
@@ -305,9 +283,6 @@ export default function SacadesGame() {
       }
       shortcuts={[
         { keys: ['←', '→'], label: 'Velocidad de salto' },
-        { keys: ['↑', '↓'], label: 'Tamaño del estímulo' },
-        { keys: ['Espacio'], label: 'Pausar y reanudar' },
-        { keys: ['R'], label: 'Reiniciar' },
       ]}
       shortcutsHint="Inicio: Vel. 28"
     >
