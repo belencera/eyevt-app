@@ -26,6 +26,8 @@ function StimulusIcon({ type }) {
       return <span className="stimulusIconColors" aria-hidden />
     case 'letters':
       return <span className="stimulusIconLetters" aria-hidden>A</span>
+    case 'pbqd':
+      return <span className="stimulusIconWords" aria-hidden>pbqd</span>
     case 'words':
       return <span className="stimulusIconWords" aria-hidden>ABC</span>
     case 'numbers':

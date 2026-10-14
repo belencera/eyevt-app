@@ -108,7 +108,7 @@ export default function EyeTrackingGame() {
 
       if (type === 'colors') {
         targetInterval = stim.refs.colorIntervalRef.current
-      } else if (type === 'letters') {
+      } else if (type === 'letters' || type === 'pbqd') {
         targetInterval = stim.refs.letterIntervalRef.current
       } else if (type === 'words') {
         targetInterval = stim.refs.wordIntervalRef.current

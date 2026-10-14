@@ -15,8 +15,11 @@ export function StimulusLetter({
   sizePx,
   position,
   isPaused = false,
+  uppercase = true,
 }) {
-  const displayLetter = String(letter || 'A').toUpperCase()
+  const displayLetter = uppercase
+    ? String(letter || 'A').toUpperCase()
+    : String(letter || 'a').toLowerCase()
 
   return (
     <div

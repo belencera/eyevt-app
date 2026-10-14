@@ -50,7 +50,7 @@ export function StimulusExtraControls({
         />
       )}
 
-      {type === 'letters' && showIntervals && (
+      {(type === 'letters' || type === 'pbqd') && showIntervals && (
         <OptionPicker
           id={id('change-interval')}
           label="Intervalo de cambio"

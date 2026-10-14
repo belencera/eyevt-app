@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   getRandomColor,
   getRandomLetter,
+  getRandomPbqd,
   getRandomWord,
   getRandomNumber,
   getRandomArrow,
@@ -33,9 +34,9 @@ export function useStimulusManager(initialType = 'classic') {
   const [colorInterval, setColorInterval] = useState(3)
   const [currentColor, setCurrentColor] = useState({ name: 'Celeste', hex: '#38bdf8' })
 
-  // Opciones de letras
+  // Opciones de letras (compartidas con pbqd)
   const [letterInterval, setLetterInterval] = useState(3)
-  const [currentLetter, setCurrentLetter] = useState('A')
+  const [currentLetter, setCurrentLetter] = useState(() => (initialType === 'pbqd' ? getRandomPbqd() : 'A'))
 
   // Opciones de palabras
   const [wordLength, setWordLength] = useState(4)
@@ -179,6 +180,13 @@ export function useStimulusManager(initialType = 'classic') {
       return next
     }
 
+    if (type === 'pbqd') {
+      const next = getRandomPbqd(currentLetterRef.current)
+      currentLetterRef.current = next
+      setCurrentLetter(next)
+      return next
+    }
+
     if (type === 'words') {
       const next = getRandomWord(wordLengthRef.current, currentWordRef.current)
       currentWordRef.current = next
@@ -227,6 +235,10 @@ export function useStimulusManager(initialType = 'classic') {
       const next = getRandomLetter()
       currentLetterRef.current = next
       setCurrentLetter(next)
+    } else if (newType === 'pbqd') {
+      const next = getRandomPbqd()
+      currentLetterRef.current = next
+      setCurrentLetter(next)
     } else if (newType === 'words') {
       const next = getRandomWord(wordLengthRef.current)
       currentWordRef.current = next
@@ -259,6 +271,10 @@ export function useStimulusManager(initialType = 'classic') {
       setCurrentColor(def)
     } else if (type === 'letters') {
       const next = getRandomLetter(currentLetterRef.current)
+      currentLetterRef.current = next
+      setCurrentLetter(next)
+    } else if (type === 'pbqd') {
+      const next = getRandomPbqd(currentLetterRef.current)
       currentLetterRef.current = next
       setCurrentLetter(next)
     } else if (type === 'words') {
