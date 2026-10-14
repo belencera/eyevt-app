@@ -28,14 +28,15 @@ export function StimulusDot({
   const sizePx = stimulus?.sizePx
   const sizeLevel = stimulus?.sizeLevel ?? 'md'
 
-  if (type === 'letters') {
+  if (type === 'letters' || type === 'pbqd') {
     return (
       <StimulusLetter
         position={position}
-        letter={stimulus?.currentLetter ?? 'A'}
+        letter={stimulus?.currentLetter ?? (type === 'pbqd' ? 'p' : 'A')}
         size={sizeLevel}
         sizePx={sizePx}
         isPaused={isPaused}
+        uppercase={type !== 'pbqd'}
       />
     )
   }

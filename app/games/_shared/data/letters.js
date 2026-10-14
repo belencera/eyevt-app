@@ -22,3 +22,13 @@ export function getRandomLetter(prevLetter = null, alphabet = UPPERCASE_ALPHABET
   const idx = Math.floor(Math.random() * pool.length)
   return pool[idx]
 }
+
+export const PBQD_LETTERS = ['p', 'b', 'q', 'd']
+
+/**
+ * Devuelve una letra aleatoria de entre 'p', 'b', 'q', 'd' en minúscula,
+ * evitando repetir la letra inmediatamente anterior si es posible.
+ */
+export function getRandomPbqd(prevLetter = null) {
+  return getRandomLetter(prevLetter, PBQD_LETTERS)
+}

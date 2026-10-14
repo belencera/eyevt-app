@@ -15,6 +15,7 @@ export const STIMULUS_TYPES = {
   CLASSIC: 'classic',
   COLORS: 'colors',
   LETTERS: 'letters',
+  PBQD: 'pbqd',
   WORDS: 'words',
   NUMBERS: 'numbers',
   ARROWS: 'arrows',
@@ -53,6 +54,12 @@ export const STIMULUS_OPTIONS = [
     label: 'Letras',
     iconType: 'letters',
     description: 'Letras mayúsculas del abecedario',
+  },
+  {
+    value: 'pbqd',
+    label: 'pbqd',
+    iconType: 'pbqd',
+    description: 'Letras p, b, q y d en minúscula',
   },
   {
     value: 'words',
