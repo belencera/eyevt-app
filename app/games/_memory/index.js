@@ -23,3 +23,4 @@ export { ResponseGrid } from './recall/ResponseGrid'
 // ── Pairs: Memoria de parejas ──
 export * from './pairs/constants'
 export { buildDeck, getDeckColumns } from './pairs/buildDeck'
+export { PairsBoard } from './pairs/PairsBoard'

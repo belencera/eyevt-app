@@ -1,0 +1,110 @@
+/* ============================================================
+   Memoria de parejas: tablero y cartas que se voltean
+   ============================================================ */
+
+.pairsBoard {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 72px 16px 24px;
+}
+
+.pairsBoardPaused {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Filas centradas: la última fila incompleta queda en el centro */
+.pairsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--pairs-gap);
+  width: calc(var(--pairs-cols) * var(--pairs-card) + (var(--pairs-cols) - 1) * var(--pairs-gap));
+  perspective: 900px;
+}
+
+/* ── Carta ── */
+.pairsCard {
+  position: relative;
+  width: var(--pairs-card);
+  height: var(--pairs-card);
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pairsCard:disabled {
+  cursor: default;
+}
+
+.pairsCardInner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.pairsCardUp .pairsCardInner {
+  transform: rotateY(180deg);
+}
+
+.pairsCardFace {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 2px solid rgba(148, 163, 184, 0.2);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Reverso: patrón oscuro con borde azul */
+.pairsCardBack {
+  border-color: rgba(56, 189, 248, 0.35);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(56, 189, 248, 0.07) 0 6px,
+      transparent 6px 14px
+    ),
+    rgba(15, 23, 42, 0.95);
+}
+
+.pairsCard:hover:not(:disabled) .pairsCardBack {
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+}
+
+/* Anverso: el estímulo */
+.pairsCardFront {
+  background: rgba(15, 23, 42, 0.9);
+  transform: rotateY(180deg);
+}
+
+.pairsCardFront > .memoryFlow {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Estados ── */
+.pairsCardMatched .pairsCardFront {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.16);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+}
+
+.pairsCardMismatch .pairsCardFront {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.16);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+}
