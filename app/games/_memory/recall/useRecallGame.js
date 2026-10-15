@@ -6,7 +6,7 @@ import { preloadImages } from '../common/preloadImages'
 import { buildRecallRound } from './buildRound'
 import { evaluateAnswer } from './evaluateAnswer'
 import { getScatteredPositions } from './scatter'
-import { FADE_MS, INFINITE_MAX_FAILS, LEVEL_UP_STREAK } from './constants'
+import { FADE_MS, INFINITE_MAX_FAILS, LEVEL_UP_STREAK, START_DELAY_MS } from './constants'
 
 /** Fases en las que se muestran estímulos (se repiten desde el principio al reanudar la pausa) */
 const PRESENTATION_PHASES = ['presenting', 'gap']
@@ -63,7 +63,8 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered
     [timers]
   )
 
-  const startRound = (count) => {
+  /** @param {number} [startDelay] - Pantalla vacía antes de la presentación (inicio de sesión) */
+  const startRound = (count, startDelay = 0) => {
     const nextRound = buildRecallRound({
       type: stimulus.stimulusType,
       count,
@@ -77,7 +78,12 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered
     setRound(nextRound)
     setSelection([])
     setResults(null)
-    runPresentation(nextRound)
+    if (startDelay > 0) {
+      setPhase('gap')
+      timers.setTimer(() => runPresentation(nextRound), startDelay)
+    } else {
+      runPresentation(nextRound)
+    }
   }
 
   const clearRound = () => {
@@ -93,7 +99,8 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered
     onBeginPlay: () => {
       level.reset()
       setSummaryOpen(false)
-      startRound(1)
+      // Pausa en blanco para que el primer estímulo no coincida con el final de la cuenta atrás
+      startRound(1, START_DELAY_MS)
     },
     onPause: timers.clearAll,
     onResume: () => {
