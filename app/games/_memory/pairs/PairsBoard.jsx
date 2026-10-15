@@ -6,7 +6,7 @@ import '../common/memory.css'
 import './pairs.css'
 
 const GAP_PX = 12
-const RESERVED_HEIGHT_PX = 72 + 24 + 66 // Barra de nivel arriba, margen inferior y botón "Siguiente ronda"
+const RESERVED_HEIGHT_PX = 72 + 24 + 80 // Barra de nivel arriba, margen inferior y botón "Siguiente ronda"
 const RESERVED_WIDTH_PX = 32
 const MIN_CARD_PX = 48
 

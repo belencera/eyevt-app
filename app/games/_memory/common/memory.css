@@ -106,15 +106,19 @@
   cursor: not-allowed;
 }
 
+/* Mismo estilo que la barra de nivel */
 .memoryBtnPrimary {
-  background: rgba(56, 189, 248, 0.14);
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.45);
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: rgba(56, 189, 248, 0.38);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.2);
 }
 
 .memoryBtnPrimary:hover:not(:disabled) {
-  background: #38bdf8;
-  color: #082f49;
-  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.4);
+  background: rgba(15, 23, 42, 0.82);
+  color: #f8fafc;
+  border-color: rgba(56, 189, 248, 0.8);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 24px rgba(56, 189, 248, 0.45);
 }
-
