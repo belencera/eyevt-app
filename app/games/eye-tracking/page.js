@@ -6,7 +6,6 @@ import {
   StimulusDot,
   StimulusGrid,
   StimulusExtraControls,
-  hasStimulusExtras,
   useGameSession,
   useStimulusManager,
   isIllustrationCategory,
@@ -184,14 +183,11 @@ export default function EyeTrackingGame() {
         />
       }
       extraControls={
-        hasStimulusExtras(stimulus.stimulusType, true)
-          ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="tracking" showIntervals />
-          : null
+        <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="tracking" showIntervals />
       }
       shortcuts={[
         { keys: ['←', '→'], label: 'Velocidad' },
       ]}
-      shortcutsHint="Inicio: Vel. 28"
     >
       {showDot && (
         <StimulusDot

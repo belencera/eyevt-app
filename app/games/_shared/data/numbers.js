@@ -9,7 +9,7 @@ export const NUMBER_DIGITS_OPTIONS = [
   { value: 3, label: '3 cifras' },
   { value: 4, label: '4 cifras' },
   { value: 5, label: '5 cifras' },
-  { value: 'all', label: 'Aleatorio', icon: '🎲' },
+  { value: 'all', label: 'Aleatorio' },
 ]
 
 /**

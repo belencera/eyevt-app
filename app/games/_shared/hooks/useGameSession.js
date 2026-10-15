@@ -180,6 +180,7 @@ export function useGameSession(callbacks = {}) {
     handleResume,
     handleReset,
     handleTogglePause,
+    handleEnd: endSession,
     isCountingDown,
     isPlaying,
     isPaused,

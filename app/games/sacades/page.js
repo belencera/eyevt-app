@@ -1,15 +1,17 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   GameShell,
+  ModeSelector,
   StimulusDot,
   StimulusGrid,
   StimulusExtraControls,
-  hasStimulusExtras,
   useGameSession,
   useStimulusManager,
+  useTimers,
   CADENCE_STEPS,
+  IconRandom,
 } from '../_shared'
 
 const MIN = 2
@@ -61,18 +63,6 @@ function intervalToMs(sec) {
   return Math.round(sec * 1000)
 }
 
-function IconRandom() {
-  return (
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M16 3h5v5" />
-      <path d="M4 20L21 3" />
-      <path d="M21 16v5h-5" />
-      <path d="M15 15l6 6" />
-      <path d="M4 4l5 5" />
-    </svg>
-  )
-}
-
 function IconReading() {
   return (
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -84,11 +74,31 @@ function IconReading() {
   )
 }
 
+const SACADE_MODES = [
+  {
+    value: 'random',
+    label: 'Movimiento aleatorio',
+    description: 'Saltos impredecibles en cualquier dirección',
+    icon: <IconRandom />,
+  },
+  {
+    value: 'reading',
+    label: 'Movimiento lectura',
+    description: 'Simulación de lectura: 15 palabras de izquierda a derecha renglón a renglón',
+    icon: <IconReading />,
+  },
+]
+
+const MODE_DESCRIPTIONS = {
+  random: 'Saltos aleatorios',
+  reading: 'Saltos siguiendo el patrón de lectura (Izquierda -> Derecha)',
+}
+
 export default function SacadesGame() {
   const [movementMode, setMovementMode] = useState('random') // 'random' | 'reading'
   const [position, setPosition] = useState({ x: 50, y: 50 })
   const [jumpInterval, setJumpInterval] = useState(0.7)
-  const intervalRef = useRef(null)
+  const timers = useTimers()
 
   // Referencias mutables para el seguimiento del paso de lectura y modo
   const movementModeRef = useRef(movementMode)
@@ -97,24 +107,20 @@ export default function SacadesGame() {
   }, [movementMode])
 
   const readingPosRef = useRef({ col: 0, row: 0 })
+  // Duración de la sesión (se sincroniza tras crear la sesión) para calcular los renglones de lectura
+  const durationSettingRef = useRef(0)
 
   const stimulus = useStimulusManager('classic')
+  const { nextStimulus } = stimulus
 
-  const clearJumpInterval = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current)
-      intervalRef.current = null
-    }
-  }
-
-  const jumpNext = () => {
+  const jumpNext = useCallback(() => {
     if (movementModeRef.current === 'reading') {
-      const totalRows = getReadingRows(session.durationSetting)
+      const totalRows = getReadingRows(durationSettingRef.current)
       const current = readingPosRef.current
 
       // Posicionar estímulo en la coordenada actual de lectura
       setPosition(getReadingPosition(current.col, current.row, totalRows))
-      stimulus.nextStimulus()
+      nextStimulus()
 
       // Avanzar al siguiente paso (palabra o renglón siguiente)
       let nextCol = current.col + 1
@@ -126,22 +132,22 @@ export default function SacadesGame() {
       readingPosRef.current = { col: nextCol, row: nextRow }
     } else {
       setPosition(randomPosition())
-      stimulus.nextStimulus()
+      nextStimulus()
     }
-  }
+  }, [nextStimulus])
 
   const startJumping = () => {
-    clearJumpInterval()
+    timers.clearAll()
     jumpNext()
-    intervalRef.current = setInterval(jumpNext, intervalToMs(jumpInterval))
+    timers.setRepeat(jumpNext, intervalToMs(jumpInterval))
   }
 
   const resetBall = () => {
-    clearJumpInterval()
+    timers.clearAll()
     stimulus.resetStimulus()
     readingPosRef.current = { col: 0, row: 0 }
     if (movementMode === 'reading') {
-      setPosition(getReadingPosition(0, 0, getReadingRows(session.durationSetting)))
+      setPosition(getReadingPosition(0, 0, getReadingRows(durationSettingRef.current)))
     } else {
       setPosition({ x: 50, y: 50 })
     }
@@ -153,19 +159,23 @@ export default function SacadesGame() {
       readingPosRef.current = { col: 0, row: 0 }
       startJumping()
     },
-    onPause: clearJumpInterval,
+    onPause: timers.clearAll,
     onResume: startJumping,
     onReset: resetBall,
-    onEnd: clearJumpInterval,
+    onEnd: timers.clearAll,
   })
+
+  useEffect(() => {
+    durationSettingRef.current = session.durationSetting
+  }, [session.durationSetting])
 
   // Actualizar intervalo en caliente al variar el tiempo durante el juego
   useEffect(() => {
     if (session.isPlaying && !session.isPaused) {
-      clearJumpInterval()
-      intervalRef.current = setInterval(jumpNext, intervalToMs(jumpInterval))
+      timers.clearAll()
+      timers.setRepeat(jumpNext, intervalToMs(jumpInterval))
     }
-  }, [jumpInterval, session.isPlaying, session.isPaused])
+  }, [jumpInterval, session.isPlaying, session.isPaused, timers, jumpNext])
 
   // Ajustar posición inicial cuando cambia el modo en reposo
   const handleModeChange = (newMode) => {
@@ -214,51 +224,15 @@ export default function SacadesGame() {
       session={session}
       stimulus={stimulus}
       gameControls={
-        <div className="modeGridContainer">
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap', marginBottom: '4px' }}>
-            <span className="controlLabel" id="sacade-mode-label" style={{ marginBottom: 0 }}>
-              Modo de movimiento
-            </span>
-            <span style={{ fontSize: '0.73rem', fontWeight: 500, color: '#94a3b8' }}>
-              · {movementMode === 'random' ? 'Saltos aleatorios' : 'Saltos siguiendo el patrón de lectura (Izquierda -> Derecha)'}
-            </span>
-          </div>
-          <div
-            className="modeGrid"
-            role="radiogroup"
-            aria-labelledby="sacade-mode-label"
-          >
-            <button
-              type="button"
-              role="radio"
-              aria-checked={movementMode === 'random'}
-              disabled={!session.isIdle}
-              className={`modeCard ${movementMode === 'random' ? 'modeCardActive' : ''}`}
-              onClick={() => handleModeChange('random')}
-              title="Saltos impredecibles en cualquier dirección"
-            >
-              <div className="modeCardIcon">
-                <IconRandom />
-              </div>
-              <span className="modeCardLabel">Movimiento aleatorio</span>
-            </button>
-
-            <button
-              type="button"
-              role="radio"
-              aria-checked={movementMode === 'reading'}
-              disabled={!session.isIdle}
-              className={`modeCard ${movementMode === 'reading' ? 'modeCardActive' : ''}`}
-              onClick={() => handleModeChange('reading')}
-              title="Simulación de lectura: 15 palabras de izquierda a derecha renglón a renglón"
-            >
-              <div className="modeCardIcon">
-                <IconReading />
-              </div>
-              <span className="modeCardLabel">Movimiento lectura</span>
-            </button>
-          </div>
-        </div>
+        <ModeSelector
+          id="sacade-mode"
+          label="Modo de movimiento"
+          description={MODE_DESCRIPTIONS[movementMode]}
+          value={movementMode}
+          options={SACADE_MODES}
+          disabled={!session.isIdle}
+          onChange={handleModeChange}
+        />
       }
       speedControl={{
         id: 'sacade-interval',
@@ -277,14 +251,11 @@ export default function SacadesGame() {
         />
       }
       extraControls={
-        hasStimulusExtras(stimulus.stimulusType)
-          ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="sacade" />
-          : null
+        <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="sacade" />
       }
       shortcuts={[
         { keys: ['←', '→'], label: 'Velocidad de salto' },
       ]}
-      shortcutsHint="Inicio: Vel. 28"
     >
       {showDot && (
         <StimulusDot

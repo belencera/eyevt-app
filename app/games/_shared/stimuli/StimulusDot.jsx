@@ -1,14 +1,23 @@
 'use client'
 
-import { StimulusLetter } from './StimulusLetter'
-import { StimulusWord } from './StimulusWord'
-import { StimulusNumber } from './StimulusNumber'
-import { StimulusArrow } from './StimulusArrow'
-import { StimulusIllustration } from './StimulusIllustration'
+import { StimulusItem } from './StimulusItem'
 import { isIllustrationCategory } from '../data/constants'
 
 /**
- * Componente despachador de estímulo visual.
+ * Devuelve el elemento actual del gestor de estímulos según el tipo activo.
+ */
+function getCurrentItem(stimulus, type) {
+  if (type === 'letters' || type === 'pbqd') return stimulus?.currentLetter
+  if (type === 'words') return stimulus?.currentWord
+  if (type === 'numbers') return stimulus?.currentNumber
+  if (type === 'arrows') return stimulus?.currentArrow
+  if (isIllustrationCategory(type)) return stimulus?.currentIllustration
+  return stimulus?.currentColor
+}
+
+/**
+ * Pinta el estímulo activo de un `useStimulusManager` en la posición indicada.
+ * El dibujo de cada tipo lo resuelve `StimulusItem`.
  *
  * Soporta:
  * - Punto fijo celeste ('classic')
@@ -25,91 +34,15 @@ export function StimulusDot({
   isPaused = false,
 }) {
   const type = stimulus?.stimulusType ?? 'classic'
-  const sizePx = stimulus?.sizePx
-  const sizeLevel = stimulus?.sizeLevel ?? 'md'
-
-  if (type === 'letters' || type === 'pbqd') {
-    return (
-      <StimulusLetter
-        position={position}
-        letter={stimulus?.currentLetter ?? (type === 'pbqd' ? 'p' : 'A')}
-        size={sizeLevel}
-        sizePx={sizePx}
-        isPaused={isPaused}
-        uppercase={type !== 'pbqd'}
-      />
-    )
-  }
-
-  if (type === 'words') {
-    return (
-      <StimulusWord
-        position={position}
-        word={stimulus?.currentWord ?? 'SOL'}
-        size={sizeLevel}
-        sizePx={sizePx}
-        isPaused={isPaused}
-      />
-    )
-  }
-
-  if (type === 'numbers') {
-    return (
-      <StimulusNumber
-        position={position}
-        number={stimulus?.currentNumber ?? '7'}
-        size={sizeLevel}
-        sizePx={sizePx}
-        isPaused={isPaused}
-      />
-    )
-  }
-
-  if (type === 'arrows') {
-    return (
-      <StimulusArrow
-        position={position}
-        arrow={stimulus?.currentArrow}
-        size={sizeLevel}
-        sizePx={sizePx}
-        isPaused={isPaused}
-      />
-    )
-  }
-
-  // Renderizado dinámico de cualquier categoría de ilustración registrada
-  if (isIllustrationCategory(type)) {
-    return (
-      <StimulusIllustration
-        position={position}
-        item={stimulus?.currentIllustration}
-        size={sizeLevel}
-        sizePx={sizePx}
-        isPaused={isPaused}
-        category={type}
-      />
-    )
-  }
-
-  // Punto fijo (classic) o colores
-  const activeColor = stimulus?.currentColor
-  const hex = activeColor?.hex || '#38bdf8'
-  const dotPx = sizePx ?? (sizeLevel === 'xs' ? 14 : sizeLevel === 'sm' ? 20 : sizeLevel === 'lg' ? 40 : sizeLevel === 'xl' ? 56 : 28)
 
   return (
-    <div
-      className={`gameDot ${isPaused ? 'gameDotPaused' : ''}`}
-      style={{
-        left: `${position.x}%`,
-        top: `${position.y}%`,
-        width: `${dotPx}px`,
-        height: `${dotPx}px`,
-        backgroundColor: hex,
-        boxShadow: isPaused
-          ? `0 0 16px ${hex}66`
-          : `0 0 24px ${hex}, 0 0 48px ${hex}55`,
-      }}
-      aria-label={`Estímulo ${activeColor?.name || ''}`}
+    <StimulusItem
+      type={type}
+      item={getCurrentItem(stimulus, type)}
+      position={position}
+      sizePx={stimulus?.sizePx}
+      sizeLevel={stimulus?.sizeLevel ?? 'md'}
+      isPaused={isPaused}
     />
   )
 }

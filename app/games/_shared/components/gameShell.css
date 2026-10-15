@@ -345,12 +345,49 @@
 }
 
 /* ============================================================
-   Selector de modo de juego (Periferia)
+   Selector de modo de juego (ModeSelector)
    ============================================================ */
 .modeGridContainer {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.modeHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.modeHeader .controlLabel {
+  margin-bottom: 0;
+}
+
+.modeSubtext {
+  font-size: 0.73rem;
+  font-weight: 500;
+  color: #94a3b8;
+  animation: modeSubtextFade 0.2s ease;
+}
+
+.modeSubtext::before {
+  content: '·';
+  margin-right: 6px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+@keyframes modeSubtextFade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modeGrid {
@@ -472,7 +509,8 @@
   justify-content: center;
   gap: 5px;
   flex: 1 1 0px;
-  min-width: 0;
+  /* Nunca más estrecho que su texto: si no caben, los botones pasan a la fila siguiente */
+  min-width: max-content;
   height: 34px;
   padding: 5px 6px;
   background: rgba(15, 23, 42, 0.9);
@@ -1607,9 +1645,9 @@
   line-height: 1;
 }
 
-/* Pantalla de resultado final de aciertos estilo cuenta atrás (sencilla y directa)
+/* Resumen final de sesión (SessionSummary) estilo cuenta atrás (sencillo y directo)
    ============================================================ */
-.peripherySummaryOverlay {
+.sessionSummaryOverlay {
   position: absolute;
   inset: 0;
   z-index: 50;
@@ -1621,6 +1659,9 @@
   -webkit-backdrop-filter: blur(8px);
   padding: 24px;
   animation: summaryFadeIn 0.25s ease-out;
+}
+
+.sessionSummaryOverlayDismissable {
   cursor: pointer;
 }
 
@@ -1634,7 +1675,7 @@
   }
 }
 
-.peripherySummarySimple {
+.sessionSummaryCard {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1644,13 +1685,13 @@
   user-select: none;
 }
 
-.peripherySummaryScoreGroup {
+.sessionSummaryScoreGroup {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.peripherySummaryNumber {
+.sessionSummaryNumber {
   font-size: clamp(6.5rem, 18vw, 12rem);
   font-weight: 800;
   line-height: 1;
@@ -1662,7 +1703,7 @@
   animation: countdownPulse 0.6s ease-out;
 }
 
-.peripherySummaryLabel {
+.sessionSummaryLabel {
   font-size: clamp(1.2rem, 3.2vw, 1.8rem);
   font-weight: 800;
   text-transform: uppercase;
@@ -1672,7 +1713,7 @@
   text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
 }
 
-.peripherySummaryMeta {
+.sessionSummaryMeta {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1686,29 +1727,37 @@
   font-size: 1.05rem;
 }
 
-.peripherySummaryMetaItem {
+.sessionSummaryMetaItem {
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
-.peripherySummaryMetaKey {
+.sessionSummaryMetaKey {
   color: #94a3b8;
   font-weight: 500;
 }
 
-.peripherySummaryMetaVal {
+.sessionSummaryMetaVal {
   color: #f8fafc;
   font-weight: 700;
 }
 
-.peripherySummaryMetaDivider {
+.sessionSummaryMetaDivider {
   color: rgba(148, 163, 184, 0.35);
   font-size: 0.85rem;
 }
 
-.peripherySummarySimpleBtn {
+.sessionSummaryActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-top: 14px;
+}
+
+.sessionSummaryBtn {
   padding: 10px 26px;
   font-size: 0.95rem;
   font-weight: 700;
@@ -1720,15 +1769,27 @@
   transition: all 0.2s ease;
 }
 
-.peripherySummarySimpleBtn:hover {
+.sessionSummaryBtn:hover {
   background: #38bdf8;
   color: #082f49;
   transform: translateY(-2px);
   box-shadow: 0 4px 18px rgba(56, 189, 248, 0.4);
 }
 
-.peripherySummarySimpleBtn:active {
+.sessionSummaryBtn:active {
   transform: translateY(0);
+}
+
+.sessionSummaryBtnSecondary {
+  background: transparent;
+  color: #94a3b8;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.sessionSummaryBtnSecondary:hover {
+  background: rgba(148, 163, 184, 0.14);
+  color: #f8fafc;
+  box-shadow: none;
 }
 
 .floatingBtn {

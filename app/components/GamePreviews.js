@@ -110,10 +110,61 @@ export function VisualMemoryPreview() {
   return (
     <div className="card-preview memory-preview">
       <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
-        <circle cx="82" cy="30" r="10" className="memory-node node-1" />
-        <circle cx="118" cy="30" r="10" className="memory-node node-2" />
-        <circle cx="82" cy="60" r="10" className="memory-node node-3" />
-        <circle cx="118" cy="60" r="10" className="memory-node node-4" />
+        {/* Patrones de dos círculos que aparecen y desaparecen a la vez */}
+        <circle cx="82" cy="30" r="10" className="pattern-node pattern-node-1" />
+        <circle cx="118" cy="30" r="10" className="pattern-node pattern-node-2" />
+        <circle cx="82" cy="60" r="10" className="pattern-node pattern-node-3" />
+        <circle cx="118" cy="60" r="10" className="pattern-node pattern-node-4" />
+      </svg>
+    </div>
+  )
+}
+
+export function SequentialMemoryPreview() {
+  return (
+    <div className="card-preview memory-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        <line x1="58" y1="45" x2="142" y2="45" className="sequence-track" />
+        <circle cx="58" cy="45" r="10" className="memory-node node-1" />
+        <circle cx="86" cy="45" r="10" className="memory-node node-2" />
+        <circle cx="114" cy="45" r="10" className="memory-node node-3" />
+        <circle cx="142" cy="45" r="10" className="memory-node node-4" />
+      </svg>
+    </div>
+  )
+}
+
+export function MemoryPairsPreview() {
+  return (
+    <div className="card-preview memory-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        {/* 4 cartas: se levanta una pareja, luego la otra, y se vuelven a esconder */}
+        <rect x="70" y="14" width="26" height="26" rx="5" className="pairs-card pairs-card-a" />
+        <rect x="104" y="14" width="26" height="26" rx="5" className="pairs-card pairs-card-b" />
+        <rect x="70" y="50" width="26" height="26" rx="5" className="pairs-card pairs-card-b" />
+        <rect x="104" y="50" width="26" height="26" rx="5" className="pairs-card pairs-card-a" />
+      </svg>
+    </div>
+  )
+}
+
+export function TachistoscopePreview() {
+  return (
+    <div className="card-preview memory-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        {/* Destellos rápidos de 1, 2 y 3 estímulos en fila (el nivel sube) */}
+        <g className="tachisto-flash tachisto-flash-1">
+          <circle cx="100" cy="45" r="9" />
+        </g>
+        <g className="tachisto-flash tachisto-flash-2">
+          <circle cx="88" cy="45" r="9" />
+          <circle cx="112" cy="45" r="9" />
+        </g>
+        <g className="tachisto-flash tachisto-flash-3">
+          <circle cx="76" cy="45" r="9" />
+          <circle cx="100" cy="45" r="9" />
+          <circle cx="124" cy="45" r="9" />
+        </g>
       </svg>
     </div>
   )
@@ -134,6 +185,12 @@ export function GamePreview({ previewKey }) {
       return <VergenceFlexibilityPreview />
     case 'memory':
       return <VisualMemoryPreview />
+    case 'sequence':
+      return <SequentialMemoryPreview />
+    case 'tachistoscope':
+      return <TachistoscopePreview />
+    case 'pairs':
+      return <MemoryPairsPreview />
     default:
       return <FixationPreview />
   }

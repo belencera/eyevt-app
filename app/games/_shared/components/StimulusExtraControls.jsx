@@ -16,12 +16,14 @@ import {
  *
  * Todos los estímulos (punto fijo, colores, letras, palabras, números, flechas e ilustraciones)
  * comparten el mismo selector universal de tamaño, además de sus opciones específicas si aplican.
+ * Con `showSize={false}` el tamaño no se elige en el menú: empieza en el estándar y se ajusta con ↑ / ↓.
  */
 export function StimulusExtraControls({
   stimulus,
   disabled = false,
   prefix = '',
   showIntervals = false,
+  showSize = true,
 }) {
   const id = (name) => (prefix ? `${prefix}-${name}` : name)
   const type = stimulus.stimulusType
@@ -29,14 +31,16 @@ export function StimulusExtraControls({
   return (
     <>
       {/* ── Selector de Tamaño Universal para TODOS los estímulos ── */}
-      <OptionPicker
-        id={id('stimulus-size')}
-        label="Tamaño del estímulo"
-        value={stimulus.sizeLevel}
-        options={STIMULUS_SIZE_OPTIONS}
-        disabled={disabled}
-        onChange={stimulus.setSizeLevel}
-      />
+      {showSize && (
+        <OptionPicker
+          id={id('stimulus-size')}
+          label="Tamaño del estímulo"
+          value={stimulus.sizeLevel}
+          options={STIMULUS_SIZE_OPTIONS}
+          disabled={disabled}
+          onChange={stimulus.setSizeLevel}
+        />
+      )}
 
       {/* ── Controles específicos de cada estímulo ── */}
       {type === 'colors' && showIntervals && (
@@ -136,12 +140,4 @@ export function StimulusExtraControls({
       )}
     </>
   )
-}
-
-/**
- * Indica si el tipo de estímulo activo tiene controles extra que renderizar.
- * Dado que todos tienen selector de tamaño, siempre devuelve true.
- */
-export function hasStimulusExtras() {
-  return true
 }
