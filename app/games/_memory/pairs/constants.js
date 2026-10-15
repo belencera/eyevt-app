@@ -28,6 +28,7 @@ export const getPairsCount = (level) => level + 1
 
 // ── Tablero ──
 export const PAIRS_MIN_ROWS = 2
+export const PAIRS_TWO_ROWS_MAX_CARDS = 10 // Con más cartas el tablero pasa a 3 filas como mínimo
 export const PAIRS_MAX_COLUMNS = 8
 
 export const PAIRS_SHORTCUTS_HINT = 'Encuentra las parejas con el ratón · Siguiente ronda para avanzar'
