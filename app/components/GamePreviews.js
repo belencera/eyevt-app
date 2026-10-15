@@ -134,6 +134,21 @@ export function SequentialMemoryPreview() {
   )
 }
 
+export function TachistoscopePreview() {
+  return (
+    <div className="card-preview memory-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        {/* Destello muy breve de estímulos en fila */}
+        <g className="tachisto-flash">
+          <circle cx="76" cy="45" r="9" />
+          <circle cx="100" cy="45" r="9" />
+          <circle cx="124" cy="45" r="9" />
+        </g>
+      </svg>
+    </div>
+  )
+}
+
 export function GamePreview({ previewKey }) {
   switch (previewKey) {
     case 'fixation':
@@ -151,6 +166,8 @@ export function GamePreview({ previewKey }) {
       return <VisualMemoryPreview />
     case 'sequence':
       return <SequentialMemoryPreview />
+    case 'tachistoscope':
+      return <TachistoscopePreview />
     default:
       return <FixationPreview />
   }

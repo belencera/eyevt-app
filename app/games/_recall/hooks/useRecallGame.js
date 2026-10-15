@@ -7,7 +7,20 @@ import { evaluateAnswer } from '../data/evaluateAnswer'
 import { INFINITE_MAX_FAILS, LEVEL_UP_STREAK } from '../data/recallConstants'
 
 /** Fases en las que se muestran estímulos (se repiten desde el principio al reanudar la pausa) */
-const PRESENTATION_PHASES = ['fixation', 'presenting', 'gap']
+const PRESENTATION_PHASES = ['presenting', 'gap']
+
+/**
+ * Precarga las ilustraciones de la ronda para que estén listas al mostrarse,
+ * imprescindible en flashes muy cortos (Taquitoscopio a 50 ms).
+ */
+function preloadImages(options) {
+  options.forEach(({ value }) => {
+    if (value?.src) {
+      const img = new Image()
+      img.src = value.src
+    }
+  })
+}
 
 /**
  * Flujo completo de los juegos de memoria y percepción:
@@ -21,7 +34,7 @@ const PRESENTATION_PHASES = ['fixation', 'presenting', 'gap']
  * @param {{ stimulus: object, buildSteps: (round) => Array<{ phase: string, ms: number, index?: number }>, ordered?: boolean }} params
  */
 export function useRecallGame({ stimulus, buildSteps, ordered = false }) {
-  const [phase, setPhase] = useState('idle') // idle | fixation | presenting | gap | responding | feedback
+  const [phase, setPhase] = useState('idle') // idle | presenting | gap | responding | feedback
   const [stepIndex, setStepIndex] = useState(null)
   const [round, setRound] = useState(null)
   const [selection, setSelection] = useState([])
@@ -69,6 +82,7 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false }) {
         numberDigits: stimulus.numberDigits,
       },
     })
+    preloadImages(nextRound.options)
     setRound(nextRound)
     setSelection([])
     setResults(null)

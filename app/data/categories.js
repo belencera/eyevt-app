@@ -67,6 +67,13 @@ export const CATEGORIES = [
         description: 'Recuerdo de estímulos en el orden en que aparecen',
         previewKey: 'sequence',
       },
+      {
+        id: 'tachistoscope',
+        title: 'Taquitoscopio',
+        href: '/games/tachistoscope',
+        description: 'Percepción ultrarrápida y velocidad de procesamiento',
+        previewKey: 'tachistoscope',
+      },
     ],
   },
 ]

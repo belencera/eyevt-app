@@ -24,7 +24,7 @@ export const MIN_DISTRACTORS = 3 // Opciones que no son objetivo; por debajo, lo
 export const SINGLE_ROW_MAX = 4 // Categorías pequeñas (pbqd, flechas) en una sola fila
 
 // ── Tiempos de presentación ──
-export const FIXATION_MS = 600 // Cruz de fijación previa del Taquitoscopio
+export const FLASH_DELAY_MS = 600 // Pantalla vacía antes del flash del Taquitoscopio (centra la mirada y precarga imágenes)
 export const SEQUENCE_GAP_MS = 250 // Pantalla en blanco entre estímulos de la secuencia
 
 /** Tiempo de exposición simultánea en Memoria Visual (segundos) */

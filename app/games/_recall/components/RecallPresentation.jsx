@@ -6,9 +6,8 @@ import '../recall.css'
 /**
  * Fase de presentación de una ronda en el centro de la pantalla.
  *
- * - 'fixation': cruz central para anclar la mirada
  * - 'presenting': los estímulos en una fila centrada
- * - Cualquier otra fase (hueco entre estímulos, respuesta...): pantalla vacía
+ * - Cualquier otra fase (hueco en blanco, respuesta...): pantalla vacía
  *
  * Con `activeIndex` solo se ve el estímulo de esa posición, pero la fila reserva el hueco
  * de todos: en Memoria Secuencial cada estímulo aparece a la derecha del anterior.
@@ -21,14 +20,6 @@ import '../recall.css'
  * @param {string} [sizeLevel] - Nivel de tamaño de respaldo
  */
 export function RecallPresentation({ phase, type, items = [], activeIndex = null, sizePx, sizeLevel }) {
-  if (phase === 'fixation') {
-    return (
-      <div className="recallStage" aria-hidden>
-        <div className="recallFixationCross" />
-      </div>
-    )
-  }
-
   if (phase !== 'presenting') return null
 
   return (

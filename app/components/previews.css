@@ -299,6 +299,20 @@
   95%, 100% { fill: rgba(15, 23, 42, 0.6); filter: none; }
 }
 
+/* Taquitoscopio: destello muy breve de los estímulos */
+.tachisto-flash circle {
+  fill: #38bdf8;
+  filter: drop-shadow(0 0 6px #38bdf8);
+  opacity: 0;
+  animation: tachistoFlash 3s infinite;
+}
+
+@keyframes tachistoFlash {
+  0%, 59% { opacity: 0; }
+  60%, 66% { opacity: 1; }
+  67%, 100% { opacity: 0; }
+}
+
 /* Memoria secuencial: línea que une los estímulos en orden */
 .sequence-track {
   stroke: rgba(56, 189, 248, 0.25);
