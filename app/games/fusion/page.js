@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   GameShell,
+  ModeSelector,
   useGameSession,
 } from '../_shared'
 import {
@@ -26,6 +27,11 @@ const MOTION_SPEED_LEVELS = [
   { level: 4, pxPerSec: 13, label: 'Moderada' },
   { level: 5, pxPerSec: 19, label: 'Media' },
 ]
+
+const MODE_OPTIONS = FUSION_MODES.map((m) => ({
+  ...m,
+  icon: m.value === 'fixed' ? <IconModeFixed /> : <IconModeMotion />,
+}))
 
 export default function FusionGame() {
   // ── Estados de Configuración ──
@@ -309,50 +315,21 @@ export default function FusionGame() {
   // ── Configuración (Columna 2 · Derecha) ──
   const gameControls = (
     <div>
-      <div className="modeGridContainer">
-        <div className="convModeHeader">
-          <span className="controlLabel" id="conv-mode-label">
-            Modo de ejercicio
-          </span>
-          <span className="convModeSubtext">
-            {mode === 'fixed'
-              ? 'Distancia constante entre estímulos'
-              : motionType === 'continuous'
-              ? 'Separación constante hacia afuera'
-              : 'Ciclos continuos de apertura y cierre'}
-          </span>
-        </div>
-        <div
-          className="modeGrid"
-          role="radiogroup"
-          aria-labelledby="conv-mode-label"
-        >
-          {FUSION_MODES.map((m) => {
-            const isSelected = m.value === mode
-            return (
-              <button
-                key={m.value}
-                type="button"
-                role="radio"
-                aria-checked={isSelected}
-                disabled={!session.isIdle}
-                className={`modeCard ${isSelected ? 'modeCardActive' : ''}`}
-                onClick={() => {
-                  if (session.isIdle) {
-                    setMode(m.value)
-                  }
-                }}
-                title={m.description}
-              >
-                <div className="modeCardIcon">
-                  {m.value === 'fixed' ? <IconModeFixed /> : <IconModeMotion />}
-                </div>
-                <span className="modeCardLabel">{m.label}</span>
-              </button>
-            )
-          })}
-        </div>
-      </div>
+      <ModeSelector
+        id="conv-mode"
+        label="Modo de ejercicio"
+        description={
+          mode === 'fixed'
+            ? 'Distancia constante entre estímulos'
+            : motionType === 'continuous'
+            ? 'Separación constante hacia afuera'
+            : 'Ciclos continuos de apertura y cierre'
+        }
+        value={mode}
+        options={MODE_OPTIONS}
+        disabled={!session.isIdle}
+        onChange={setMode}
+      />
 
       {mode === 'motion' && (
         <div className="dashDurationBlock" style={{ marginTop: '16px' }}>

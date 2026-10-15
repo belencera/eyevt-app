@@ -6,6 +6,7 @@
 // Componentes de UI y layout
 export { GameShell } from './components/GameShell'
 export { OptionPicker } from './components/OptionPicker'
+export { ModeSelector } from './components/ModeSelector'
 export { StimulusGrid } from './components/StimulusGrid'
 export { StimulusExtraControls, hasStimulusExtras } from './components/StimulusExtraControls'
 export { KeyboardShortcutsBar } from './components/KeyboardShortcutsBar'

@@ -345,12 +345,49 @@
 }
 
 /* ============================================================
-   Selector de modo de juego (Periferia)
+   Selector de modo de juego (ModeSelector)
    ============================================================ */
 .modeGridContainer {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.modeHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.modeHeader .controlLabel {
+  margin-bottom: 0;
+}
+
+.modeSubtext {
+  font-size: 0.73rem;
+  font-weight: 500;
+  color: #94a3b8;
+  animation: modeSubtextFade 0.2s ease;
+}
+
+.modeSubtext::before {
+  content: '·';
+  margin-right: 6px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+@keyframes modeSubtextFade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modeGrid {
