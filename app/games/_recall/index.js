@@ -6,8 +6,12 @@
 // Constantes y generación de rondas
 export * from './data/recallConstants'
 export { getCategoryItems, getOptionsCount, getGridColumns, buildRecallRound } from './data/stimulusPool'
+export { evaluateAnswer } from './data/evaluateAnswer'
 
 // Componentes
 export { LevelStatus } from './components/LevelStatus'
 export { RecallPresentation } from './components/RecallPresentation'
 export { ResponseGrid } from './components/ResponseGrid'
+
+// Hooks
+export { useRecallGame } from './hooks/useRecallGame'
