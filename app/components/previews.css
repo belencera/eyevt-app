@@ -299,18 +299,38 @@
   95%, 100% { fill: rgba(15, 23, 42, 0.6); filter: none; }
 }
 
-/* Taquitoscopio: destello muy breve de los estímulos */
+/* Taquitoscopio: destellos rápidos de 1, 2 y 3 estímulos (≈0,3 s cada uno) en un ciclo de 3 s */
+.tachisto-flash {
+  opacity: 0;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
 .tachisto-flash circle {
   fill: #38bdf8;
   filter: drop-shadow(0 0 6px #38bdf8);
-  opacity: 0;
-  animation: tachistoFlash 3s infinite;
 }
 
-@keyframes tachistoFlash {
-  0%, 59% { opacity: 0; }
-  60%, 66% { opacity: 1; }
-  67%, 100% { opacity: 0; }
+.tachisto-flash-1 { animation-name: tachistoFlash1; }
+.tachisto-flash-2 { animation-name: tachistoFlash2; }
+.tachisto-flash-3 { animation-name: tachistoFlash3; }
+
+@keyframes tachistoFlash1 {
+  0%, 2% { opacity: 0; }
+  3%, 12% { opacity: 1; }
+  13%, 100% { opacity: 0; }
+}
+
+@keyframes tachistoFlash2 {
+  0%, 32% { opacity: 0; }
+  33%, 42% { opacity: 1; }
+  43%, 100% { opacity: 0; }
+}
+
+@keyframes tachistoFlash3 {
+  0%, 62% { opacity: 0; }
+  63%, 72% { opacity: 1; }
+  73%, 100% { opacity: 0; }
 }
 
 /* Memoria secuencial: línea que une los estímulos en orden */

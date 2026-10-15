@@ -138,8 +138,15 @@ export function TachistoscopePreview() {
   return (
     <div className="card-preview memory-preview">
       <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
-        {/* Destello muy breve de estímulos en fila */}
-        <g className="tachisto-flash">
+        {/* Destellos rápidos de 1, 2 y 3 estímulos en fila (el nivel sube) */}
+        <g className="tachisto-flash tachisto-flash-1">
+          <circle cx="100" cy="45" r="9" />
+        </g>
+        <g className="tachisto-flash tachisto-flash-2">
+          <circle cx="88" cy="45" r="9" />
+          <circle cx="112" cy="45" r="9" />
+        </g>
+        <g className="tachisto-flash tachisto-flash-3">
           <circle cx="76" cy="45" r="9" />
           <circle cx="100" cy="45" r="9" />
           <circle cx="124" cy="45" r="9" />
