@@ -3,6 +3,7 @@
  *
  * - common/: piezas comunes a todos los juegos de memoria
  * - recall/: juegos con cuadrícula de respuesta (Memoria Visual, Secuencial y Taquitoscopio)
+ * - pairs/: Memoria de parejas
  */
 
 // ── Común ──
@@ -18,3 +19,7 @@ export { evaluateAnswer } from './recall/evaluateAnswer'
 export { useRecallGame } from './recall/useRecallGame'
 export { RecallPresentation } from './recall/RecallPresentation'
 export { ResponseGrid } from './recall/ResponseGrid'
+
+// ── Pairs: Memoria de parejas ──
+export * from './pairs/constants'
+export { buildDeck, getDeckColumns } from './pairs/buildDeck'
