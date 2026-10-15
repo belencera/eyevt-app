@@ -1,0 +1,269 @@
+/* ============================================================
+   Juegos de memoria y percepción (Memoria Visual, Secuencial, Taquitoscopio)
+   ============================================================ */
+
+/* Los estímulos compartidos se posicionan en absoluto (left/top + translate).
+   Dentro de .recallFlow pasan a flujo normal para colocarse en filas y tarjetas. */
+.recallFlow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recallFlow > * {
+  position: static !important;
+  transform: none !important;
+}
+
+/* ── Barra de nivel: NIVEL X | ● ○ ──
+   ============================================================ */
+.recallLevelStatus {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(56, 189, 248, 0.38);
+  border-radius: 999px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.2);
+  user-select: none;
+  pointer-events: none;
+  animation: optionMenuIn 0.25s ease-out;
+}
+
+.recallLevelLabel {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
+}
+
+.recallLevelSep {
+  width: 1px;
+  height: 18px;
+  background: rgba(148, 163, 184, 0.35);
+}
+
+.recallLevelDots {
+  display: flex;
+  gap: 6px;
+}
+
+.recallLevelDot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid rgba(56, 189, 248, 0.6);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recallLevelDotFilled {
+  background: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+}
+
+/* ── Presentación de estímulos ──
+   ============================================================ */
+.recallStage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.recallStageRow {
+  flex-wrap: wrap;
+  gap: clamp(20px, 4vw, 48px);
+  max-width: 90%;
+}
+
+.recallFixationCross {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.recallFixationCross::before,
+.recallFixationCross::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #f8fafc;
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(248, 250, 252, 0.35);
+}
+
+.recallFixationCross::before {
+  width: 100%;
+  height: 4px;
+}
+
+.recallFixationCross::after {
+  width: 4px;
+  height: 100%;
+}
+
+/* ── Cuadrícula de respuesta ──
+   ============================================================ */
+.recallBoard {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 72px 16px 24px;
+}
+
+.recallGrid {
+  display: grid;
+  grid-template-columns: repeat(var(--recall-cols, 4), var(--recall-card));
+  gap: clamp(8px, 1.4vw, 16px);
+  --recall-card: clamp(64px, calc((92vw - 80px) / var(--recall-cols, 4)), 128px);
+}
+
+.recallCard {
+  position: relative;
+  width: var(--recall-card);
+  height: var(--recall-card);
+  border-radius: 16px;
+  border: 2px solid rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.9);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.14s ease, border-color 0.14s ease,
+    background-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.recallCard > .recallFlow {
+  width: 100%;
+  height: 100%;
+}
+
+.recallCard:hover:not(:disabled) {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(30, 41, 59, 0.95);
+  transform: translateY(-2px);
+}
+
+.recallCard:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.recallCard:disabled {
+  cursor: default;
+}
+
+.recallCardSelected {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.25);
+}
+
+.recallCardCorrect {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.16);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+}
+
+.recallCardWrong {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.16);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+}
+
+.recallCardMissed {
+  border-color: #22c55e;
+  border-style: dashed;
+}
+
+.recallCardBadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #082f49;
+  background: #38bdf8;
+  font-variant-numeric: tabular-nums;
+}
+
+.recallCardCorrect .recallCardBadge {
+  background: #22c55e;
+  color: #052e16;
+}
+
+.recallCardWrong .recallCardBadge {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* ── Botones de ronda ──
+   ============================================================ */
+.recallActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.recallBtn {
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.recallBtn:hover:not(:disabled) {
+  background: rgba(148, 163, 184, 0.14);
+  color: #f8fafc;
+}
+
+.recallBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.recallBtnPrimary {
+  background: rgba(56, 189, 248, 0.14);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.recallBtnPrimary:hover:not(:disabled) {
+  background: #38bdf8;
+  color: #082f49;
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.4);
+}
+
+/* En pausa la cuadrícula se atenúa y no admite respuestas */
+.recallBoardPaused {
+  opacity: 0.45;
+  pointer-events: none;
+}
