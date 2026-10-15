@@ -14,6 +14,8 @@ function getActiveBadge(label, option) {
 /**
  * Selector con botones en una única fila / cuadrícula compacta para opciones de configuración de ejercicios.
  * Sin menús desplegables: todo directo y visible.
+ *
+ * `formatBadge(option)` permite personalizar el texto de la opción activa junto al título.
  */
 export function OptionPicker({
   id,
@@ -22,6 +24,7 @@ export function OptionPicker({
   options = [],
   disabled = false,
   onChange,
+  formatBadge,
 }) {
   const selected = options.find((opt) => opt.value === value)
 
@@ -33,7 +36,7 @@ export function OptionPicker({
         </span>
         {selected && (
           <span className="dashCardSub" style={{ marginLeft: 'auto' }}>
-            {getActiveBadge(label, selected)}
+            {formatBadge ? formatBadge(selected) : getActiveBadge(label, selected)}
           </span>
         )}
       </div>

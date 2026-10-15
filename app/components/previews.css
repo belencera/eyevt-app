@@ -299,6 +299,37 @@
   95%, 100% { fill: rgba(15, 23, 42, 0.6); filter: none; }
 }
 
+/* Memoria de parejas: cartas boca abajo que se levantan por parejas (diagonales) en un ciclo de 4 s */
+.pairs-card {
+  stroke: rgba(56, 189, 248, 0.45);
+  stroke-width: 1.5;
+  fill: rgba(15, 23, 42, 0.75);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.pairs-card-a { animation-name: pairsCardA; }
+.pairs-card-b { animation-name: pairsCardB; }
+
+@keyframes pairsCardA {
+  0%, 8% { fill: rgba(15, 23, 42, 0.75); transform: scaleX(1); }
+  12% { transform: scaleX(0.1); }
+  16%, 40% { fill: #38bdf8; transform: scaleX(1); filter: drop-shadow(0 0 6px #38bdf8); }
+  44% { transform: scaleX(0.1); }
+  48%, 100% { fill: rgba(15, 23, 42, 0.75); transform: scaleX(1); filter: none; }
+}
+
+@keyframes pairsCardB {
+  0%, 52% { fill: rgba(15, 23, 42, 0.75); transform: scaleX(1); }
+  56% { transform: scaleX(0.1); }
+  60%, 84% { fill: #facc15; transform: scaleX(1); filter: drop-shadow(0 0 6px #facc15); }
+  88% { transform: scaleX(0.1); }
+  92%, 100% { fill: rgba(15, 23, 42, 0.75); transform: scaleX(1); filter: none; }
+}
+
 /* Taquitoscopio: destellos rápidos de 1, 2 y 3 estímulos (≈0,3 s cada uno) en un ciclo de 3 s */
 .tachisto-flash {
   opacity: 0;

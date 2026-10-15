@@ -13,6 +13,13 @@ export const PREVIEW_OPTIONS = [
 ]
 export const DEFAULT_PREVIEW_SECONDS = 5
 
+/** Texto de la opción activa en el selector de vista previa */
+export const formatPreviewBadge = (option) =>
+  option.value === 0 ? 'Cartas boca abajo desde el inicio' : `${option.value} segundos boca arriba`
+
+// ── Tamaño ──
+export const CARD_SIZE_FACTOR = 2.5 // Carta = tamaño del estímulo (↑ / ↓) × factor; tamaño estándar 48 px → carta de 120 px
+
 // ── Juego ──
 export const MISMATCH_MS = 1000 // Tiempo que se ven dos cartas distintas antes de esconderse
 

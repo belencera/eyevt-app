@@ -134,6 +134,20 @@ export function SequentialMemoryPreview() {
   )
 }
 
+export function MemoryPairsPreview() {
+  return (
+    <div className="card-preview memory-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        {/* 4 cartas: se levanta una pareja, luego la otra, y se vuelven a esconder */}
+        <rect x="70" y="14" width="26" height="26" rx="5" className="pairs-card pairs-card-a" />
+        <rect x="104" y="14" width="26" height="26" rx="5" className="pairs-card pairs-card-b" />
+        <rect x="70" y="50" width="26" height="26" rx="5" className="pairs-card pairs-card-b" />
+        <rect x="104" y="50" width="26" height="26" rx="5" className="pairs-card pairs-card-a" />
+      </svg>
+    </div>
+  )
+}
+
 export function TachistoscopePreview() {
   return (
     <div className="card-preview memory-preview">
@@ -175,6 +189,8 @@ export function GamePreview({ previewKey }) {
       return <SequentialMemoryPreview />
     case 'tachistoscope':
       return <TachistoscopePreview />
+    case 'pairs':
+      return <MemoryPairsPreview />
     default:
       return <FixationPreview />
   }

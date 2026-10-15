@@ -68,6 +68,13 @@ export const CATEGORIES = [
         previewKey: 'sequence',
       },
       {
+        id: 'memory-pairs',
+        title: 'Memoria de parejas',
+        href: '/games/memory-pairs',
+        description: 'Encontrar las parejas de estímulos iguales',
+        previewKey: 'pairs',
+      },
+      {
         id: 'tachistoscope',
         title: 'Taquitoscopio',
         href: '/games/tachistoscope',
