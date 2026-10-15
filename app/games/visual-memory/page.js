@@ -3,10 +3,13 @@
 import { useCallback, useState } from 'react'
 import {
   GameShell,
+  ModeSelector,
   SessionSummary,
   StimulusGrid,
   StimulusExtraControls,
   useStimulusManager,
+  IconRandom,
+  IconTarget,
 } from '../_shared'
 import {
   LevelStatus,
@@ -15,15 +18,25 @@ import {
   useRecallGame,
   DEFAULT_EXPOSURE,
   DEFAULT_MEMORY_STIMULUS,
+  DEFAULT_VISUAL_MEMORY_MODE,
   EXPOSURE_STEPS,
   MEMORY_SHORTCUTS_HINT,
   MEMORY_STIMULUS_OPTIONS,
+  VISUAL_MEMORY_MODES,
 } from '../_memory'
 
 const VISUAL_MEMORY_HINT =
   'Memorizar los estímulos que aparecen a la vez y seleccionarlos después en la cuadrícula, en cualquier orden.'
 
+const MODE_ICONS = {
+  center: <IconTarget />,
+  scattered: <IconRandom />,
+}
+
+const MODE_OPTIONS = VISUAL_MEMORY_MODES.map((m) => ({ ...m, icon: MODE_ICONS[m.value] }))
+
 export default function VisualMemoryGame() {
+  const [mode, setMode] = useState(DEFAULT_VISUAL_MEMORY_MODE) // 'center' | 'scattered'
   const [exposure, setExposure] = useState(DEFAULT_EXPOSURE) // Segundos que los estímulos permanecen visibles
 
   const stimulus = useStimulusManager(DEFAULT_MEMORY_STIMULUS)
@@ -34,7 +47,7 @@ export default function VisualMemoryGame() {
     [exposure]
   )
 
-  const game = useRecallGame({ stimulus, buildSteps })
+  const game = useRecallGame({ stimulus, buildSteps, scattered: mode === 'scattered' })
   const { session } = game
 
   return (
@@ -43,6 +56,17 @@ export default function VisualMemoryGame() {
       hint={VISUAL_MEMORY_HINT}
       session={session}
       stimulus={stimulus}
+      gameControls={
+        <ModeSelector
+          id="visual-memory-mode"
+          label="Modo de juego"
+          description={VISUAL_MEMORY_MODES.find((m) => m.value === mode)?.description}
+          value={mode}
+          options={MODE_OPTIONS}
+          disabled={!session.isIdle}
+          onChange={setMode}
+        />
+      }
       speedControl={{
         id: 'visual-memory-exposure',
         label: 'Tiempo de exposición',
@@ -79,6 +103,7 @@ export default function VisualMemoryGame() {
             phase={game.stagePhase}
             type={stimulus.stimulusType}
             items={game.presentedItems}
+            positions={game.positions}
             sizePx={stimulus.sizePx}
             sizeLevel={stimulus.sizeLevel}
           />

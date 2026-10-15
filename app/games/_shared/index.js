@@ -33,4 +33,4 @@ export * from './data/constants'
 // Utilidades
 export { formatTime } from './utils/formatTime'
 export { shuffle } from './utils/shuffle'
-export { IconPlay, IconPause, IconReset, IconClick, IconTarget } from './utils/icons'
+export { IconPlay, IconPause, IconReset, IconClick, IconTarget, IconRandom } from './utils/icons'

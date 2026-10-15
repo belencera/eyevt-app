@@ -64,3 +64,15 @@ export function IconTarget() {
     </svg>
   )
 }
+
+export function IconRandom() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M16 3h5v5" />
+      <path d="M4 20L21 3" />
+      <path d="M21 16v5h-5" />
+      <path d="M15 15l6 6" />
+      <path d="M4 4l5 5" />
+    </svg>
+  )
+}

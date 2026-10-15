@@ -5,6 +5,7 @@ import { useAdaptiveLevel, useGameSession, useTimers } from '../../_shared'
 import { preloadImages } from '../common/preloadImages'
 import { buildRecallRound } from './buildRound'
 import { evaluateAnswer } from './evaluateAnswer'
+import { getScatteredPositions } from './scatter'
 import { INFINITE_MAX_FAILS, LEVEL_UP_STREAK } from './constants'
 
 /** Fases en las que se muestran estímulos (se repiten desde el principio al reanudar la pausa) */
@@ -18,10 +19,11 @@ const PRESENTATION_PHASES = ['presenting', 'gap']
  * - buildSteps(round): pasos de la presentación, ej. [{ phase: 'presenting', ms: 2500 }].
  *   Un paso con `index` muestra solo ese objetivo (Memoria Secuencial).
  * - ordered: si la respuesta debe respetar el orden de aparición.
+ * - scattered: cada estímulo aparece en una posición aleatoria de la pantalla (se fija al crear la ronda).
  *
- * @param {{ stimulus: object, buildSteps: (round) => Array<{ phase: string, ms: number, index?: number }>, ordered?: boolean }} params
+ * @param {{ stimulus: object, buildSteps: (round) => Array<{ phase: string, ms: number, index?: number }>, ordered?: boolean, scattered?: boolean }} params
  */
-export function useRecallGame({ stimulus, buildSteps, ordered = false }) {
+export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered = false }) {
   const [phase, setPhase] = useState('idle') // idle | presenting | gap | responding | feedback
   const [stepIndex, setStepIndex] = useState(null)
   const [round, setRound] = useState(null)
@@ -70,6 +72,7 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false }) {
         numberDigits: stimulus.numberDigits,
       },
     })
+    nextRound.positions = scattered ? getScatteredPositions(count) : null
     preloadImages(nextRound.options)
     setRound(nextRound)
     setSelection([])
@@ -157,6 +160,7 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false }) {
     round,
     presentedItems,
     activeIndex: stepIndex, // Posición visible en la presentación serial (null = todos a la vez)
+    positions: round?.positions ?? null, // Posiciones en pantalla en modo disperso (null = fila centrada)
     selection,
     results,
     isAnswering: phase === 'responding' || phase === 'feedback',

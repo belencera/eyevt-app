@@ -24,6 +24,26 @@ export const SINGLE_ROW_MAX = 4 // Categorías pequeñas (pbqd, flechas) en una 
 export const FLASH_DELAY_MS = 600 // Pantalla vacía antes del flash del Taquitoscopio (centra la mirada y precarga imágenes)
 export const SEQUENCE_GAP_MS = 250 // Pantalla en blanco entre estímulos de la secuencia
 
+// ── Modos de Memoria Visual ──
+export const VISUAL_MEMORY_MODES = [
+  {
+    value: 'center',
+    label: 'Centro',
+    description: 'Los estímulos aparecen juntos en el centro de la pantalla',
+  },
+  {
+    value: 'scattered',
+    label: 'Posiciones aleatorias',
+    description: 'Cada estímulo aparece en una zona aleatoria de la pantalla',
+  },
+]
+export const DEFAULT_VISUAL_MEMORY_MODE = 'center'
+
+/** Zona de la pantalla (en %) donde pueden aparecer los estímulos dispersos: deja libre la barra de nivel */
+export const SCATTER_AREA = { minX: 10, maxX: 90, minY: 22, maxY: 85 }
+/** Separación mínima (en %) entre estímulos dispersos para que no se solapen */
+export const SCATTER_MIN_GAP = { x: 16, y: 20 }
+
 /** Tiempo de exposición simultánea en Memoria Visual (segundos) */
 export const EXPOSURE_STEPS = [1, 1.5, 2, 2.5, 3, 4, 5]
 export const DEFAULT_EXPOSURE = 2.5
