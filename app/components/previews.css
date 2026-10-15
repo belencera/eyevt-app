@@ -325,7 +325,7 @@
 @keyframes pairsCardB {
   0%, 52% { fill: rgba(15, 23, 42, 0.75); transform: scaleX(1); }
   56% { transform: scaleX(0.1); }
-  60%, 84% { fill: #facc15; transform: scaleX(1); filter: drop-shadow(0 0 6px #facc15); }
+  60%, 84% { fill: #38bdf8; transform: scaleX(1); filter: drop-shadow(0 0 6px #38bdf8); }
   88% { transform: scaleX(0.1); }
   92%, 100% { fill: rgba(15, 23, 42, 0.75); transform: scaleX(1); filter: none; }
 }
