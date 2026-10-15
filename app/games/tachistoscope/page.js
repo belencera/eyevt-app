@@ -15,11 +15,11 @@ import {
   useRecallGame,
   DEFAULT_FLASH_MS,
   DEFAULT_MEMORY_STIMULUS,
-  FLASH_AFTER_MS,
   FLASH_DELAY_MS,
   FLASH_MS_STEPS,
   MEMORY_SHORTCUTS_HINT,
   MEMORY_STIMULUS_OPTIONS,
+  RESPONSE_DELAY_MS,
 } from '../_memory'
 
 const TACHISTOSCOPE_HINT =
@@ -35,7 +35,7 @@ export default function TachistoscopeGame() {
     () => [
       { phase: 'gap', ms: FLASH_DELAY_MS },
       { phase: 'presenting', ms: flashMs },
-      { phase: 'gap', ms: FLASH_AFTER_MS },
+      { phase: 'gap', ms: RESPONSE_DELAY_MS },
     ],
     [flashMs]
   )

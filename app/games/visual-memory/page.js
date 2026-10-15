@@ -22,6 +22,7 @@ import {
   EXPOSURE_STEPS,
   MEMORY_SHORTCUTS_HINT,
   MEMORY_STIMULUS_OPTIONS,
+  RESPONSE_DELAY_MS,
   VISUAL_MEMORY_MODES,
 } from '../_memory'
 
@@ -41,9 +42,12 @@ export default function VisualMemoryGame() {
 
   const stimulus = useStimulusManager(DEFAULT_MEMORY_STIMULUS)
 
-  // Presentación simultánea: todos los objetivos a la vez durante el tiempo de exposición
+  // Presentación simultánea: todos los objetivos a la vez durante el tiempo de exposición y pausa antes de responder
   const buildSteps = useCallback(
-    () => [{ phase: 'presenting', ms: exposure * 1000 }],
+    () => [
+      { phase: 'presenting', ms: exposure * 1000 },
+      { phase: 'gap', ms: RESPONSE_DELAY_MS },
+    ],
     [exposure]
   )
 
