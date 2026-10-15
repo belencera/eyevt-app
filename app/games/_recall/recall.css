@@ -17,11 +17,14 @@
 
 /* ── Barra de nivel: NIVEL X | ● ○ ──
    ============================================================ */
+/* Centrada con márgenes (no con transform) para que la animación de entrada no la desplace */
 .recallLevelStatus {
   position: absolute;
   top: 18px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  width: fit-content;
+  margin: 0 auto;
   z-index: 40;
   display: flex;
   align-items: center;
