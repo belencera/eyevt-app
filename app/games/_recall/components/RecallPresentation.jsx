@@ -7,16 +7,20 @@ import '../recall.css'
  * Fase de presentación de una ronda en el centro de la pantalla.
  *
  * - 'fixation': cruz central para anclar la mirada
- * - 'presenting': los estímulos recibidos en una fila centrada (uno solo en Secuencial)
+ * - 'presenting': los estímulos en una fila centrada
  * - Cualquier otra fase (hueco entre estímulos, respuesta...): pantalla vacía
+ *
+ * Con `activeIndex` solo se ve el estímulo de esa posición, pero la fila reserva el hueco
+ * de todos: en Memoria Secuencial cada estímulo aparece a la derecha del anterior.
  *
  * @param {string} phase - Fase actual de la ronda
  * @param {string} type - Categoría de estímulo
- * @param {Array} items - Valores a mostrar (los `value` de la ronda)
+ * @param {Array} items - Valores de la fila (los `value` de los objetivos)
+ * @param {number|null} [activeIndex] - Posición visible; sin valor se ven todos a la vez
  * @param {number} sizePx - Tamaño del estímulo (↑ / ↓)
  * @param {string} [sizeLevel] - Nivel de tamaño de respaldo
  */
-export function RecallPresentation({ phase, type, items = [], sizePx, sizeLevel }) {
+export function RecallPresentation({ phase, type, items = [], activeIndex = null, sizePx, sizeLevel }) {
   if (phase === 'fixation') {
     return (
       <div className="recallStage" aria-hidden>
@@ -29,16 +33,19 @@ export function RecallPresentation({ phase, type, items = [], sizePx, sizeLevel 
 
   return (
     <div className="recallStage">
-      <div className="recallFlow recallStageRow">
-        {items.map((value, index) => (
-          <StimulusItem
-            key={index}
-            type={type}
-            item={value}
-            sizePx={sizePx}
-            sizeLevel={sizeLevel}
-          />
-        ))}
+      <div className="recallStageRow">
+        {items.map((value, index) => {
+          const isHidden = activeIndex !== null && index !== activeIndex
+          return (
+            <div
+              key={index}
+              className={`recallFlow ${isHidden ? 'recallSlotHidden' : ''}`}
+              aria-hidden={isHidden}
+            >
+              <StimulusItem type={type} item={value} sizePx={sizePx} sizeLevel={sizeLevel} />
+            </div>
+          )
+        })}
       </div>
     </div>
   )

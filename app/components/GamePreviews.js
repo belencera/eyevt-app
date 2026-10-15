@@ -119,6 +119,20 @@ export function VisualMemoryPreview() {
   )
 }
 
+export function SequentialMemoryPreview() {
+  return (
+    <div className="card-preview memory-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        <line x1="58" y1="45" x2="142" y2="45" className="sequence-track" />
+        <circle cx="58" cy="45" r="10" className="memory-node node-1" />
+        <circle cx="86" cy="45" r="10" className="memory-node node-2" />
+        <circle cx="114" cy="45" r="10" className="memory-node node-3" />
+        <circle cx="142" cy="45" r="10" className="memory-node node-4" />
+      </svg>
+    </div>
+  )
+}
+
 export function GamePreview({ previewKey }) {
   switch (previewKey) {
     case 'fixation':
@@ -134,6 +148,8 @@ export function GamePreview({ previewKey }) {
       return <VergenceFlexibilityPreview />
     case 'memory':
       return <VisualMemoryPreview />
+    case 'sequence':
+      return <SequentialMemoryPreview />
     default:
       return <FixationPreview />
   }

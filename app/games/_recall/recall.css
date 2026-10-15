@@ -82,9 +82,17 @@
 }
 
 .recallStageRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: clamp(20px, 4vw, 48px);
   max-width: 90%;
+}
+
+/* Hueco reservado de un estímulo que no toca mostrar (Memoria Secuencial) */
+.recallSlotHidden {
+  visibility: hidden;
 }
 
 .recallFixationCross {

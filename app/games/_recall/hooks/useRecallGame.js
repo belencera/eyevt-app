@@ -143,11 +143,7 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false }) {
   // Estímulos visibles en la presentación (en pausa no se muestran para no dar exposición extra)
   const isPresentationPhase = PRESENTATION_PHASES.includes(phase)
   const stagePhase = session.isPaused && isPresentationPhase ? 'idle' : phase
-  const presentedItems = round
-    ? stepIndex !== null
-      ? [round.targets[stepIndex].value]
-      : round.targets.map((t) => t.value)
-    : []
+  const presentedItems = round ? round.targets.map((t) => t.value) : []
 
   const { stats } = level
   const accuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0
@@ -158,6 +154,7 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false }) {
     stagePhase,
     round,
     presentedItems,
+    activeIndex: stepIndex, // Posición visible en la presentación serial (null = todos a la vez)
     selection,
     results,
     isAnswering: phase === 'responding' || phase === 'feedback',

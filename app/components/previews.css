@@ -252,6 +252,13 @@
 .memory-node.node-3 { animation-delay: 2.4s; }
 .memory-node.node-4 { animation-delay: 3.6s; }
 
+/* Memoria secuencial: línea que une los estímulos en orden */
+.sequence-track {
+  stroke: rgba(56, 189, 248, 0.25);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 4;
+}
+
 @keyframes memorySequence {
   0%, 15% {
     fill: #38bdf8;

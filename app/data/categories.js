@@ -60,6 +60,13 @@ export const CATEGORIES = [
         description: 'Memorización y recuerdo de patrones',
         previewKey: 'memory',
       },
+      {
+        id: 'sequential-memory',
+        title: 'Memoria secuencial',
+        href: '/games/sequential-memory',
+        description: 'Recuerdo de estímulos en el orden en que aparecen',
+        previewKey: 'sequence',
+      },
     ],
   },
 ]
