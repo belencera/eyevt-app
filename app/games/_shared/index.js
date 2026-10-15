@@ -8,7 +8,7 @@ export { GameShell } from './components/GameShell'
 export { OptionPicker } from './components/OptionPicker'
 export { ModeSelector } from './components/ModeSelector'
 export { StimulusGrid } from './components/StimulusGrid'
-export { StimulusExtraControls, hasStimulusExtras } from './components/StimulusExtraControls'
+export { StimulusExtraControls } from './components/StimulusExtraControls'
 export { KeyboardShortcutsBar } from './components/KeyboardShortcutsBar'
 
 // Estímulos visuales
@@ -23,6 +23,7 @@ export { StimulusIllustration } from './stimuli/StimulusIllustration'
 // Hooks
 export { useGameSession } from './hooks/useGameSession'
 export { useStimulusManager } from './hooks/useStimulusManager'
+export { useTimers } from './hooks/useTimers'
 
 // Constantes, opciones y catálogos (incluye animales, frutas, letras, palabras)
 export * from './data/constants'

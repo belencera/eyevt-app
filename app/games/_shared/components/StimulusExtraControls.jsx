@@ -137,11 +137,3 @@ export function StimulusExtraControls({
     </>
   )
 }
-
-/**
- * Indica si el tipo de estímulo activo tiene controles extra que renderizar.
- * Dado que todos tienen selector de tamaño, siempre devuelve true.
- */
-export function hasStimulusExtras() {
-  return true
-}

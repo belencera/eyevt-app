@@ -140,7 +140,6 @@ export function GameShell({
 
   // Asegurar que 'Espacio', 'R', 'Tamaño' y 'Esc' siempre formen parte de la tarjeta de atajos
   const resolvedShortcuts = useMemo(() => {
-    if (!shortcuts && !bottomContent && !stimulus && !onIncreaseSize) return null
     if (bottomContent && !shortcuts) return null
 
     const list = shortcuts ? [...shortcuts] : []

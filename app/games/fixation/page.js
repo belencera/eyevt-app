@@ -6,9 +6,9 @@ import {
   StimulusDot,
   StimulusGrid,
   StimulusExtraControls,
-  hasStimulusExtras,
   useGameSession,
   useStimulusManager,
+  useTimers,
   CADENCE_STEPS,
 } from '../_shared'
 
@@ -24,40 +24,27 @@ export default function FixationGame() {
     stimulusRef.current = stimulus
   }, [stimulus])
 
-  const intervalTimerRef = useRef(null)
-
-  const clearTimer = () => {
-    if (intervalTimerRef.current) {
-      clearInterval(intervalTimerRef.current)
-      intervalTimerRef.current = null
-    }
-  }
+  const timers = useTimers()
 
   const session = useGameSession({
     onReset: () => {
-      clearTimer()
+      timers.clearAll()
       stimulusRef.current.resetStimulus()
     },
-    onFinish: () => {
-      clearTimer()
-    },
+    onEnd: timers.clearAll,
   })
 
   // Control del intervalo de rotación del estímulo durante el ejercicio
   useEffect(() => {
-    if (session.isPlaying && !session.isPaused) {
-      clearTimer()
-      // En modo 'classic', el punto permanece fijo sin necesidad de rotación
-      if (stimulus.stimulusType !== 'classic') {
-        intervalTimerRef.current = setInterval(() => {
-          stimulusRef.current.nextStimulus()
-        }, changeInterval * 1000)
-      }
-    } else {
-      clearTimer()
+    timers.clearAll()
+    // En modo 'classic', el punto permanece fijo sin necesidad de rotación
+    if (session.isPlaying && !session.isPaused && stimulus.stimulusType !== 'classic') {
+      timers.setRepeat(() => {
+        stimulusRef.current.nextStimulus()
+      }, changeInterval * 1000)
     }
-    return () => clearTimer()
-  }, [session.isPlaying, session.isPaused, changeInterval, stimulus.stimulusType])
+    return () => timers.clearAll()
+  }, [session.isPlaying, session.isPaused, changeInterval, stimulus.stimulusType, timers])
 
   return (
     <GameShell
@@ -79,15 +66,13 @@ export default function FixationGame() {
           value={stimulus.stimulusType}
           disabled={!session.isIdle}
           onChange={(val) => {
-            clearTimer()
+            timers.clearAll()
             stimulus.handleStimulusChange(val)
           }}
         />
       }
       extraControls={
-        hasStimulusExtras(stimulus.stimulusType)
-          ? <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="fixation" />
-          : null
+        <StimulusExtraControls stimulus={stimulus} disabled={!session.isIdle} prefix="fixation" />
       }
     >
       <StimulusDot
