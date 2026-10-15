@@ -144,12 +144,12 @@ export function GameShell({
 
     const list = shortcuts ? [...shortcuts] : []
 
-    // 1. Espacio: Pausar (al principio si no está)
+    // 1. Espacio: Pausar / Reanudar (al principio si no está)
     const hasSpace = list.some((item) =>
       item.keys.some((k) => k.toLowerCase() === 'espacio' || k.toLowerCase() === 'space')
     )
     if (!hasSpace) {
-      list.unshift({ keys: ['Espacio'], label: 'Pausar' })
+      list.unshift({ keys: ['Espacio'], label: 'Pausar / Reanudar' })
     }
 
     // 2. R: Reiniciar (tras Espacio si no está)
