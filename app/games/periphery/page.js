@@ -12,13 +12,11 @@ import {
   useGameSession,
   useStimulusManager,
   useTimers,
-  PERIPHERY_MODES,
-  DISTANCE_OPTIONS,
   CADENCE_STEPS,
-  getRandomPeripheralPosition,
   IconClick,
   IconTarget,
 } from '../_shared'
+import { PERIPHERY_MODES, DISTANCE_OPTIONS, getRandomPeripheralPosition } from './data/periphery'
 
 const PERIPHERY_HINT =
   'Mantener la mirada fija en el punto central y percibir los estímulos del campo visual periférico'
