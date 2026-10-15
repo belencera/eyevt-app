@@ -509,7 +509,8 @@
   justify-content: center;
   gap: 5px;
   flex: 1 1 0px;
-  min-width: 0;
+  /* Nunca más estrecho que su texto: si no caben, los botones pasan a la fila siguiente */
+  min-width: max-content;
   height: 34px;
   padding: 5px 6px;
   background: rgba(15, 23, 42, 0.9);
