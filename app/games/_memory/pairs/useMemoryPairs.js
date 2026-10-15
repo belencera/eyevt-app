@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useGameSession, useTimers } from '../../_shared'
-import { preloadImages } from '../common/preloadImages'
+import { preloadImages, useGameSession, useTimers } from '../../_shared'
 import { buildDeck, getDeckColumns } from './buildDeck'
 import { MISMATCH_MS, getPairsCount } from './constants'
 

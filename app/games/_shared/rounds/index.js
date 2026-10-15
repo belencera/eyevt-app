@@ -3,3 +3,5 @@
  */
 
 export { LevelStatus } from './LevelStatus'
+export * from './positions'
+export { preloadImages } from './preloadImages'

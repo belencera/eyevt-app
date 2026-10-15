@@ -1,8 +1,25 @@
 /**
- * Posiciones aleatorias en pantalla para el modo "Posiciones aleatorias" de Memoria Visual.
+ * Disposición de los estímulos en pantalla: juntos en el centro o en posiciones aleatorias.
  */
 
-import { SCATTER_AREA, SCATTER_MIN_GAP } from './constants'
+export const POSITION_MODES = [
+  {
+    value: 'center',
+    label: 'Centro',
+    description: 'Los estímulos aparecen juntos en el centro de la pantalla',
+  },
+  {
+    value: 'scattered',
+    label: 'Posiciones aleatorias',
+    description: 'Cada estímulo aparece en una zona aleatoria de la pantalla',
+  },
+]
+export const DEFAULT_POSITION_MODE = 'center'
+
+/** Zona de la pantalla (en %) donde pueden aparecer los estímulos dispersos: deja libre la barra de nivel */
+export const SCATTER_AREA = { minX: 10, maxX: 90, minY: 22, maxY: 85 }
+/** Separación mínima (en %) entre estímulos dispersos para que no se solapen */
+export const SCATTER_MIN_GAP = { x: 16, y: 20 }
 
 const randomBetween = (min, max) => min + Math.random() * (max - min)
 

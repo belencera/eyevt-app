@@ -1,11 +1,9 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useAdaptiveLevel, useGameSession, useTimers } from '../../_shared'
-import { preloadImages } from '../common/preloadImages'
+import { getScatteredPositions, preloadImages, useAdaptiveLevel, useGameSession, useTimers } from '../../_shared'
 import { buildRecallRound } from './buildRound'
 import { evaluateAnswer } from './evaluateAnswer'
-import { getScatteredPositions } from './scatter'
 import { FADE_MS, INFINITE_MAX_FAILS, LEVEL_UP_STREAK, START_DELAY_MS } from './constants'
 
 /** Fases en las que se muestran estímulos (se repiten desde el principio al reanudar la pausa) */

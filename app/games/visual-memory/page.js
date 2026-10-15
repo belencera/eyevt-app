@@ -11,6 +11,8 @@ import {
   IconRandom,
   IconTarget,
   LevelStatus,
+  DEFAULT_POSITION_MODE,
+  POSITION_MODES,
 } from '../_shared'
 import {
   RecallPresentation,
@@ -18,12 +20,10 @@ import {
   useRecallGame,
   DEFAULT_EXPOSURE,
   DEFAULT_MEMORY_STIMULUS,
-  DEFAULT_VISUAL_MEMORY_MODE,
   EXPOSURE_STEPS,
   MEMORY_SHORTCUTS_HINT,
   MEMORY_STIMULUS_OPTIONS,
   RESPONSE_DELAY_MS,
-  VISUAL_MEMORY_MODES,
 } from '../_memory'
 
 const VISUAL_MEMORY_HINT =
@@ -34,10 +34,10 @@ const MODE_ICONS = {
   scattered: <IconRandom />,
 }
 
-const MODE_OPTIONS = VISUAL_MEMORY_MODES.map((m) => ({ ...m, icon: MODE_ICONS[m.value] }))
+const MODE_OPTIONS = POSITION_MODES.map((m) => ({ ...m, icon: MODE_ICONS[m.value] }))
 
 export default function VisualMemoryGame() {
-  const [mode, setMode] = useState(DEFAULT_VISUAL_MEMORY_MODE) // 'center' | 'scattered'
+  const [mode, setMode] = useState(DEFAULT_POSITION_MODE) // 'center' | 'scattered'
   const [exposure, setExposure] = useState(DEFAULT_EXPOSURE) // Segundos que los estímulos permanecen visibles
 
   const stimulus = useStimulusManager(DEFAULT_MEMORY_STIMULUS)
@@ -64,7 +64,7 @@ export default function VisualMemoryGame() {
         <ModeSelector
           id="visual-memory-mode"
           label="Modo de juego"
-          description={VISUAL_MEMORY_MODES.find((m) => m.value === mode)?.description}
+          description={POSITION_MODES.find((m) => m.value === mode)?.description}
           value={mode}
           options={MODE_OPTIONS}
           disabled={!session.isIdle}

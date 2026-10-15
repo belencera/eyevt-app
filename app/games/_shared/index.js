@@ -36,4 +36,5 @@ export * from './rounds'
 // Utilidades
 export { formatTime } from './utils/formatTime'
 export { shuffle } from './utils/shuffle'
+export { pickRandom } from './utils/random'
 export { IconPlay, IconPause, IconReset, IconClick, IconTarget, IconRandom } from './utils/icons'

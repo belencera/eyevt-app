@@ -16,12 +16,12 @@ import {
   getIllustrationCategory,
 } from '../../_shared/data/constants'
 import { shuffle } from '../../_shared/utils/shuffle'
+import { pickRandom } from '../../_shared/utils/random'
 import { MAX_OPTIONS } from './constants'
 
 export const toItems = (list, getKey = (v) => v) => list.map((value) => ({ key: getKey(value), value }))
 
 const randomInt = (max) => Math.floor(Math.random() * max)
-export const pickRandom = (list) => list[randomInt(list.length)]
 
 /** Longitudes usadas cuando se elige "Aleatorio": una sola por ronda para que las opciones se parezcan */
 const NUMBER_LENGTHS = [2, 3, 4, 5]

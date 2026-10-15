@@ -4,14 +4,9 @@
  */
 
 import { shuffle } from '../../_shared/utils/shuffle'
+import { pickRandom } from '../../_shared/utils/random'
 import { MAX_OPTIONS } from '../common/constants'
-import {
-  getCategoryItems,
-  getGroupedNumbers,
-  pickRandom,
-  resolveNumberLength,
-  toItems,
-} from '../common/stimulusPool'
+import { getCategoryItems, getGroupedNumbers, resolveNumberLength, toItems } from '../common/stimulusPool'
 import { GRID_SIZE_STEPS, MIN_DISTRACTORS, SINGLE_ROW_MAX } from './constants'
 
 /**
