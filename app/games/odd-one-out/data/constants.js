@@ -15,6 +15,14 @@ export const ODD_ONE_STIMULUS_OPTIONS = STIMULUS_OPTIONS.filter((opt) => !EXCLUD
 export const ODD_ONE_START_COUNT = 3 // Estímulos de la primera pantalla; cada acierto suma uno, sin tope
 export const ODD_ONE_INFINITE_MAX_FAILS = 5 // Fallos seguidos que terminan la sesión en duración "Infinito"
 
+// ── Detalle eliminado en ilustraciones ──
+/**
+ * Proporción del dibujo que puede cambiar al quitar una pieza: visible pero poco perceptible
+ * (un ojo, una rueda, un brillo). Ni piezas tapadas (0 %) ni piezas grandes como el cuerpo.
+ */
+export const DETAIL_MIN_RATIO = 0.01
+export const DETAIL_MAX_RATIO = 0.05
+
 // ── Diferencias en letras, palabras y números ──
 /** Letras mayúsculas que se confunden visualmente (Letras y Palabras) */
 export const SIMILAR_LETTERS = {
