@@ -10,6 +10,7 @@ export { ModeSelector } from './components/ModeSelector'
 export { StimulusGrid } from './components/StimulusGrid'
 export { StimulusExtraControls } from './components/StimulusExtraControls'
 export { KeyboardShortcutsBar } from './components/KeyboardShortcutsBar'
+export { SessionSummary } from './components/SessionSummary'
 
 // Estímulos visuales
 export { StimulusDot } from './stimuli/StimulusDot'

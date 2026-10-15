@@ -3,12 +3,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   GameShell,
+  ModeSelector,
   OptionPicker,
+  SessionSummary,
   StimulusDot,
   StimulusGrid,
   StimulusExtraControls,
   useGameSession,
   useStimulusManager,
+  useTimers,
   PERIPHERY_MODES,
   DISTANCE_OPTIONS,
   CADENCE_STEPS,
@@ -24,6 +27,13 @@ const MODE_DESCRIPTIONS = {
   'name-and-tap': 'Decir en voz alta el centro y hacer clic en los puntos de alrededor',
   'central-focus': 'Identificar el estímulo que aparece en la periferia manteniendo la mirada en el punto central',
 }
+
+const MODE_ICONS = {
+  click: <IconClick />,
+  target: <IconTarget />,
+}
+
+const MODE_OPTIONS = PERIPHERY_MODES.map((m) => ({ ...m, icon: MODE_ICONS[m.icon] }))
 
 export default function PeripheryGame() {
   const [mode, setMode] = useState('name-and-tap') // 'name-and-tap' | 'central-focus'
@@ -41,7 +51,7 @@ export default function PeripheryGame() {
   const modeRef = useRef(mode)
   const distanceRef = useRef(distance)
   const cadenceRef = useRef(cadence)
-  const timerRef = useRef(null)
+  const timers = useTimers()
   const stimulusRef = useRef(stimulus)
   const hitsRef = useRef(hits)
 
@@ -52,14 +62,6 @@ export default function PeripheryGame() {
     stimulusRef.current = stimulus
     hitsRef.current = hits
   }, [mode, distance, cadence, stimulus, hits])
-
-  // Despejar temporizador de cadencia
-  const clearCadenceTimer = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current)
-      timerRef.current = null
-    }
-  }, [])
 
   // Siguiente ciclo del juego según el modo seleccionado
   const stepCycle = useCallback(() => {
@@ -79,11 +81,9 @@ export default function PeripheryGame() {
 
   // Iniciar temporizador de cadencia
   const startCadenceTimer = useCallback(() => {
-    clearCadenceTimer()
-    timerRef.current = setInterval(() => {
-      stepCycle()
-    }, cadenceRef.current * 1000)
-  }, [clearCadenceTimer, stepCycle])
+    timers.clearAll()
+    timers.setRepeat(stepCycle, cadenceRef.current * 1000)
+  }, [timers, stepCycle])
 
   // Acción al pulsar el punto periférico en el modo interactivo (Nombra y Pulsa)
   const handleTapTarget = useCallback((e) => {
@@ -107,30 +107,19 @@ export default function PeripheryGame() {
 
   // Reiniciar ejercicio
   const resetGame = useCallback(() => {
-    clearCadenceTimer()
+    timers.clearAll()
     setHits(0)
     hitsRef.current = 0
     setHitRipple(null)
     stimulus.resetStimulus()
     setPeripheralPos(getRandomPeripheralPosition(distanceRef.current))
-  }, [clearCadenceTimer, stimulus])
+  }, [timers, stimulus])
 
   // Salir del resumen y volver al menú de opciones
   const handleDismissSummary = useCallback(() => {
     setShowSummary(false)
     resetGame()
   }, [resetGame])
-
-  useEffect(() => {
-    if (!showSummary) return
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' || e.key === 'Enter') {
-        handleDismissSummary()
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [showSummary, handleDismissSummary])
 
   const session = useGameSession({
     onBeginPlay: () => {
@@ -141,11 +130,11 @@ export default function PeripheryGame() {
       stimulus.nextStimulus()
       startCadenceTimer()
     },
-    onPause: clearCadenceTimer,
+    onPause: timers.clearAll,
     onResume: startCadenceTimer,
     onReset: resetGame,
     onEnd: () => {
-      clearCadenceTimer()
+      timers.clearAll()
       if (modeRef.current === 'name-and-tap') {
         setFinalScore(hitsRef.current)
         setShowSummary(true)
@@ -158,21 +147,23 @@ export default function PeripheryGame() {
     if (modeRef.current === 'name-and-tap' && session.started) {
       setFinalScore(hitsRef.current)
       setShowSummary(true)
-      clearCadenceTimer()
+      timers.clearAll()
       session.handleReset()
     } else {
       session.handleReset()
     }
-  }, [clearCadenceTimer, session])
+  }, [timers, session])
 
   const shellSession = {
     ...session,
     handleReset: handleStopOrReset,
   }
 
-  useEffect(() => {
-    return () => clearCadenceTimer()
-  }, [clearCadenceTimer])
+  // Empezar otra sesión desde el resumen con la misma configuración
+  const handleRestartFromSummary = useCallback(() => {
+    setShowSummary(false)
+    session.handleStart()
+  }, [session])
 
   const isPlayingOrPaused = session.started && (session.isPlaying || session.isPaused)
   const distanceLabel =
@@ -213,48 +204,18 @@ export default function PeripheryGame() {
       }
       gameControls={
         <>
-          {/* Selector de modo interactivo en cuadrícula idéntica a estímulos */}
-          <div className="modeGridContainer">
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap', marginBottom: '4px' }}>
-              <span className="controlLabel" id="periphery-mode-label" style={{ marginBottom: 0 }}>
-                Modo de juego
-              </span>
-              <span style={{ fontSize: '0.73rem', fontWeight: 500, color: '#94a3b8' }}>
-                · {MODE_DESCRIPTIONS[mode]}
-              </span>
-            </div>
-            <div
-              className="modeGrid"
-              role="radiogroup"
-              aria-labelledby="periphery-mode-label"
-            >
-              {PERIPHERY_MODES.map((m) => {
-                const isSelected = m.value === mode
-                return (
-                  <button
-                    key={m.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={isSelected}
-                    disabled={!session.isIdle}
-                    className={`modeCard ${isSelected ? 'modeCardActive' : ''}`}
-                    onClick={() => {
-                      if (session.isIdle) {
-                        setMode(m.value)
-                        resetGame()
-                      }
-                    }}
-                    title={m.description}
-                  >
-                    <div className="modeCardIcon">
-                      {m.icon === 'click' ? <IconClick /> : m.icon === 'target' ? <IconTarget /> : <span>{m.icon}</span>}
-                    </div>
-                    <span className="modeCardLabel">{m.label}</span>
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+          <ModeSelector
+            id="periphery-mode"
+            label="Modo de juego"
+            description={MODE_DESCRIPTIONS[mode]}
+            value={mode}
+            options={MODE_OPTIONS}
+            disabled={!session.isIdle}
+            onChange={(value) => {
+              setMode(value)
+              resetGame()
+            }}
+          />
 
           {/* Distancia al centro (Cercana, Media, Lejana, Aleatoria) */}
           <OptionPicker
@@ -340,48 +301,18 @@ export default function PeripheryGame() {
       )}
 
       {/* Pantalla de resultado final de aciertos en modo pulsar estilo cuenta atrás */}
-      {showSummary && (
-        <div
-          className="peripherySummaryOverlay"
-          onClick={handleDismissSummary}
-          role="dialog"
-          aria-modal="true"
-          title="Pulsa para volver al menú de opciones"
-        >
-          <div
-            className="peripherySummarySimple"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="peripherySummaryScoreGroup">
-              <span className="peripherySummaryNumber">{finalScore}</span>
-              <span className="peripherySummaryLabel">
-                {finalScore === 1 ? 'acierto' : 'aciertos'}
-              </span>
-            </div>
-
-            <div className="peripherySummaryMeta">
-              <div className="peripherySummaryMetaItem">
-                <span className="peripherySummaryMetaKey">Velocidad de cambio:</span>
-                <span className="peripherySummaryMetaVal">{cadence} s</span>
-              </div>
-              <span className="peripherySummaryMetaDivider">•</span>
-              <div className="peripherySummaryMetaItem">
-                <span className="peripherySummaryMetaKey">Distancia:</span>
-                <span className="peripherySummaryMetaVal">{distanceLabel}</span>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              className="peripherySummarySimpleBtn"
-              onClick={handleDismissSummary}
-              autoFocus
-            >
-              Volver al menú
-            </button>
-          </div>
-        </div>
-      )}
+      <SessionSummary
+        open={showSummary}
+        headline={{ value: finalScore, label: finalScore === 1 ? 'acierto' : 'aciertos' }}
+        stats={[
+          { label: 'Velocidad de cambio', value: `${cadence} s` },
+          { label: 'Distancia', value: distanceLabel },
+        ]}
+        onRestart={handleRestartFromSummary}
+        onExit={handleDismissSummary}
+        exitLabel="Volver al menú"
+        dismissOnBackdrop
+      />
     </GameShell>
   )
 }
