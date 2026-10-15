@@ -25,10 +25,12 @@ export { StimulusIllustration } from './stimuli/StimulusIllustration'
 export { useGameSession } from './hooks/useGameSession'
 export { useStimulusManager } from './hooks/useStimulusManager'
 export { useTimers } from './hooks/useTimers'
+export { useAdaptiveLevel } from './hooks/useAdaptiveLevel'
 
 // Constantes, opciones y catálogos (incluye animales, frutas, letras, palabras)
 export * from './data/constants'
 
 // Utilidades
 export { formatTime } from './utils/formatTime'
+export { shuffle } from './utils/shuffle'
 export { IconPlay, IconPause, IconReset, IconClick, IconTarget } from './utils/icons'
