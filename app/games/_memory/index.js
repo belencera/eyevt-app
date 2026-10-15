@@ -10,7 +10,6 @@
 export * from './common/constants'
 export { getCategoryItems } from './common/stimulusPool'
 export { preloadImages } from './common/preloadImages'
-export { LevelStatus } from './common/LevelStatus'
 
 // ── Recall: Memoria Visual, Secuencial y Taquitoscopio ──
 export * from './recall/constants'

@@ -8,9 +8,9 @@ import {
   StimulusGrid,
   StimulusExtraControls,
   useStimulusManager,
+  LevelStatus,
 } from '../_shared'
 import {
-  LevelStatus,
   PairsBoard,
   useMemoryPairs,
   CARD_SIZE_FACTOR,

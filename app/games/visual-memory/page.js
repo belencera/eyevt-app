@@ -10,9 +10,9 @@ import {
   useStimulusManager,
   IconRandom,
   IconTarget,
+  LevelStatus,
 } from '../_shared'
 import {
-  LevelStatus,
   RecallPresentation,
   ResponseGrid,
   useRecallGame,

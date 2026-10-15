@@ -1,7 +1,7 @@
 'use client'
 
 import { StimulusItem } from '../../_shared'
-import '../common/memory.css'
+import '../../_shared/rounds/rounds.css'
 import './recall.css'
 
 /**
@@ -69,7 +69,7 @@ export function RecallPresentation({
           return (
             <div
               key={index}
-              className={`memoryFlow recallSlot ${isHidden ? 'recallSlotHidden' : ''}`}
+              className={`stimulusFlow recallSlot ${isHidden ? 'recallSlotHidden' : ''}`}
               aria-hidden={isHidden}
             >
               <StimulusItem type={type} item={value} sizePx={sizePx} sizeLevel={sizeLevel} />

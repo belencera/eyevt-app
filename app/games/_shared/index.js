@@ -30,6 +30,9 @@ export { useAdaptiveLevel } from './hooks/useAdaptiveLevel'
 // Constantes, opciones y catálogos (incluye animales, frutas, letras, palabras)
 export * from './data/constants'
 
+// Juegos por rondas con nivel (memoria y discriminación)
+export * from './rounds'
+
 // Utilidades
 export { formatTime } from './utils/formatTime'
 export { shuffle } from './utils/shuffle'

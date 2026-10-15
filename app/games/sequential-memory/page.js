@@ -7,9 +7,9 @@ import {
   StimulusGrid,
   StimulusExtraControls,
   useStimulusManager,
+  LevelStatus,
 } from '../_shared'
 import {
-  LevelStatus,
   RecallPresentation,
   ResponseGrid,
   useRecallGame,

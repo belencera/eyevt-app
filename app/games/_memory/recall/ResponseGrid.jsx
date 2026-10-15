@@ -1,7 +1,7 @@
 'use client'
 
 import { StimulusItem } from '../../_shared'
-import '../common/memory.css'
+import '../../_shared/rounds/rounds.css'
 import './recall.css'
 
 /** Tamaño del estímulo dentro de cada tarjeta según la categoría (los textos largos necesitan menos) */
@@ -96,7 +96,7 @@ export function ResponseGrid({
               onClick={() => onSelect?.(option)}
               aria-pressed={isSelected}
             >
-              <div className="memoryFlow">
+              <div className="stimulusFlow">
                 <StimulusItem type={type} item={option.value} sizePx={stimulusPx} />
               </div>
               {badge && <span className="recallCardBadge">{badge}</span>}
@@ -105,11 +105,11 @@ export function ResponseGrid({
         })}
       </div>
 
-      <div className="memoryActions">
+      <div className="roundActions">
         {showUndo && (
           <button
             type="button"
-            className="memoryBtn"
+            className="roundBtn"
             disabled={disabled || selection.length === 0}
             onMouseDown={(e) => e.preventDefault()}
             onClick={onUndo}
@@ -120,7 +120,7 @@ export function ResponseGrid({
         {onNext && results && (
           <button
             type="button"
-            className="memoryBtn memoryBtnPrimary"
+            className="roundBtn roundBtnPrimary"
             onMouseDown={(e) => e.preventDefault()}
             onClick={onNext}
           >

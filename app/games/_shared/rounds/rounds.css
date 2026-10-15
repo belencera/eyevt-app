@@ -1,17 +1,17 @@
 /* ============================================================
-   Estilos comunes de los juegos de memoria
-   (Memoria Visual, Secuencial, Taquitoscopio y Memoria de parejas)
+   Estilos comunes de los juegos por rondas con nivel
+   (juegos de memoria y de discriminación)
    ============================================================ */
 
 /* Los estímulos compartidos se posicionan en absoluto (left/top + translate).
-   Dentro de .memoryFlow pasan a flujo normal para colocarse en filas y tarjetas. */
-.memoryFlow {
+   Dentro de .stimulusFlow pasan a flujo normal para colocarse en filas y tarjetas. */
+.stimulusFlow {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.memoryFlow > * {
+.stimulusFlow > * {
   position: static !important;
   transform: none !important;
 }
@@ -19,7 +19,7 @@
 /* ── Barra de nivel: NIVEL X | ● ○ ──
    ============================================================ */
 /* Centrada con márgenes (no con transform) para que la animación de entrada no la desplace */
-.memoryLevelStatus {
+.levelStatus {
   position: absolute;
   top: 18px;
   left: 0;
@@ -42,7 +42,7 @@
   animation: optionMenuIn 0.25s ease-out;
 }
 
-.memoryLevelLabel {
+.levelStatusLabel {
   font-size: 0.95rem;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -50,18 +50,18 @@
   font-variant-numeric: tabular-nums;
 }
 
-.memoryLevelSep {
+.levelStatusSep {
   width: 1px;
   height: 18px;
   background: rgba(148, 163, 184, 0.35);
 }
 
-.memoryLevelDots {
+.levelStatusDots {
   display: flex;
   gap: 6px;
 }
 
-.memoryLevelDot {
+.levelStatusDot {
   width: 11px;
   height: 11px;
   border-radius: 50%;
@@ -69,14 +69,14 @@
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.memoryLevelDotFilled {
+.levelStatusDotFilled {
   background: #38bdf8;
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
 }
 
 /* ── Botones de ronda ──
    ============================================================ */
-.memoryActions {
+.roundActions {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,7 +84,7 @@
   min-height: 44px;
 }
 
-.memoryBtn {
+.roundBtn {
   padding: 10px 24px;
   font-size: 0.95rem;
   font-weight: 700;
@@ -96,18 +96,18 @@
   transition: all 0.2s ease;
 }
 
-.memoryBtn:hover:not(:disabled) {
+.roundBtn:hover:not(:disabled) {
   background: rgba(148, 163, 184, 0.14);
   color: #f8fafc;
 }
 
-.memoryBtn:disabled {
+.roundBtn:disabled {
   opacity: 0.35;
   cursor: not-allowed;
 }
 
 /* Mismo estilo que la barra de nivel */
-.memoryBtnPrimary {
+.roundBtnPrimary {
   color: #f8fafc;
   background: rgba(15, 23, 42, 0.82);
   backdrop-filter: blur(14px);
@@ -116,7 +116,7 @@
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.2);
 }
 
-.memoryBtnPrimary:hover:not(:disabled) {
+.roundBtnPrimary:hover:not(:disabled) {
   background: rgba(15, 23, 42, 0.82);
   color: #f8fafc;
   border-color: rgba(56, 189, 248, 0.8);

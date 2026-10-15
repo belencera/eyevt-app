@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from 'react'
 import { StimulusItem } from '../../_shared'
-import '../common/memory.css'
+import '../../_shared/rounds/rounds.css'
 import './pairs.css'
 
 const GAP_PX = 12
@@ -105,7 +105,7 @@ export function PairsBoard({
               <span className="pairsCardInner">
                 <span className="pairsCardFace pairsCardBack" aria-hidden />
                 <span className="pairsCardFace pairsCardFront" aria-hidden={!isUp}>
-                  <span className="memoryFlow">
+                  <span className="stimulusFlow">
                     <StimulusItem type={type} item={card.value} sizePx={stimulusPx} />
                   </span>
                 </span>
@@ -115,11 +115,11 @@ export function PairsBoard({
         })}
       </div>
 
-      <div className="memoryActions">
+      <div className="roundActions">
         {onNext && (
           <button
             type="button"
-            className="memoryBtn memoryBtnPrimary"
+            className="roundBtn roundBtnPrimary"
             onMouseDown={(e) => e.preventDefault()}
             onClick={onNext}
           >
