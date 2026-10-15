@@ -83,7 +83,7 @@ export function PairsBoard({
         role="group"
         aria-label="Cartas"
       >
-        {deck.map((card) => {
+        {deck.map((card, index) => {
           const isMatched = matched.includes(card.id)
           const isUp = isMatched || faceUp.includes(card.id)
           const isMismatch = mismatch.includes(card.id)
@@ -95,6 +95,7 @@ export function PairsBoard({
               className={`pairsCard ${isUp ? 'pairsCardUp' : ''} ${isMatched ? 'pairsCardMatched' : ''} ${
                 isMismatch ? 'pairsCardMismatch' : ''
               }`}
+              style={{ '--pairs-index': index }}
               disabled={disabled || isUp}
               // Evita que la carta se quede con el foco y Espacio la vuelva a pulsar en lugar de pausar
               onMouseDown={(e) => e.preventDefault()}

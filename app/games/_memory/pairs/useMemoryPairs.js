@@ -28,6 +28,7 @@ const INITIAL_STATS = {
 export function useMemoryPairs({ stimulus, previewSeconds }) {
   const [phase, setPhase] = useState('idle') // idle | preview | playing | checking | complete
   const [level, setLevel] = useState(1)
+  const [roundId, setRoundId] = useState(0) // Cambia en cada ronda para montar cartas nuevas (sin animación de volteo)
   const [deck, setDeck] = useState([])
   const [faceUp, setFaceUp] = useState([]) // Cartas levantadas que aún no son pareja
   const [matched, setMatched] = useState([])
@@ -58,6 +59,7 @@ export function useMemoryPairs({ stimulus, previewSeconds }) {
     })
     preloadImages(nextDeck)
     setLevel(roundLevel)
+    setRoundId((prev) => prev + 1)
     setDeck(nextDeck)
     setFaceUp([])
     setMatched([])
@@ -158,6 +160,7 @@ export function useMemoryPairs({ stimulus, previewSeconds }) {
     session: { ...session, handleReset: handleExit },
     phase,
     level,
+    roundId,
     deck,
     columns: getDeckColumns(deck.length),
     // En la vista previa se ven todas las cartas

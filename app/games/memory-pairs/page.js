@@ -73,6 +73,8 @@ export default function MemoryPairsGame() {
           <LevelStatus level={game.level} filled={game.pairsInRound} total={game.totalPairs} />
 
           <PairsBoard
+            // Tablero nuevo en cada ronda: las cartas emparejadas de la anterior no se ven darse la vuelta
+            key={game.roundId}
             type={stimulus.stimulusType}
             deck={game.deck}
             columns={game.columns}
