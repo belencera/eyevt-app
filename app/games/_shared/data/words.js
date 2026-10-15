@@ -7,7 +7,7 @@ export const WORD_LENGTH_OPTIONS = [
   { value: 4, label: '4 letras' },
   { value: 5, label: '5 letras' },
   { value: 6, label: '6 letras' },
-  { value: 'all', label: 'Aleatorio', icon: '🎲' },
+  { value: 'all', label: 'Aleatorio' },
 ]
 
 /**
