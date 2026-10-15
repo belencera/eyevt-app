@@ -110,10 +110,11 @@ export function VisualMemoryPreview() {
   return (
     <div className="card-preview memory-preview">
       <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
-        <circle cx="82" cy="30" r="10" className="memory-node node-1" />
-        <circle cx="118" cy="30" r="10" className="memory-node node-2" />
-        <circle cx="82" cy="60" r="10" className="memory-node node-3" />
-        <circle cx="118" cy="60" r="10" className="memory-node node-4" />
+        {/* Patrones de dos círculos que aparecen y desaparecen a la vez */}
+        <circle cx="82" cy="30" r="10" className="pattern-node pattern-node-1" />
+        <circle cx="118" cy="30" r="10" className="pattern-node pattern-node-2" />
+        <circle cx="82" cy="60" r="10" className="pattern-node pattern-node-3" />
+        <circle cx="118" cy="60" r="10" className="pattern-node pattern-node-4" />
       </svg>
     </div>
   )

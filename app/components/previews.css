@@ -252,6 +252,53 @@
 .memory-node.node-3 { animation-delay: 2.4s; }
 .memory-node.node-4 { animation-delay: 3.6s; }
 
+/* Memoria visual: patrones de dos círculos que se encienden y apagan a la vez.
+   Ciclo de 4 patrones (25% cada uno): diagonal ↘ (1-4), diagonal ↙ (2-3),
+   columna izquierda (1-3) y columna derecha (2-4). */
+.pattern-node {
+  stroke: rgba(56, 189, 248, 0.4);
+  stroke-width: 1.5;
+  fill: rgba(15, 23, 42, 0.6);
+  animation-duration: 6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.pattern-node-1 { animation-name: patternNode1; }
+.pattern-node-2 { animation-name: patternNode2; }
+.pattern-node-3 { animation-name: patternNode3; }
+.pattern-node-4 { animation-name: patternNode4; }
+
+@keyframes patternNode1 {
+  0%, 16% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  20%, 46% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+  50%, 66% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  70%, 100% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+}
+
+@keyframes patternNode2 {
+  0%, 21% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+  25%, 41% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  45%, 71% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+  75%, 91% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  95%, 100% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+}
+
+@keyframes patternNode3 {
+  0%, 21% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+  25%, 41% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  45%, 46% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+  50%, 66% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  70%, 100% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+}
+
+@keyframes patternNode4 {
+  0%, 16% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  20%, 71% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+  75%, 91% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  95%, 100% { fill: rgba(15, 23, 42, 0.6); filter: none; }
+}
+
 /* Memoria secuencial: línea que une los estímulos en orden */
 .sequence-track {
   stroke: rgba(56, 189, 248, 0.25);
