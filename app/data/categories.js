@@ -1,7 +1,7 @@
 export const CATEGORIES = [
   {
     id: 'oculomotricidad',
-    title: 'OCULOMOTRICIDAD',
+    label: 'Oculomotricidad',
     description: 'Movimiento ocular, estabilidad de la fijación y atención periférica',
     games: [
       {
@@ -36,7 +36,7 @@ export const CATEGORIES = [
   },
   {
     id: 'binocularidad',
-    title: 'BINOCULARIDAD',
+    label: 'Binocularidad',
     description: 'Coordinación visual mediante diferentes posiciones y configuraciones de estímulos',
     games: [
       {
@@ -50,7 +50,7 @@ export const CATEGORIES = [
   },
   {
     id: 'percepcion',
-    title: 'PERCEPCIÓN VISUAL',
+    label: 'Percepción',
     description: 'Procesamiento y reconocimiento de información visual',
     games: [
       {
