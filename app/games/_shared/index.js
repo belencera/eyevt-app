@@ -12,6 +12,7 @@ export { KeyboardShortcutsBar } from './components/KeyboardShortcutsBar'
 
 // Estímulos visuales
 export { StimulusDot } from './stimuli/StimulusDot'
+export { StimulusItem } from './stimuli/StimulusItem'
 export { StimulusLetter } from './stimuli/StimulusLetter'
 export { StimulusWord } from './stimuli/StimulusWord'
 export { StimulusNumber } from './stimuli/StimulusNumber'
