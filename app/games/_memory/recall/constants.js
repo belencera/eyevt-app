@@ -22,6 +22,7 @@ export const SINGLE_ROW_MAX = 4 // Categorías pequeñas (pbqd, flechas) en una 
 
 // ── Tiempos de presentación ──
 export const FLASH_DELAY_MS = 600 // Pantalla vacía antes del flash del Taquitoscopio (centra la mirada y precarga imágenes)
+export const FADE_MS = 200 // Fundido de estímulos y cuadrícula (igual que las transiciones de recall.css)
 export const RESPONSE_DELAY_MS = 500 // Pantalla vacía tras la presentación, antes de mostrar las respuestas
 export const SEQUENCE_GAP_MS = 250 // Pantalla en blanco entre estímulos de la secuencia
 

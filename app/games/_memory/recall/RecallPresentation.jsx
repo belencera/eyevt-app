@@ -10,6 +10,8 @@ import './recall.css'
  * - 'presenting': los estímulos en una fila centrada, o cada uno en su posición si se pasan `positions`
  * - Cualquier otra fase (hueco en blanco, respuesta...): pantalla vacía
  *
+ * Los estímulos aparecen y desaparecen con un fundido corto, salvo con `instant` (flash del Taquitoscopio).
+ *
  * Con `activeIndex` solo se ve el estímulo de esa posición, pero la fila reserva el hueco
  * de todos: en Memoria Secuencial cada estímulo aparece a la derecha del anterior.
  *
@@ -20,6 +22,7 @@ import './recall.css'
  * @param {Array<{ x: number, y: number }>|null} [positions] - Posiciones en pantalla (%) por estímulo
  * @param {number} sizePx - Tamaño del estímulo (↑ / ↓)
  * @param {string} [sizeLevel] - Nivel de tamaño de respaldo
+ * @param {boolean} [instant=false] - Sin fundido: aparece y desaparece de golpe
  */
 export function RecallPresentation({
   phase,
@@ -29,38 +32,44 @@ export function RecallPresentation({
   positions = null,
   sizePx,
   sizeLevel,
+  instant = false,
 }) {
-  if (phase !== 'presenting') return null
+  // Se mantiene montado fuera de 'presenting' (oculto) para que los estímulos puedan desvanecerse
+  const isVisible = (index) => phase === 'presenting' && (activeIndex === null || index === activeIndex)
+  const stageClass = `recallStage ${instant ? 'recallStageInstant' : ''}`
 
   // Modo disperso: cada estímulo en su posición de pantalla (los estímulos ya se colocan en %)
   if (positions) {
     return (
-      <div className="recallStage">
-        {items.map((value, index) =>
-          activeIndex === null || index === activeIndex ? (
+      <div className={stageClass}>
+        {items.map((value, index) => (
+          <div
+            key={index}
+            className={`recallSlot ${isVisible(index) ? '' : 'recallSlotHidden'}`}
+            aria-hidden={!isVisible(index)}
+          >
             <StimulusItem
-              key={index}
               type={type}
               item={value}
               position={positions[index]}
               sizePx={sizePx}
               sizeLevel={sizeLevel}
             />
-          ) : null
-        )}
+          </div>
+        ))}
       </div>
     )
   }
 
   return (
-    <div className="recallStage">
+    <div className={stageClass}>
       <div className="recallStageRow">
         {items.map((value, index) => {
-          const isHidden = activeIndex !== null && index !== activeIndex
+          const isHidden = !isVisible(index)
           return (
             <div
               key={index}
-              className={`memoryFlow ${isHidden ? 'recallSlotHidden' : ''}`}
+              className={`memoryFlow recallSlot ${isHidden ? 'recallSlotHidden' : ''}`}
               aria-hidden={isHidden}
             >
               <StimulusItem type={type} item={value} sizePx={sizePx} sizeLevel={sizeLevel} />

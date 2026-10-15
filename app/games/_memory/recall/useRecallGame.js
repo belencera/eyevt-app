@@ -6,7 +6,7 @@ import { preloadImages } from '../common/preloadImages'
 import { buildRecallRound } from './buildRound'
 import { evaluateAnswer } from './evaluateAnswer'
 import { getScatteredPositions } from './scatter'
-import { INFINITE_MAX_FAILS, LEVEL_UP_STREAK } from './constants'
+import { FADE_MS, INFINITE_MAX_FAILS, LEVEL_UP_STREAK } from './constants'
 
 /** Fases en las que se muestran estímulos (se repiten desde el principio al reanudar la pausa) */
 const PRESENTATION_PHASES = ['presenting', 'gap']
@@ -24,7 +24,7 @@ const PRESENTATION_PHASES = ['presenting', 'gap']
  * @param {{ stimulus: object, buildSteps: (round) => Array<{ phase: string, ms: number, index?: number }>, ordered?: boolean, scattered?: boolean }} params
  */
 export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered = false }) {
-  const [phase, setPhase] = useState('idle') // idle | presenting | gap | responding | feedback
+  const [phase, setPhase] = useState('idle') // idle | presenting | gap | responding | feedback | leaving
   const [stepIndex, setStepIndex] = useState(null)
   const [round, setRound] = useState(null)
   const [selection, setSelection] = useState([])
@@ -99,6 +99,7 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered
     onResume: () => {
       // Al reanudar durante la presentación se repite desde el principio (sin exposición extra)
       if (round && PRESENTATION_PHASES.includes(phase)) runPresentation(round)
+      else if (phase === 'leaving') startRound(level.level)
     },
     onReset: clearRound,
     onEnd: () => {
@@ -137,7 +138,9 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered
 
   const nextRound = () => {
     if (phase !== 'feedback' || session.isPaused) return
-    startRound(level.level)
+    // La cuadrícula se desvanece antes de empezar la siguiente ronda
+    setPhase('leaving')
+    timers.setTimer(() => startRound(level.level), FADE_MS)
   }
 
   const restartFromSummary = () => {
@@ -163,7 +166,8 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered
     positions: round?.positions ?? null, // Posiciones en pantalla en modo disperso (null = fila centrada)
     selection,
     results,
-    isAnswering: phase === 'responding' || phase === 'feedback',
+    isAnswering: ['responding', 'feedback', 'leaving'].includes(phase),
+    isLeaving: phase === 'leaving',
     level: level.level,
     streak: level.streak,
     upAfter: level.upAfter,

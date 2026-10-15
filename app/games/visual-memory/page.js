@@ -121,6 +121,7 @@ export default function VisualMemoryGame() {
               results={game.results}
               disabled={game.phase !== 'responding'}
               isPaused={session.isPaused}
+              leaving={game.isLeaving}
               onSelect={game.select}
               onNext={game.nextRound}
             />

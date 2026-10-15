@@ -87,6 +87,7 @@ export default function TachistoscopeGame() {
             items={game.presentedItems}
             sizePx={stimulus.sizePx}
             sizeLevel={stimulus.sizeLevel}
+            instant
           />
 
           {game.isAnswering && (
@@ -98,6 +99,7 @@ export default function TachistoscopeGame() {
               results={game.results}
               disabled={game.phase !== 'responding'}
               isPaused={session.isPaused}
+              leaving={game.isLeaving}
               onSelect={game.select}
               onNext={game.nextRound}
             />

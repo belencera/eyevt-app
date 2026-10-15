@@ -22,9 +22,24 @@
   max-width: 90%;
 }
 
-/* Hueco reservado de un estímulo que no toca mostrar (Memoria Secuencial) */
+/* Fundido corto al aparecer y desaparecer (FADE_MS); la animación cubre también los estímulos recién montados */
+.recallSlot {
+  transition: opacity 0.2s ease;
+}
+
+.recallSlot:not(.recallSlotHidden) {
+  animation: recallFadeIn 0.2s ease;
+}
+
+/* Estímulo que no toca mostrar: sigue reservando su hueco (Memoria Secuencial) */
 .recallSlotHidden {
-  visibility: hidden;
+  opacity: 0;
+}
+
+/* Flash del Taquitoscopio: aparece y desaparece de golpe */
+.recallStageInstant .recallSlot {
+  transition: none;
+  animation: none;
 }
 
 /* ── Cuadrícula de respuesta ──
@@ -38,6 +53,19 @@
   justify-content: center;
   gap: 36px;
   padding: 72px 16px 24px;
+  animation: recallFadeIn 0.2s ease;
+  transition: opacity 0.2s ease;
+}
+
+@keyframes recallFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.recallBoardLeaving {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .recallGrid {

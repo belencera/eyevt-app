@@ -43,6 +43,7 @@ function getBadge(selection, key, ordered) {
  * @param {boolean} [ordered=false] - Muestra el orden de pulsación en cada tarjeta
  * @param {boolean} [disabled=false] - Bloquea las respuestas (fuera de la fase de respuesta)
  * @param {boolean} [isPaused=false] - Atenúa la cuadrícula durante la pausa
+ * @param {boolean} [leaving=false] - Desvanece la cuadrícula antes de la siguiente ronda
  * @param {(option) => void} onSelect
  * @param {() => void} [onUndo] - Si se pasa, muestra el botón Deshacer mientras se responde
  * @param {() => void} [onNext] - Si se pasa, muestra el botón Siguiente ronda (tras corregir)
@@ -56,6 +57,7 @@ export function ResponseGrid({
   ordered = false,
   disabled = false,
   isPaused = false,
+  leaving = false,
   onSelect,
   onUndo,
   onNext,
@@ -64,7 +66,9 @@ export function ResponseGrid({
   const showUndo = Boolean(onUndo) && !results
 
   return (
-    <div className={`recallBoard ${isPaused ? 'recallBoardPaused' : ''}`}>
+    <div
+      className={`recallBoard ${isPaused ? 'recallBoardPaused' : ''} ${leaving ? 'recallBoardLeaving' : ''}`}
+    >
       <div
         className="recallGrid"
         style={{ '--recall-cols': columns }}

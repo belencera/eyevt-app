@@ -99,6 +99,7 @@ export default function SequentialMemoryGame() {
               ordered
               disabled={game.phase !== 'responding'}
               isPaused={session.isPaused}
+              leaving={game.isLeaving}
               onSelect={game.select}
               onUndo={game.undo}
               onNext={game.nextRound}
