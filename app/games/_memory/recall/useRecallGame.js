@@ -2,25 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAdaptiveLevel, useGameSession, useTimers } from '../../_shared'
-import { buildRecallRound } from '../data/stimulusPool'
-import { evaluateAnswer } from '../data/evaluateAnswer'
-import { INFINITE_MAX_FAILS, LEVEL_UP_STREAK } from '../data/recallConstants'
+import { preloadImages } from '../common/preloadImages'
+import { buildRecallRound } from './buildRound'
+import { evaluateAnswer } from './evaluateAnswer'
+import { INFINITE_MAX_FAILS, LEVEL_UP_STREAK } from './constants'
 
 /** Fases en las que se muestran estímulos (se repiten desde el principio al reanudar la pausa) */
 const PRESENTATION_PHASES = ['presenting', 'gap']
-
-/**
- * Precarga las ilustraciones de la ronda para que estén listas al mostrarse,
- * imprescindible en flashes muy cortos (Taquitoscopio a 50 ms).
- */
-function preloadImages(options) {
-  options.forEach(({ value }) => {
-    if (value?.src) {
-      const img = new Image()
-      img.src = value.src
-    }
-  })
-}
 
 /**
  * Flujo completo de los juegos de memoria y percepción:

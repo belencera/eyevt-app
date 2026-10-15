@@ -14,12 +14,12 @@ import {
   ResponseGrid,
   useRecallGame,
   DEFAULT_FLASH_MS,
-  DEFAULT_RECALL_STIMULUS,
+  DEFAULT_MEMORY_STIMULUS,
   FLASH_DELAY_MS,
   FLASH_MS_STEPS,
-  RECALL_SHORTCUTS_HINT,
-  RECALL_STIMULUS_OPTIONS,
-} from '../_recall'
+  MEMORY_SHORTCUTS_HINT,
+  MEMORY_STIMULUS_OPTIONS,
+} from '../_memory'
 
 const TACHISTOSCOPE_HINT =
   'Mirar al centro de la pantalla, identificar los estímulos que aparecen durante un instante y seleccionarlos en la cuadrícula.'
@@ -27,7 +27,7 @@ const TACHISTOSCOPE_HINT =
 export default function TachistoscopeGame() {
   const [flashMs, setFlashMs] = useState(DEFAULT_FLASH_MS) // Milisegundos que dura el flash
 
-  const stimulus = useStimulusManager(DEFAULT_RECALL_STIMULUS)
+  const stimulus = useStimulusManager(DEFAULT_MEMORY_STIMULUS)
 
   // Pantalla vacía breve y flash ultracorto de todos los estímulos en fila
   const buildSteps = useCallback(
@@ -59,7 +59,7 @@ export default function TachistoscopeGame() {
       stimulusGrid={
         <StimulusGrid
           value={stimulus.stimulusType}
-          options={RECALL_STIMULUS_OPTIONS}
+          options={MEMORY_STIMULUS_OPTIONS}
           disabled={!session.isIdle}
           onChange={stimulus.handleStimulusChange}
         />
@@ -73,11 +73,11 @@ export default function TachistoscopeGame() {
         />
       }
       shortcuts={[]}
-      shortcutsHint={RECALL_SHORTCUTS_HINT}
+      shortcutsHint={MEMORY_SHORTCUTS_HINT}
     >
       {session.started && game.round && (
         <>
-          <LevelStatus level={game.level} streak={game.streak} upAfter={game.upAfter} />
+          <LevelStatus level={game.level} filled={game.streak} total={game.upAfter} />
 
           <RecallPresentation
             phase={game.stagePhase}

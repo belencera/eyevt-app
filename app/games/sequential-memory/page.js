@@ -13,13 +13,13 @@ import {
   RecallPresentation,
   ResponseGrid,
   useRecallGame,
-  DEFAULT_RECALL_STIMULUS,
+  DEFAULT_MEMORY_STIMULUS,
   DEFAULT_SEQUENCE_SPEED,
-  RECALL_SHORTCUTS_HINT,
-  RECALL_STIMULUS_OPTIONS,
+  MEMORY_SHORTCUTS_HINT,
+  MEMORY_STIMULUS_OPTIONS,
   SEQUENCE_GAP_MS,
   SEQUENCE_SPEED_STEPS,
-} from '../_recall'
+} from '../_memory'
 
 const SEQUENTIAL_MEMORY_HINT =
   'Memorizar los estímulos que aparecen uno tras otro y pulsarlos después en el mismo orden.'
@@ -27,7 +27,7 @@ const SEQUENTIAL_MEMORY_HINT =
 export default function SequentialMemoryGame() {
   const [speed, setSpeed] = useState(DEFAULT_SEQUENCE_SPEED) // Segundos que se muestra cada estímulo
 
-  const stimulus = useStimulusManager(DEFAULT_RECALL_STIMULUS)
+  const stimulus = useStimulusManager(DEFAULT_MEMORY_STIMULUS)
 
   // Presentación serial en fila: cada objetivo aparece a la derecha del anterior, separados por un breve hueco en blanco
   const buildSteps = useCallback(
@@ -60,7 +60,7 @@ export default function SequentialMemoryGame() {
       stimulusGrid={
         <StimulusGrid
           value={stimulus.stimulusType}
-          options={RECALL_STIMULUS_OPTIONS}
+          options={MEMORY_STIMULUS_OPTIONS}
           disabled={!session.isIdle}
           onChange={stimulus.handleStimulusChange}
         />
@@ -74,11 +74,11 @@ export default function SequentialMemoryGame() {
         />
       }
       shortcuts={[]}
-      shortcutsHint={RECALL_SHORTCUTS_HINT}
+      shortcutsHint={MEMORY_SHORTCUTS_HINT}
     >
       {session.started && game.round && (
         <>
-          <LevelStatus level={game.level} streak={game.streak} upAfter={game.upAfter} />
+          <LevelStatus level={game.level} filled={game.streak} total={game.upAfter} />
 
           <RecallPresentation
             phase={game.stagePhase}

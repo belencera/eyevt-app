@@ -1,0 +1,120 @@
+/* ============================================================
+   Estilos comunes de los juegos de memoria
+   (Memoria Visual, Secuencial, Taquitoscopio y Memoria de parejas)
+   ============================================================ */
+
+/* Los estímulos compartidos se posicionan en absoluto (left/top + translate).
+   Dentro de .memoryFlow pasan a flujo normal para colocarse en filas y tarjetas. */
+.memoryFlow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.memoryFlow > * {
+  position: static !important;
+  transform: none !important;
+}
+
+/* ── Barra de nivel: NIVEL X | ● ○ ──
+   ============================================================ */
+/* Centrada con márgenes (no con transform) para que la animación de entrada no la desplace */
+.memoryLevelStatus {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  margin: 0 auto;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(56, 189, 248, 0.38);
+  border-radius: 999px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 18px rgba(56, 189, 248, 0.2);
+  user-select: none;
+  pointer-events: none;
+  animation: optionMenuIn 0.25s ease-out;
+}
+
+.memoryLevelLabel {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #f8fafc;
+  font-variant-numeric: tabular-nums;
+}
+
+.memoryLevelSep {
+  width: 1px;
+  height: 18px;
+  background: rgba(148, 163, 184, 0.35);
+}
+
+.memoryLevelDots {
+  display: flex;
+  gap: 6px;
+}
+
+.memoryLevelDot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid rgba(56, 189, 248, 0.6);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.memoryLevelDotFilled {
+  background: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+}
+
+/* ── Botones de ronda ──
+   ============================================================ */
+.memoryActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.memoryBtn {
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.memoryBtn:hover:not(:disabled) {
+  background: rgba(148, 163, 184, 0.14);
+  color: #f8fafc;
+}
+
+.memoryBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.memoryBtnPrimary {
+  background: rgba(56, 189, 248, 0.14);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.memoryBtnPrimary:hover:not(:disabled) {
+  background: #38bdf8;
+  color: #082f49;
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.4);
+}
+

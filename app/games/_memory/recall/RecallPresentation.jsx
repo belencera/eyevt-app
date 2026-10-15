@@ -1,7 +1,8 @@
 'use client'
 
 import { StimulusItem } from '../../_shared'
-import '../recall.css'
+import '../common/memory.css'
+import './recall.css'
 
 /**
  * Fase de presentación de una ronda en el centro de la pantalla.
@@ -30,7 +31,7 @@ export function RecallPresentation({ phase, type, items = [], activeIndex = null
           return (
             <div
               key={index}
-              className={`recallFlow ${isHidden ? 'recallSlotHidden' : ''}`}
+              className={`memoryFlow ${isHidden ? 'recallSlotHidden' : ''}`}
               aria-hidden={isHidden}
             >
               <StimulusItem type={type} item={value} sizePx={sizePx} sizeLevel={sizeLevel} />

@@ -14,11 +14,11 @@ import {
   ResponseGrid,
   useRecallGame,
   DEFAULT_EXPOSURE,
-  DEFAULT_RECALL_STIMULUS,
+  DEFAULT_MEMORY_STIMULUS,
   EXPOSURE_STEPS,
-  RECALL_SHORTCUTS_HINT,
-  RECALL_STIMULUS_OPTIONS,
-} from '../_recall'
+  MEMORY_SHORTCUTS_HINT,
+  MEMORY_STIMULUS_OPTIONS,
+} from '../_memory'
 
 const VISUAL_MEMORY_HINT =
   'Memorizar los estímulos que aparecen a la vez y seleccionarlos después en la cuadrícula, en cualquier orden.'
@@ -26,7 +26,7 @@ const VISUAL_MEMORY_HINT =
 export default function VisualMemoryGame() {
   const [exposure, setExposure] = useState(DEFAULT_EXPOSURE) // Segundos que los estímulos permanecen visibles
 
-  const stimulus = useStimulusManager(DEFAULT_RECALL_STIMULUS)
+  const stimulus = useStimulusManager(DEFAULT_MEMORY_STIMULUS)
 
   // Presentación simultánea: todos los objetivos a la vez durante el tiempo de exposición
   const buildSteps = useCallback(
@@ -55,7 +55,7 @@ export default function VisualMemoryGame() {
       stimulusGrid={
         <StimulusGrid
           value={stimulus.stimulusType}
-          options={RECALL_STIMULUS_OPTIONS}
+          options={MEMORY_STIMULUS_OPTIONS}
           disabled={!session.isIdle}
           onChange={stimulus.handleStimulusChange}
         />
@@ -69,11 +69,11 @@ export default function VisualMemoryGame() {
         />
       }
       shortcuts={[]}
-      shortcutsHint={RECALL_SHORTCUTS_HINT}
+      shortcutsHint={MEMORY_SHORTCUTS_HINT}
     >
       {session.started && game.round && (
         <>
-          <LevelStatus level={game.level} streak={game.streak} upAfter={game.upAfter} />
+          <LevelStatus level={game.level} filled={game.streak} total={game.upAfter} />
 
           <RecallPresentation
             phase={game.stagePhase}
