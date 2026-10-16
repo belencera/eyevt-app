@@ -33,7 +33,7 @@ function getLayout(desiredPx, gapPx, viewport) {
  * @param {number} gapPx - Separación entre las tarjetas (← / →)
  * @param {{ card: number, index: number }|null} selected - Estímulo pulsado
  * @param {boolean} isAnswered
- * @param {boolean} isVisible - Modo memoria
+ * @param {number|null} visibleCard - Modo memoria: tarjeta visible (0 | 1); null = las dos
  * @param {number|null} rotationSeconds - Modo girando (null = quietas)
  * @param {boolean} [isPaused=false]
  * @param {(card: number, index: number) => void} onSelect
@@ -46,7 +46,7 @@ export function RepeatsBoard({
   gapPx,
   selected,
   isAnswered,
-  isVisible,
+  visibleCard,
   rotationSeconds,
   isPaused = false,
   onSelect,
@@ -67,7 +67,7 @@ export function RepeatsBoard({
             commonKey={round.commonKey}
             selectedIndex={selected?.card === card ? selected.index : null}
             isAnswered={isAnswered}
-            isVisible={isVisible}
+            isVisible={visibleCard === null || visibleCard === card}
             rotationSeconds={rotationSeconds}
             reverse={card === 1}
             isPaused={isPaused}

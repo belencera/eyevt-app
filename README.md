@@ -120,7 +120,7 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
 - **Objetivo:** Búsqueda visual rápida: encontrar el único estímulo que comparten dos tarjetas redondas, con estímulos de distintos tamaños y giros.
 - **Modos de Juego:**
   - **Normal:** Las dos tarjetas quietas.
-  - **Con memoria:** Las tarjetas aparecen y desaparecen a la vez (tiempo visible de 1 s a 5 s); se puede pulsar aunque estén ocultas.
+  - **Con memoria:** Solo se ve una tarjeta a la vez y se van alternando (tiempo visible de 1 s a 5 s); se puede pulsar aunque esté oculta.
   - **Girando:** Las tarjetas giran sin parar en sentidos opuestos (velocidad lenta, media o rápida).
 - **Configuración:**
   - Empieza con 3 estímulos por tarjeta; cada acierto añade uno, hasta 8. Un fallo repite el mismo número.

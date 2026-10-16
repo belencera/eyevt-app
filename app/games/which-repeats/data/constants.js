@@ -32,7 +32,7 @@ export const WHICH_REPEATS_MODES = [
   {
     value: 'memory',
     label: 'Con memoria',
-    description: 'Las tarjetas aparecen y desaparecen a la vez; se puede pulsar aunque estén ocultas',
+    description: 'Las tarjetas se ven de una en una, alternándose; se puede pulsar aunque estén ocultas',
   },
   {
     value: 'rotating',
@@ -42,7 +42,7 @@ export const WHICH_REPEATS_MODES = [
 ]
 export const DEFAULT_WHICH_REPEATS_MODE = 'normal'
 
-/** Con memoria: segundos que se ven las tarjetas (ocultas siempre HIDDEN_MS) */
+/** Con memoria: segundos que se ve cada tarjeta antes de pasar a la otra */
 export const VISIBLE_SECONDS_OPTIONS = [
   { value: 1, label: '1 s' },
   { value: 2, label: '2 s' },
@@ -50,7 +50,6 @@ export const VISIBLE_SECONDS_OPTIONS = [
   { value: 5, label: '5 s' },
 ]
 export const DEFAULT_VISIBLE_SECONDS = 2
-export const HIDDEN_MS = 1000
 
 /** Girando: segundos por vuelta completa */
 export const ROTATION_SPEED_OPTIONS = [

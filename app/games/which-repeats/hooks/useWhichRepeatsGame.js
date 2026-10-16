@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { preloadImages, useGameSession, useRoundScore, useTimers } from '../../_shared'
 import { buildWhichRepeatsRound } from '../data/buildRound'
 import {
-  HIDDEN_MS,
   WHICH_REPEATS_INFINITE_MAX_FAILS,
   WHICH_REPEATS_MAX_COUNT,
   WHICH_REPEATS_START_COUNT,
@@ -26,8 +25,8 @@ const getSummaryHeadline = (level, count) => {
  * - Estímulos por tarjeta = nivel, hasta 8 (o lo que permita la categoría). Después el nivel sigue
  *   subiendo con los mismos estímulos y se muestra como "8 - 1", "8 - 2"… (o "7 - 1" en Emojis).
  *
- * - Modo "memory": las tarjetas se ven `visibleSeconds` y se ocultan HIDDEN_MS en bucle hasta responder;
- *   se puede pulsar también con las tarjetas ocultas. La pausa detiene el ciclo.
+ * - Modo "memory": solo se ve una tarjeta a la vez; se alternan cada `visibleSeconds` hasta responder.
+ *   Se puede pulsar también la tarjeta oculta. La pausa detiene el ciclo y al reanudar sigue la misma.
  * - Modo "rotating": el giro es solo visual (lo anima la tarjeta); aquí no cambia nada.
  * - Puntuación, tiempo sin pausas, fin por fallos seguidos y resumen: useRoundScore.
  *
@@ -38,7 +37,7 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
   const [level, setLevel] = useState(WHICH_REPEATS_START_COUNT) // Sin tope; los estímulos sí lo tienen
   const [round, setRound] = useState(null)
   const [selected, setSelected] = useState(null) // { card, index } del estímulo pulsado
-  const [isVisible, setIsVisible] = useState(true) // Modo memoria: tarjetas visibles u ocultas
+  const [visibleCard, setVisibleCard] = useState(null) // Modo memoria: tarjeta visible (0 | 1); null = las dos
 
   const timers = useTimers()
   const score = useRoundScore({
@@ -48,13 +47,10 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
   })
   const endSessionRef = useRef(null) // session.handleEnd (la sesión se crea después de startRound)
 
-  // Modo memoria: visible → oculto → visible… hasta responder
-  const runMemoryCycle = () => {
-    setIsVisible(true)
-    timers.setTimer(() => {
-      setIsVisible(false)
-      timers.setTimer(runMemoryCycle, HIDDEN_MS)
-    }, visibleSeconds * 1000)
+  // Modo memoria: una tarjeta → la otra → la primera… hasta responder
+  const runMemoryCycle = (card = 0) => {
+    setVisibleCard(card)
+    timers.setTimer(() => runMemoryCycle(1 - card), visibleSeconds * 1000)
   }
 
   const startRound = (roundLevel) => {
@@ -83,14 +79,14 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
     score.startTimer()
 
     if (mode === 'memory') runMemoryCycle()
-    else setIsVisible(true)
+    else setVisibleCard(null)
   }
 
   const clearRound = () => {
     timers.clearAll()
     setRound(null)
     setSelected(null)
-    setIsVisible(true)
+    setVisibleCard(null)
     setPhase('idle')
   }
 
@@ -105,7 +101,7 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
     },
     onResume: () => {
       score.resume()
-      if (mode === 'memory' && phase === 'responding') runMemoryCycle()
+      if (mode === 'memory' && phase === 'responding') runMemoryCycle(visibleCard ?? 0)
     },
     onReset: clearRound,
     onEnd: () => {
@@ -122,7 +118,7 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
     if (phase !== 'responding' || session.isPaused || !round) return
 
     timers.clearAll()
-    setIsVisible(true) // Tras responder se ven las tarjetas para comprobar la corrección
+    setVisibleCard(null) // Tras responder se ven las dos tarjetas para comprobar la corrección
     setSelected({ card, index })
     setPhase('feedback')
     score.registerAnswer(round.cards[card][index].key === round.commonKey, session)
@@ -140,7 +136,7 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
     levelLabel: round ? formatLevel(level, round.count) : String(level),
     round,
     selected,
-    isVisible,
+    visibleCard,
     isAnswered: phase === 'feedback',
     select,
     nextRound,

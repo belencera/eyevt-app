@@ -144,7 +144,7 @@ export default function WhichRepeatsGame() {
             gapPx={cardGap}
             selected={game.selected}
             isAnswered={game.isAnswered}
-            isVisible={game.isVisible}
+            visibleCard={game.visibleCard}
             rotationSeconds={mode === 'rotating' ? rotationSeconds : null}
             isPaused={session.isPaused}
             onSelect={game.select}
