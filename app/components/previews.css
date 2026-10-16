@@ -364,6 +364,28 @@
   73%, 100% { opacity: 0; }
 }
 
+/* Encuentra el diferente: el estímulo sin detalle se ilumina como encontrado */
+.odd-item circle {
+  stroke: rgba(56, 189, 248, 0.4);
+  stroke-width: 1.5;
+  fill: rgba(15, 23, 42, 0.6);
+}
+
+.odd-item .odd-item-detail {
+  stroke: none;
+  fill: rgba(56, 189, 248, 0.7);
+}
+
+.odd-item-different circle {
+  animation: oddItemFound 3s infinite ease-in-out;
+}
+
+@keyframes oddItemFound {
+  0%, 45% { stroke: rgba(56, 189, 248, 0.4); fill: rgba(15, 23, 42, 0.6); filter: none; }
+  55%, 85% { stroke: #38bdf8; fill: rgba(56, 189, 248, 0.25); filter: drop-shadow(0 0 6px #38bdf8); }
+  95%, 100% { stroke: rgba(56, 189, 248, 0.4); fill: rgba(15, 23, 42, 0.6); filter: none; }
+}
+
 /* Memoria secuencial: línea que une los estímulos en orden */
 .sequence-track {
   stroke: rgba(56, 189, 248, 0.25);

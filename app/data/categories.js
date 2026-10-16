@@ -81,6 +81,13 @@ export const CATEGORIES = [
         description: 'Percepción ultrarrápida de estímulos',
         previewKey: 'tachistoscope',
       },
+      {
+        id: 'odd-one-out',
+        title: 'Encuentra el diferente',
+        href: '/games/odd-one-out',
+        description: 'Discriminación del estímulo distinto',
+        previewKey: 'odd-one-out',
+      },
     ],
   },
 ]

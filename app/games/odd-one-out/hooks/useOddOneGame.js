@@ -27,6 +27,7 @@ const releaseOddImage = (round) => {
  * - Mientras se juega una pantalla se prepara el estímulo de la siguiente (en ilustraciones tarda).
  * - El tiempo de respuesta no cuenta las pausas.
  * - En duración "Infinito", ODD_ONE_INFINITE_MAX_FAILS fallos seguidos terminan la sesión.
+ * - Al salir (Esc o reinicio) se muestra el resumen si se ha respondido alguna pantalla.
  *
  * @param {{ stimulus: object, scattered?: boolean }} params
  */
@@ -143,6 +144,13 @@ export function useOddOneGame({ stimulus, scattered = false }) {
     startRound(isCorrect ? count + 1 : count)
   }
 
+  // Salir (Esc o reinicio): resumen de lo jugado hasta ese momento
+  const handleExit = () => {
+    const showSummary = session.started && stats.total > 0
+    session.handleReset()
+    if (showSummary) setSummaryOpen(true)
+  }
+
   const restartFromSummary = () => {
     setSummaryOpen(false)
     session.handleStart()
@@ -152,7 +160,7 @@ export function useOddOneGame({ stimulus, scattered = false }) {
   const averageSeconds = stats.total > 0 ? (stats.responseMs / stats.total / 1000).toFixed(1) : '0.0'
 
   return {
-    session,
+    session: { ...session, handleReset: handleExit },
     phase,
     count,
     round,

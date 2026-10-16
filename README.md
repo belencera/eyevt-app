@@ -103,6 +103,18 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
 
 > **Juegos de memoria y percepción:** Nivel adaptativo (2 aciertos seguidos suben de nivel y se añade un estímulo), cuadrícula de respuesta con opciones parecidas entre sí, avance manual con "Siguiente ronda" y resumen al terminar la sesión. En duración infinita, 5 fallos seguidos terminan la sesión.
 
+### 10. Encuentra el diferente (`/games/odd-one-out`)
+- **Categoría:** Percepción
+- **Objetivo:** Discriminación visual: encontrar entre varios estímulos iguales el que tiene un detalle distinto.
+- **Modos de Juego:**
+  - **Centro:** Los estímulos aparecen juntos en el centro de la pantalla.
+  - **Posiciones aleatorias:** Cada estímulo aparece en una zona aleatoria de la pantalla, sin solaparse.
+- **Configuración:**
+  - Empieza con 3 estímulos; cada acierto añade uno más, sin tope. Un fallo repite el mismo número.
+  - Ilustraciones: al diferente le falta un pequeño detalle del dibujo (un ojo, una rueda, una gota…), detectado automáticamente.
+  - Letras, palabras y números: una letra o cifra cambiada por otra parecida (E/F, CAMA/CANA, 3481/3471); pbqd en espejo.
+  - Resumen con el máximo de estímulos, la precisión y el tiempo medio de respuesta.
+
 ---
 
 ## 🎨 Catálogo Modular de Estímulos
@@ -157,22 +169,24 @@ eyevt/
 │   │   └── categories.js         # Categorías (filtros del menú) y configuración de actividades
 │   ├── games/
 │   │   ├── _memory/              # Módulo compartido de los juegos de memoria y percepción
-│   │   │   ├── common/           # Elementos por categoría, barra de nivel y estilos comunes
+│   │   │   ├── common/           # Elementos por categoría y opciones de respuesta parecidas
 │   │   │   ├── recall/           # Rondas, presentación y cuadrícula de respuesta (Visual, Secuencial, Taquitoscopio)
 │   │   │   ├── pairs/            # Baraja, tablero de cartas y flujo de Memoria de parejas
 │   │   │   └── index.js          # Exportaciones centralizadas de _memory
 │   │   ├── _shared/              # Módulo compartido de actividades y utilidades
 │   │   │   ├── components/       # Layout y controles (GameShell, OptionPicker, ModeSelector, StimulusGrid, SessionSummary)
 │   │   │   ├── data/             # Catálogos de palabras, números, letras, flechas e ilustraciones
-│   │   │   ├── hooks/            # Hooks de ciclo de vida (useGameSession, useStimulusManager, useTimers, useAdaptiveLevel)
+│   │   │   ├── hooks/            # Hooks de ciclo de vida (useGameSession, useStimulusManager, useTimers, useAdaptiveLevel, useViewportSize)
+│   │   │   ├── rounds/           # Juegos por rondas con nivel: barra de nivel, botones de ronda, posiciones y modos
 │   │   │   ├── stimuli/          # Componentes de renderizado de estímulos
-│   │   │   ├── utils/            # Formateadores, barajado e iconos SVG
+│   │   │   ├── utils/            # Formateadores, azar, barajado e iconos SVG
 │   │   │   └── index.js          # Exportaciones centralizadas de _shared
 │   │   ├── eye-tracking/         # Actividad de Seguimientos
 │   │   ├── fixation/             # Actividad de Fijación
 │   │   ├── fusion/               # Actividad de Fusión (convergencia, divergencia y flexibilidad)
 │   │   ├── memory-pairs/         # Actividad de Memoria de parejas
-│   │   ├── periphery/            # Actividad de Periferia
+│   │   ├── odd-one-out/          # Actividad de Encuentra el diferente (componentes, datos y hook propios)
+│   │   ├── periphery/            # Actividad de Periferia (con sus datos)
 │   │   ├── sacades/              # Actividad de Sacádicos
 │   │   ├── sequential-memory/    # Actividad de Memoria Secuencial
 │   │   ├── tachistoscope/        # Actividad de Taquitoscopio

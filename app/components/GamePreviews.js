@@ -170,6 +170,22 @@ export function TachistoscopePreview() {
   )
 }
 
+export function OddOneOutPreview() {
+  return (
+    <div className="card-preview memory-preview">
+      <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
+        {/* 4 estímulos iguales; al tercero le falta el detalle y se ilumina al encontrarlo */}
+        {[58, 86, 114, 142].map((cx) => (
+          <g key={cx} className={cx === 114 ? 'odd-item odd-item-different' : 'odd-item'}>
+            <circle cx={cx} cy="45" r="10" />
+            {cx !== 114 && <circle cx={cx} cy="45" r="3" className="odd-item-detail" />}
+          </g>
+        ))}
+      </svg>
+    </div>
+  )
+}
+
 export function GamePreview({ previewKey }) {
   switch (previewKey) {
     case 'fixation':
@@ -191,6 +207,8 @@ export function GamePreview({ previewKey }) {
       return <TachistoscopePreview />
     case 'pairs':
       return <MemoryPairsPreview />
+    case 'odd-one-out':
+      return <OddOneOutPreview />
     default:
       return <FixationPreview />
   }

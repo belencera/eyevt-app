@@ -13,7 +13,9 @@ import { pickRandom } from '../../_shared/utils/random'
 import { DETAIL_MAX_RATIO, DETAIL_MIN_RATIO } from './constants'
 
 const RENDER_PX = 96 // Tamaño del dibujo al comparar
-const PIXEL_THRESHOLD = 48 // Diferencia mínima (suma RGBA) para contar un píxel como cambiado
+const BACKGROUND = [15, 23, 42] // Fondo oscuro del juego (#0f172a): un contorno oscuro que se quita no se ve
+const DRAWN_THRESHOLD = 90 // Diferencia de color (suma RGB) con el fondo para considerar un píxel parte del dibujo
+const CHANGE_THRESHOLD = 180 // Diferencia de color para que un cambio se vea (deja fuera contornos oscuros)
 const SHAPE_SELECTOR = 'path, circle, ellipse, rect, polygon, polyline, line'
 const NON_RENDERED_PARENTS = 'defs, clipPath, mask, pattern, symbol, marker'
 
@@ -65,7 +67,7 @@ function serializeWithout(text, detail) {
 
 const toBlobUrl = (svgText) => URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml' }))
 
-/** Píxeles RGBA del SVG dibujado a RENDER_PX */
+/** Píxeles RGBA del SVG dibujado a RENDER_PX sobre el fondo del juego */
 async function rasterize(svgText) {
   const url = toBlobUrl(svgText)
   try {
@@ -76,6 +78,8 @@ async function rasterize(svgText) {
     canvas.width = RENDER_PX
     canvas.height = RENDER_PX
     const ctx = canvas.getContext('2d', { willReadFrequently: true })
+    ctx.fillStyle = `rgb(${BACKGROUND.join(',')})`
+    ctx.fillRect(0, 0, RENDER_PX, RENDER_PX)
     ctx.drawImage(img, 0, 0, RENDER_PX, RENDER_PX)
     return ctx.getImageData(0, 0, RENDER_PX, RENDER_PX).data
   } finally {
@@ -83,18 +87,17 @@ async function rasterize(svgText) {
   }
 }
 
-/** Proporción del dibujo (píxeles no transparentes del original) que cambia */
+/** Diferencia de color (suma RGB) entre el píxel `i` de `a` y el color `b` (lista RGB o píxeles) */
+const colorDiff = (a, i, b, j = 0) =>
+  Math.abs(a[i] - b[j]) + Math.abs(a[i + 1] - b[j + 1]) + Math.abs(a[i + 2] - b[j + 2])
+
+/** Proporción del dibujo (píxeles que se distinguen del fondo) que cambia a simple vista */
 function getChangeRatio(base, modified) {
   let drawn = 0
   let changed = 0
   for (let i = 0; i < base.length; i += 4) {
-    if (base[i + 3] > 0) drawn++
-    const diff =
-      Math.abs(base[i] - modified[i]) +
-      Math.abs(base[i + 1] - modified[i + 1]) +
-      Math.abs(base[i + 2] - modified[i + 2]) +
-      Math.abs(base[i + 3] - modified[i + 3])
-    if (diff > PIXEL_THRESHOLD) changed++
+    if (colorDiff(base, i, BACKGROUND) > DRAWN_THRESHOLD) drawn++
+    if (colorDiff(base, i, modified, i) > CHANGE_THRESHOLD) changed++
   }
   return drawn > 0 ? changed / drawn : 0
 }
