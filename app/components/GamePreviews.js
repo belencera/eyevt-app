@@ -191,14 +191,14 @@ export function WhichRepeatsPreview() {
     <div className="card-preview memory-preview">
       <svg className="preview-svg-path" viewBox="0 0 200 90" fill="none">
         {/* Dos tarjetas redondas; el triángulo está en las dos y se ilumina a la vez */}
-        <circle cx="70" cy="45" r="30" className="repeats-card" />
-        <circle cx="130" cy="45" r="30" className="repeats-card" />
-        <polygon points="62,30 72,46 52,46" className="repeats-shape repeats-common" />
-        <circle cx="80" cy="34" r="5" className="repeats-shape" />
-        <rect x="64" y="52" width="10" height="10" rx="2" className="repeats-shape" />
-        <polygon points="140,50 150,66 130,66" className="repeats-shape repeats-common" />
-        <rect x="117" y="30" width="9" height="9" rx="1" transform="rotate(45 121.5 34.5)" className="repeats-shape" />
-        <circle cx="142" cy="34" r="5" className="repeats-shape repeats-ring" />
+        <circle cx="64" cy="45" r="30" className="repeats-card" />
+        <circle cx="136" cy="45" r="30" className="repeats-card" />
+        <polygon points="56,30 66,46 46,46" className="repeats-shape repeats-common" />
+        <circle cx="74" cy="34" r="5" className="repeats-shape" />
+        <rect x="58" y="52" width="10" height="10" rx="2" className="repeats-shape" />
+        <polygon points="138,44 148,60 128,60" className="repeats-shape repeats-common" />
+        <rect x="123" y="30" width="9" height="9" rx="1" transform="rotate(45 127.5 34.5)" className="repeats-shape" />
+        <circle cx="148" cy="34" r="5" className="repeats-shape repeats-ring" />
       </svg>
     </div>
   )
