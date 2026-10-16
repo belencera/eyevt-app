@@ -26,6 +26,7 @@
   /* Entrada suave de las tarjetas, un instante después de que se vaya la cuenta atrás.
      En el contenedor para no pisar el giro de las tarjetas; "backwards" no deja transform al acabar */
   animation: repeatsCardsIn 0.45s ease 0.15s backwards;
+  transition: gap 0.18s cubic-bezier(0.25, 1, 0.5, 1); /* ← / → suave */
 }
 
 @keyframes repeatsCardsIn {
