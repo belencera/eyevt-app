@@ -115,6 +115,17 @@ Abre en tu navegador: [http://localhost:3000](http://localhost:3000)
   - Letras, palabras y números: una letra o cifra cambiada por otra parecida (E/F, CAMA/CANA, 3481/3471); pbqd en espejo.
   - Resumen con el máximo de estímulos, la precisión y el tiempo medio de respuesta.
 
+### 11. ¿Cuál se repite? (`/games/which-repeats`)
+- **Categoría:** Percepción
+- **Objetivo:** Búsqueda visual rápida: encontrar el único estímulo que comparten dos tarjetas redondas, con estímulos de distintos tamaños y giros.
+- **Modos de Juego:**
+  - **Normal:** Las dos tarjetas quietas.
+  - **Con memoria:** Las tarjetas aparecen y desaparecen a la vez (tiempo visible de 1 s a 5 s); se puede pulsar aunque estén ocultas.
+  - **Girando:** Las tarjetas giran sin parar en sentidos opuestos (velocidad lenta, media o rápida).
+- **Configuración:**
+  - Empieza con 3 estímulos por tarjeta; cada acierto añade uno, hasta 8. Un fallo repite el mismo número.
+  - Resumen con el máximo de estímulos por tarjeta, la precisión y el tiempo medio de respuesta.
+
 ---
 
 ## 🎨 Catálogo Modular de Estímulos
@@ -177,7 +188,7 @@ eyevt/
 │   │   │   ├── components/       # Layout y controles (GameShell, OptionPicker, ModeSelector, StimulusGrid, SessionSummary)
 │   │   │   ├── data/             # Catálogos de palabras, números, letras, flechas e ilustraciones
 │   │   │   ├── hooks/            # Hooks de ciclo de vida (useGameSession, useStimulusManager, useTimers, useAdaptiveLevel, useViewportSize)
-│   │   │   ├── rounds/           # Juegos por rondas con nivel: barra de nivel, botones de ronda, posiciones y modos
+│   │   │   ├── rounds/           # Juegos por rondas con nivel: barra de nivel, botones de ronda, posiciones, modos y puntuación
 │   │   │   ├── stimuli/          # Componentes de renderizado de estímulos
 │   │   │   ├── utils/            # Formateadores, azar, barajado e iconos SVG
 │   │   │   └── index.js          # Exportaciones centralizadas de _shared
@@ -190,7 +201,8 @@ eyevt/
 │   │   ├── sacades/              # Actividad de Sacádicos
 │   │   ├── sequential-memory/    # Actividad de Memoria Secuencial
 │   │   ├── tachistoscope/        # Actividad de Taquitoscopio
-│   │   └── visual-memory/        # Actividad de Memoria Visual
+│   │   ├── visual-memory/        # Actividad de Memoria Visual
+│   │   └── which-repeats/        # Actividad de ¿Cuál se repite? (componentes, datos y hook propios)
 │   ├── favicon.ico
 │   ├── globals.css               # Estilos globales y tokens de diseño
 │   ├── layout.js                 # Layout raíz de Next.js

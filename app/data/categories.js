@@ -88,6 +88,13 @@ export const CATEGORIES = [
         description: 'Discriminación del estímulo distinto',
         previewKey: 'odd-one-out',
       },
+      {
+        id: 'which-repeats',
+        title: '¿Cuál se repite?',
+        href: '/games/which-repeats',
+        description: 'Encontrar el único estímulo que comparten dos tarjetas',
+        previewKey: 'which-repeats',
+      },
     ],
   },
 ]

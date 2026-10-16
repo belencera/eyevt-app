@@ -386,6 +386,33 @@
   95%, 100% { stroke: rgba(56, 189, 248, 0.4); fill: rgba(15, 23, 42, 0.6); filter: none; }
 }
 
+/* ¿Cuál se repite?: dos tarjetas redondas; la forma común se ilumina en las dos a la vez */
+.repeats-card {
+  stroke: rgba(56, 189, 248, 0.4);
+  stroke-width: 1.5;
+  fill: rgba(15, 23, 42, 0.6);
+}
+
+.repeats-shape {
+  fill: rgba(56, 189, 248, 0.45);
+}
+
+.repeats-ring {
+  fill: none;
+  stroke: rgba(56, 189, 248, 0.45);
+  stroke-width: 2;
+}
+
+.repeats-common {
+  animation: repeatsFound 3s infinite ease-in-out;
+}
+
+@keyframes repeatsFound {
+  0%, 45% { fill: rgba(56, 189, 248, 0.45); filter: none; }
+  55%, 85% { fill: #38bdf8; filter: drop-shadow(0 0 6px #38bdf8); }
+  95%, 100% { fill: rgba(56, 189, 248, 0.45); filter: none; }
+}
+
 /* Memoria secuencial: línea que une los estímulos en orden */
 .sequence-track {
   stroke: rgba(56, 189, 248, 0.25);
