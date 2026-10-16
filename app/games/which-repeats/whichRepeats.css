@@ -11,14 +11,7 @@
   justify-content: center;
   gap: 36px;
   padding: 72px 16px 24px;
-  animation: repeatsFadeIn 0.2s ease;
   transition: opacity 0.2s ease;
-}
-
-@keyframes repeatsFadeIn {
-  from {
-    opacity: 0;
-  }
 }
 
 .repeatsBoardPaused {
@@ -30,6 +23,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Entrada suave de las tarjetas, un instante después de que se vaya la cuenta atrás.
+     En el contenedor para no pisar el giro de las tarjetas; "backwards" no deja transform al acabar */
+  animation: repeatsCardsIn 0.45s ease 0.15s backwards;
+}
+
+@keyframes repeatsCardsIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .repeatsCards {
+    animation: none;
+  }
 }
 
 .repeatsCardsColumn {
