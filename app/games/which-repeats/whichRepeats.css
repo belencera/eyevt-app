@@ -1,0 +1,114 @@
+/* ============================================================
+   ¿Cuál se repite?: dos tarjetas redondas con un estímulo en común
+   ============================================================ */
+
+.repeatsBoard {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  padding: 72px 16px 24px;
+  animation: repeatsFadeIn 0.2s ease;
+  transition: opacity 0.2s ease;
+}
+
+@keyframes repeatsFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.repeatsBoardPaused {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.repeatsCards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.repeatsCardsColumn {
+  flex-direction: column;
+}
+
+/* ── Tarjeta ── */
+.repeatsCard {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  background: radial-gradient(circle at 50% 40%, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 24px rgba(56, 189, 248, 0.12);
+}
+
+/* Modo girando: la duración llega por estilo en línea; la segunda tarjeta gira al revés */
+.repeatsCardRotating {
+  animation-name: repeatsSpin;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.repeatsCardReverse {
+  animation-direction: reverse;
+}
+
+/* En pausa o tras responder la tarjeta se queda quieta donde está */
+.repeatsCardStill {
+  animation-play-state: paused;
+}
+
+@keyframes repeatsSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Estímulo pulsable ── */
+.repeatsItem {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background-color 0.14s ease, box-shadow 0.14s ease,
+    opacity 0.2s ease;
+}
+
+.repeatsItem > .stimulusFlow {
+  width: 100%;
+  height: 100%;
+}
+
+.repeatsItem:hover:not(:disabled) {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.repeatsItem:disabled {
+  cursor: default;
+}
+
+/* Modo memoria: los estímulos se ocultan pero siguen en su sitio y se pueden pulsar */
+.repeatsCardHidden .repeatsItem {
+  opacity: 0;
+}
+
+/* ── Corrección ── */
+.repeatsItemCorrect {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.16);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+}
+
+.repeatsItemWrong {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.16);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+}
