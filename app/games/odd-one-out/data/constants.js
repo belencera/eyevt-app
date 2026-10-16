@@ -5,11 +5,12 @@
 import { STIMULUS_OPTIONS } from '../../_shared/data/constants'
 
 // ── Estímulos ──
-export const DEFAULT_ODD_ONE_STIMULUS = 'animals'
-
 /** Punto fijo, flechas y colores no tienen detalles que discriminar */
 const EXCLUDED_STIMULI = ['classic', 'arrows', 'colors']
 export const ODD_ONE_STIMULUS_OPTIONS = STIMULUS_OPTIONS.filter((opt) => !EXCLUDED_STIMULI.includes(opt.value))
+
+/** Por defecto, la primera categoría de la lista (Números) */
+export const DEFAULT_ODD_ONE_STIMULUS = ODD_ONE_STIMULUS_OPTIONS[0].value
 
 // ── Progresión ──
 export const ODD_ONE_START_COUNT = 3 // Estímulos de la primera pantalla; cada acierto suma uno, sin tope

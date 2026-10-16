@@ -5,13 +5,14 @@
 import { STIMULUS_OPTIONS } from '../../_shared/data/constants'
 
 // ── Estímulos ──
-export const DEFAULT_WHICH_REPEATS_STIMULUS = 'animals'
-
 /** Punto fijo y flechas no tienen elementos suficientes para dos tarjetas distintas */
 const EXCLUDED_STIMULI = ['classic', 'arrows']
 export const WHICH_REPEATS_STIMULUS_OPTIONS = STIMULUS_OPTIONS.filter(
   (opt) => !EXCLUDED_STIMULI.includes(opt.value)
 )
+
+/** Por defecto, la primera categoría de la lista (Colores) */
+export const DEFAULT_WHICH_REPEATS_STIMULUS = WHICH_REPEATS_STIMULUS_OPTIONS[0].value
 
 // ── Progresión ──
 export const WHICH_REPEATS_START_COUNT = 3 // Estímulos por tarjeta al empezar; cada acierto suma uno
