@@ -126,7 +126,7 @@ La plataforma cuenta con un amplio repertorio de estímulos vectoriales en alta 
 | **Punto fijo** | Estímulo clásico celeste de alto contraste |
 | **Colores** | Cambio dinámico entre 8 colores de alto contraste |
 | **Letras** | Letras sueltas del abecedario en mayúsculas |
-| **pbqd** | Letras p, b, q y d en minúscula |
+| **pbqd** | Letras p, b, q y d en minúscula, sueltas o combinadas de 2 a 4 letras distintas (bq, pdb, dqbp…) |
 | **Palabras** | Bancos de palabras cotidianas por longitud (3 a 6 letras) |
 | **Números** | Cifras numéricas aleatorias de 1 a 5 dígitos |
 | **Flechas** | Flechas cardinales en 4 direcciones (↑, ↓, ←, →) |

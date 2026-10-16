@@ -11,6 +11,14 @@ const CARD_STIMULUS_PX = {
   default: 46,
 }
 
+/** pbqd de 1 a 4 letras: más pequeño cuantas más letras para que quepa en la tarjeta */
+const PBQD_CARD_PX = { 1: 46, 2: 36, 3: 28, 4: 22 }
+
+const getCardStimulusPx = (type, value) =>
+  type === 'pbqd'
+    ? PBQD_CARD_PX[String(value).length] ?? PBQD_CARD_PX[4]
+    : CARD_STIMULUS_PX[type] ?? CARD_STIMULUS_PX.default
+
 const STATUS_CLASS = {
   correct: 'recallCardCorrect',
   wrong: 'recallCardWrong',
@@ -62,7 +70,6 @@ export function ResponseGrid({
   onUndo,
   onNext,
 }) {
-  const stimulusPx = CARD_STIMULUS_PX[type] ?? CARD_STIMULUS_PX.default
   const showUndo = Boolean(onUndo) && !results
 
   return (
@@ -97,7 +104,7 @@ export function ResponseGrid({
               aria-pressed={isSelected}
             >
               <div className="stimulusFlow">
-                <StimulusItem type={type} item={option.value} sizePx={stimulusPx} />
+                <StimulusItem type={type} item={option.value} sizePx={getCardStimulusPx(type, option.value)} />
               </div>
               {badge && <span className="recallCardBadge">{badge}</span>}
             </button>

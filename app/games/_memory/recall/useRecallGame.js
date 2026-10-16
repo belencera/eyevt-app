@@ -69,6 +69,7 @@ export function useRecallGame({ stimulus, buildSteps, ordered = false, scattered
       settings: {
         wordLength: stimulus.wordLength,
         numberDigits: stimulus.numberDigits,
+        pbqdLength: stimulus.pbqdLength,
       },
     })
     nextRound.positions = scattered ? getScatteredPositions(count) : null

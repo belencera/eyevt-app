@@ -12,7 +12,7 @@ const TEXT_CHAR_RATIO = 0.55 // Ancho de cada carácter respecto al tamaño del 
 
 /** Caja de un estímulo a tamaño completo (los textos largos son más anchos que altos) */
 function getItemBox(type, value, stimulusPx) {
-  const isText = type === 'words' || type === 'numbers'
+  const isText = type === 'words' || type === 'numbers' || type === 'pbqd'
   const contentW = isText ? String(value).length * stimulusPx * TEXT_CHAR_RATIO : stimulusPx
   return { w: contentW + ITEM_PADDING_PX * 2, h: stimulusPx + ITEM_PADDING_PX * 2 }
 }

@@ -4,10 +4,10 @@
  */
 
 import {
-  PBQD_LETTERS,
   UPPERCASE_ALPHABET,
   getIllustrationCategory,
   getRandomNumber,
+  getRandomPbqd,
   getRandomWord,
 } from '../../_shared/data/constants'
 import { shuffle } from '../../_shared/utils/shuffle'
@@ -21,7 +21,7 @@ const MAX_TEXT_ATTEMPTS = 30
 function pickTextBase(type, settings, prevKey) {
   for (let attempt = 0; attempt < MAX_TEXT_ATTEMPTS; attempt++) {
     let value
-    if (type === 'pbqd') value = pickRandom(PBQD_LETTERS)
+    if (type === 'pbqd') value = getRandomPbqd(prevKey, settings.pbqdLength)
     else if (type === 'letters') value = pickRandom(UPPERCASE_ALPHABET)
     else if (type === 'words') value = getRandomWord(settings.wordLength, prevKey)
     else if (type === 'numbers') value = getRandomNumber(settings.numberDigits, prevKey)
@@ -52,7 +52,7 @@ async function buildIllustrationPair(type, prevKey) {
  * Estímulo base y su variante "diferente" (la parte lenta: en ilustraciones analiza el dibujo).
  * Se puede preparar por adelantado porque no depende del número de estímulos.
  *
- * @param {{ type: string, settings?: { wordLength?, numberDigits? }, prevKey?: string|null }} params
+ * @param {{ type: string, settings?: { wordLength?, numberDigits?, pbqdLength? }, prevKey?: string|null }} params
  * @returns {Promise<{ key: string, value: any, oddValue: any } | null>} null si la categoría no sirve
  */
 export async function buildOddPair({ type, settings = {}, prevKey = null }) {

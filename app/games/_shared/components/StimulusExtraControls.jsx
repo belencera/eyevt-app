@@ -6,9 +6,11 @@ import {
   STIMULUS_SIZE_OPTIONS,
   WORD_LENGTH_OPTIONS,
   NUMBER_DIGITS_OPTIONS,
+  PBQD_LENGTH_OPTIONS,
   isIllustrationCategory,
   getRandomWord,
   getRandomNumber,
+  getRandomPbqd,
 } from '../data/constants'
 
 /**
@@ -51,6 +53,20 @@ export function StimulusExtraControls({
           options={CHANGE_INTERVAL_OPTIONS}
           disabled={disabled}
           onChange={stimulus.setColorInterval}
+        />
+      )}
+
+      {type === 'pbqd' && (
+        <OptionPicker
+          id={id('pbqd-length')}
+          label="Cantidad de letras"
+          value={stimulus.pbqdLength}
+          options={PBQD_LENGTH_OPTIONS}
+          disabled={disabled}
+          onChange={(length) => {
+            stimulus.setPbqdLength(length)
+            stimulus.setCurrentLetter(getRandomPbqd(null, length))
+          }}
         />
       )}
 

@@ -36,6 +36,7 @@ export function useStimulusManager(initialType = 'classic') {
 
   // Opciones de letras (compartidas con pbqd)
   const [letterInterval, setLetterInterval] = useState(3)
+  const [pbqdLength, setPbqdLength] = useState(1) // Letras pbqd juntas: 1 a 4 o 'all'
   const [currentLetter, setCurrentLetter] = useState(() => (initialType === 'pbqd' ? getRandomPbqd() : 'A'))
 
   // Opciones de palabras
@@ -69,6 +70,7 @@ export function useStimulusManager(initialType = 'classic') {
   const currentColorRef = useRef(currentColor)
   const letterIntervalRef = useRef(letterInterval)
   const currentLetterRef = useRef(currentLetter)
+  const pbqdLengthRef = useRef(pbqdLength)
   const wordIntervalRef = useRef(wordInterval)
   const wordLengthRef = useRef(wordLength)
   const currentWordRef = useRef(currentWord)
@@ -88,6 +90,7 @@ export function useStimulusManager(initialType = 'classic') {
     currentColorRef.current = currentColor
     letterIntervalRef.current = letterInterval
     currentLetterRef.current = currentLetter
+    pbqdLengthRef.current = pbqdLength
     wordIntervalRef.current = wordInterval
     wordLengthRef.current = wordLength
     currentWordRef.current = currentWord
@@ -106,6 +109,7 @@ export function useStimulusManager(initialType = 'classic') {
     currentColor,
     letterInterval,
     currentLetter,
+    pbqdLength,
     wordInterval,
     wordLength,
     currentWord,
@@ -181,7 +185,7 @@ export function useStimulusManager(initialType = 'classic') {
     }
 
     if (type === 'pbqd') {
-      const next = getRandomPbqd(currentLetterRef.current)
+      const next = getRandomPbqd(currentLetterRef.current, pbqdLengthRef.current)
       currentLetterRef.current = next
       setCurrentLetter(next)
       return next
@@ -236,7 +240,7 @@ export function useStimulusManager(initialType = 'classic') {
       currentLetterRef.current = next
       setCurrentLetter(next)
     } else if (newType === 'pbqd') {
-      const next = getRandomPbqd()
+      const next = getRandomPbqd(null, pbqdLengthRef.current)
       currentLetterRef.current = next
       setCurrentLetter(next)
     } else if (newType === 'words') {
@@ -274,7 +278,7 @@ export function useStimulusManager(initialType = 'classic') {
       currentLetterRef.current = next
       setCurrentLetter(next)
     } else if (type === 'pbqd') {
-      const next = getRandomPbqd(currentLetterRef.current)
+      const next = getRandomPbqd(currentLetterRef.current, pbqdLengthRef.current)
       currentLetterRef.current = next
       setCurrentLetter(next)
     } else if (type === 'words') {
@@ -323,6 +327,8 @@ export function useStimulusManager(initialType = 'classic') {
     setCurrentLetter,
     letterInterval,
     setLetterInterval,
+    pbqdLength,
+    setPbqdLength,
 
     // Palabras
     currentWord,
@@ -361,6 +367,7 @@ export function useStimulusManager(initialType = 'classic') {
       currentColorRef,
       letterIntervalRef,
       currentLetterRef,
+      pbqdLengthRef,
       wordIntervalRef,
       wordLengthRef,
       currentWordRef,

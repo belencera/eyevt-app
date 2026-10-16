@@ -10,10 +10,11 @@
 import {
   BASIC_COLORS,
   UPPERCASE_ALPHABET,
-  PBQD_LETTERS,
   ARROW_DIRECTIONS,
   WORD_BANKS,
   getIllustrationCategory,
+  getPbqdCombinations,
+  resolvePbqdLength,
 } from '../../_shared/data/constants'
 import { shuffle } from '../../_shared/utils/shuffle'
 import { pickRandom } from '../../_shared/utils/random'
@@ -98,13 +99,15 @@ function getSimilarWords(wordLength, count) {
  *   (`buildRecallRound` los agrupa además por objetivo).
  *
  * @param {string} type - Categoría ('colors', 'letters', 'animals'...)
- * @param {{ wordLength?: number|'all', numberDigits?: number|'all' }} [settings]
+ * - pbqd: todas las combinaciones de la cantidad de letras elegida ('Aleatorio' elige una por ronda).
+ *
+ * @param {{ wordLength?: number|'all', numberDigits?: number|'all', pbqdLength?: number|'all' }} [settings]
  * @returns {Array<{ key: string, value: any }>}
  */
-export function getCategoryItems(type, { wordLength = 4, numberDigits = 1 } = {}) {
+export function getCategoryItems(type, { wordLength = 4, numberDigits = 1, pbqdLength = 1 } = {}) {
   if (type === 'colors') return toItems(BASIC_COLORS, (c) => c.name)
   if (type === 'letters') return toItems(UPPERCASE_ALPHABET)
-  if (type === 'pbqd') return toItems(PBQD_LETTERS)
+  if (type === 'pbqd') return toItems(getPbqdCombinations(resolvePbqdLength(pbqdLength)))
   if (type === 'arrows') return toItems(ARROW_DIRECTIONS, (a) => a.id)
   if (type === 'words') return toItems(getSimilarWords(wordLength, MAX_OPTIONS))
   if (type === 'numbers') {

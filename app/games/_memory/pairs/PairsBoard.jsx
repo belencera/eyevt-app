@@ -16,6 +16,14 @@ const STIMULUS_RATIO = {
   default: 0.55,
 }
 
+/** pbqd de 1 a 4 letras: más pequeño cuantas más letras */
+const PBQD_RATIO = { 1: 0.55, 2: 0.4, 3: 0.3, 4: 0.24 }
+
+const getStimulusRatio = (type, value) =>
+  type === 'pbqd'
+    ? PBQD_RATIO[String(value).length] ?? PBQD_RATIO[4]
+    : STIMULUS_RATIO[type] ?? STIMULUS_RATIO.default
+
 /**
  * Tamaño de carta: el deseado (↑ / ↓) limitado a lo que cabe en pantalla.
  */
@@ -57,7 +65,8 @@ export function PairsBoard({
   const viewport = useViewportSize()
 
   const cardSize = getCardSize(cardPx, deck.length, columns, viewport.width, viewport.height)
-  const stimulusPx = Math.round(cardSize * (STIMULUS_RATIO[type] ?? STIMULUS_RATIO.default))
+  // Todas las cartas de una ronda tienen la misma longitud: basta con la primera
+  const stimulusPx = Math.round(cardSize * getStimulusRatio(type, deck[0]?.value))
 
   return (
     <div className={`pairsBoard ${isPaused ? 'pairsBoardPaused' : ''}`}>

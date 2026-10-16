@@ -2,7 +2,8 @@
  * Estímulo "diferente" en las categorías de texto de Encuentra el diferente:
  * una variante casi igual al original que solo se distingue por un detalle.
  *
- * - pbqd: otra letra del grupo (espejo o invertida)
+ * - pbqd: una letra cambiada por otra del grupo en espejo o invertida (pdb → pdq);
+ *   con las 4 letras no queda ninguna libre y se intercambian dos (pbqd → pbdq)
  * - Letras: una letra parecida (E → F)
  * - Palabras: una letra cambiada por otra parecida (CAMA → CANA)
  * - Números: una cifra cambiada por otra parecida (3481 → 3471)
@@ -38,7 +39,10 @@ function replaceSimilarChar(text, table) {
  * ¿Se puede crear una variante de este valor? (letras sin parecidos como A, J o S no sirven)
  */
 export function canMakeVariant(type, value) {
-  if (type === 'pbqd') return PBQD_LETTERS.includes(value)
+  if (type === 'pbqd') {
+    const letters = [...value]
+    return letters.every((ch) => PBQD_LETTERS.includes(ch)) && new Set(letters).size === letters.length
+  }
   if (type === 'letters') return Boolean(SIMILAR_LETTERS[value])
   if (type === 'words') return getChangeablePositions(value, SIMILAR_LETTERS).length > 0
   if (type === 'numbers') return getChangeablePositions(value, SIMILAR_DIGITS).length > 0
@@ -49,12 +53,24 @@ export function canMakeVariant(type, value) {
  * Devuelve la variante "diferente" de un valor de texto, o null si no se puede crear.
  *
  * @param {string} type - 'pbqd' | 'letters' | 'words' | 'numbers'
- * @param {string} value - Valor original (ej. 'b', 'E', 'CAMA', '3481')
+ * @param {string} value - Valor original (ej. 'b', 'pdb', 'E', 'CAMA', '3481')
  */
 export function makeTextVariant(type, value) {
   if (!canMakeVariant(type, value)) return null
 
-  if (type === 'pbqd') return pickRandom(PBQD_LETTERS.filter((letter) => letter !== value))
+  if (type === 'pbqd') {
+    const free = PBQD_LETTERS.filter((letter) => !value.includes(letter))
+    const index = Math.floor(Math.random() * value.length)
+
+    // Una letra cambiada por otra que no esté ya: las letras siguen siendo distintas entre sí
+    if (free.length > 0) return value.slice(0, index) + pickRandom(free) + value.slice(index + 1)
+
+    // Con las 4 letras: se intercambian dos letras seguidas
+    const swapAt = Math.min(index, value.length - 2)
+    const letters = [...value]
+    ;[letters[swapAt], letters[swapAt + 1]] = [letters[swapAt + 1], letters[swapAt]]
+    return letters.join('')
+  }
   if (type === 'letters') return pickRandom(SIMILAR_LETTERS[value])
   if (type === 'words') return replaceSimilarChar(value, SIMILAR_LETTERS)
   if (type === 'numbers') return replaceSimilarChar(value, SIMILAR_DIGITS)

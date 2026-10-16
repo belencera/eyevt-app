@@ -46,7 +46,11 @@ export function useOddOneGame({ stimulus, scattered = false }) {
   const roundRef = useRef(null)
   const endSessionRef = useRef(null) // session.handleEnd (la sesión se crea después de startRound)
 
-  const settings = { wordLength: stimulus.wordLength, numberDigits: stimulus.numberDigits }
+  const settings = {
+    wordLength: stimulus.wordLength,
+    numberDigits: stimulus.numberDigits,
+    pbqdLength: stimulus.pbqdLength,
+  }
 
   const preparePair = (prevKey) =>
     buildOddPair({ type: stimulus.stimulusType, settings, prevKey })

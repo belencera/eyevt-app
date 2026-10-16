@@ -54,6 +54,7 @@ export function useMemoryPairs({ stimulus, previewSeconds }) {
       settings: {
         wordLength: stimulus.wordLength,
         numberDigits: stimulus.numberDigits,
+        pbqdLength: stimulus.pbqdLength,
       },
     })
     preloadImages(nextDeck)
