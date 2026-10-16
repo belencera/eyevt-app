@@ -392,7 +392,7 @@
 
 .modeGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(var(--mode-columns, 2), minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -1864,7 +1864,8 @@
   }
 
   .dashGrid {
-    grid-template-columns: 1fr !important;
+    /* minmax(0, …): la columna no crece con su contenido y nunca se sale de la pantalla */
+    grid-template-columns: minmax(0, 1fr) !important;
     gap: 14px;
     flex: none;
     min-height: auto;

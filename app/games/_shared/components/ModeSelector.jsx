@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * Selector de modo de juego en tarjetas con icono (2 columnas).
+ * Selector de modo de juego en tarjetas con icono, todos los modos en una fila.
  * Unifica el bloque "Modo de juego" de Periferia, Sacádicos y Fusión.
  *
  * @param {string} id - Prefijo para los ids de accesibilidad
@@ -35,7 +35,12 @@ export function ModeSelector({
           </span>
         )}
       </div>
-      <div className="modeGrid" role="radiogroup" aria-labelledby={labelId}>
+      <div
+        className="modeGrid"
+        style={{ '--mode-columns': options.length }}
+        role="radiogroup"
+        aria-labelledby={labelId}
+      >
         {options.map((opt) => {
           const isSelected = opt.value === value
           return (
