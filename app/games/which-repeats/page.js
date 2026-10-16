@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   GameShell,
   LevelStatus,
@@ -17,6 +17,7 @@ import {
 import { RepeatsBoard } from './components/RepeatsBoard'
 import { useWhichRepeatsGame } from './hooks/useWhichRepeatsGame'
 import {
+  CARD_GAP,
   CARD_SIZE_FACTOR,
   DEFAULT_ROTATION_SECONDS,
   DEFAULT_VISIBLE_SECONDS,
@@ -44,10 +45,30 @@ export default function WhichRepeatsGame() {
   const [mode, setMode] = useState(DEFAULT_WHICH_REPEATS_MODE) // 'normal' | 'memory' | 'rotating'
   const [visibleSeconds, setVisibleSeconds] = useState(DEFAULT_VISIBLE_SECONDS)
   const [rotationSeconds, setRotationSeconds] = useState(DEFAULT_ROTATION_SECONDS)
+  const [cardGap, setCardGap] = useState(CARD_GAP.initial) // Separación entre tarjetas (← / →)
 
   const stimulus = useStimulusManager(DEFAULT_WHICH_REPEATS_STIMULUS)
   const game = useWhichRepeatsGame({ stimulus, mode, visibleSeconds })
   const { session } = game
+
+  // ← / →: separar o juntar las tarjetas durante la partida
+  useEffect(() => {
+    if (!session.started) return
+
+    const handleKeyDown = (e) => {
+      if (session.isPaused) return
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        setCardGap((prev) => Math.max(CARD_GAP.min, prev - CARD_GAP.step))
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        setCardGap((prev) => Math.min(CARD_GAP.max, prev + CARD_GAP.step))
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [session.started, session.isPaused])
 
   // Opción propia de cada modo: tiempo visible (con memoria) o velocidad de giro (girando)
   const modeOption =
@@ -105,7 +126,7 @@ export default function WhichRepeatsGame() {
           showSize={false}
         />
       }
-      shortcuts={[]}
+      shortcuts={[{ keys: ['←', '→'], label: 'Separación' }]}
       shortcutsHint={WHICH_REPEATS_SHORTCUTS_HINT}
     >
       {session.started && game.round && (
@@ -117,6 +138,7 @@ export default function WhichRepeatsGame() {
             type={stimulus.stimulusType}
             round={game.round}
             cardPx={stimulus.sizePx * CARD_SIZE_FACTOR}
+            gapPx={cardGap}
             selected={game.selected}
             isAnswered={game.isAnswered}
             isVisible={game.isVisible}

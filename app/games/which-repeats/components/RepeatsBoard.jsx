@@ -5,7 +5,6 @@ import { SymbolCard } from './SymbolCard'
 import '../../_shared/rounds/rounds.css'
 import '../whichRepeats.css'
 
-const GAP_PX = 32
 const RESERVED_HEIGHT_PX = 72 + 24 + 80 // Barra de nivel arriba, margen inferior y botón "Siguiente ronda"
 const RESERVED_WIDTH_PX = 32
 const MIN_CARD_PX = 160
@@ -14,11 +13,11 @@ const MIN_CARD_PX = 160
  * Tarjetas en fila o en columna (lo que deje tarjetas más grandes) y su diámetro:
  * el deseado (↑ / ↓) limitado a lo que cabe en pantalla.
  */
-function getLayout(desiredPx, viewport) {
+function getLayout(desiredPx, gapPx, viewport) {
   const availW = viewport.width - RESERVED_WIDTH_PX
   const availH = viewport.height - RESERVED_HEIGHT_PX
-  const rowFit = Math.min((availW - GAP_PX) / 2, availH)
-  const columnFit = Math.min(availW, (availH - GAP_PX) / 2)
+  const rowFit = Math.min((availW - gapPx) / 2, availH)
+  const columnFit = Math.min(availW, (availH - gapPx) / 2)
   const isColumn = columnFit > rowFit
   const cardPx = Math.max(MIN_CARD_PX, Math.floor(Math.min(desiredPx, isColumn ? columnFit : rowFit)))
   return { isColumn, cardPx }
@@ -31,6 +30,7 @@ function getLayout(desiredPx, viewport) {
  * @param {string} type - Categoría de estímulo
  * @param {{ commonKey: string, cards: Array<Array<object>> }} round
  * @param {number} cardPx - Diámetro deseado de las tarjetas
+ * @param {number} gapPx - Separación entre las tarjetas (← / →)
  * @param {{ card: number, index: number }|null} selected - Estímulo pulsado
  * @param {boolean} isAnswered
  * @param {boolean} isVisible - Modo memoria
@@ -43,6 +43,7 @@ export function RepeatsBoard({
   type,
   round,
   cardPx,
+  gapPx,
   selected,
   isAnswered,
   isVisible,
@@ -52,11 +53,11 @@ export function RepeatsBoard({
   onNext,
 }) {
   const viewport = useViewportSize()
-  const layout = getLayout(cardPx, viewport)
+  const layout = getLayout(cardPx, gapPx, viewport)
 
   return (
     <div className={`repeatsBoard ${isPaused ? 'repeatsBoardPaused' : ''}`}>
-      <div className={`repeatsCards ${layout.isColumn ? 'repeatsCardsColumn' : ''}`} style={{ gap: GAP_PX }}>
+      <div className={`repeatsCards ${layout.isColumn ? 'repeatsCardsColumn' : ''}`} style={{ gap: gapPx }}>
         {round.cards.map((items, card) => (
           <SymbolCard
             key={card}
