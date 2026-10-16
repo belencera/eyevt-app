@@ -10,7 +10,8 @@ import { Fragment, useEffect } from 'react'
  * por eso el resumen gestiona los suyos propios.
  *
  * @param {boolean} open - Muestra u oculta el resumen
- * @param {{ value: React.ReactNode, label: string }} [headline] - Cifra principal en grande
+ * @param {{ value: React.ReactNode, label: string, detail?: string }} [headline] - Cifra principal en grande
+ *   (detail: nota pequeña debajo, ej. 'superado 2 veces')
  * @param {Array<{ label: string, value: React.ReactNode }>} [stats] - Métricas secundarias
  * @param {() => void} onExit - Cerrar el resumen y volver al menú del juego
  * @param {string} [exitLabel='Salir']
@@ -62,6 +63,7 @@ export function SessionSummary({
           <div className="sessionSummaryScoreGroup">
             <span className="sessionSummaryNumber">{headline.value}</span>
             <span className="sessionSummaryLabel">{headline.label}</span>
+            {headline.detail && <span className="sessionSummaryDetail">{headline.detail}</span>}
           </div>
         )}
 

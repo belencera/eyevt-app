@@ -10,9 +10,21 @@ import {
   WHICH_REPEATS_START_COUNT,
 } from '../data/constants'
 
+/** Nivel visible: el número mientras sube de estímulos; al llegar al tope, "8 - 1", "8 - 2"… */
+const formatLevel = (level, count) => (level <= count ? String(level) : `${count} - ${level - count}`)
+
+/** Resumen: estímulos por tarjeta y, si se ha pasado del tope, cuántas veces se ha superado con ese número */
+const getSummaryHeadline = (level, count) => {
+  const extra = level - count
+  return { value: count, detail: extra > 0 ? `superado ${extra} ${extra === 1 ? 'vez' : 'veces'}` : null }
+}
+
 /**
  * Flujo de ¿Cuál se repite?:
- * dos tarjetas con un estímulo en común → pulsarlo → corrección → acierto: N + 1 (hasta 8) / fallo: mismo N.
+ * dos tarjetas con un estímulo en común → pulsarlo → corrección → acierto: nivel + 1 / fallo: mismo nivel.
+ *
+ * - Estímulos por tarjeta = nivel, hasta 8 (o lo que permita la categoría). Después el nivel sigue
+ *   subiendo con los mismos estímulos y se muestra como "8 - 1", "8 - 2"… (o "7 - 1" en Emojis).
  *
  * - Modo "memory": las tarjetas se ven `visibleSeconds` y se ocultan HIDDEN_MS en bucle hasta responder;
  *   se puede pulsar también con las tarjetas ocultas. La pausa detiene el ciclo.
@@ -23,7 +35,7 @@ import {
  */
 export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
   const [phase, setPhase] = useState('idle') // idle | responding | feedback
-  const [count, setCount] = useState(WHICH_REPEATS_START_COUNT)
+  const [level, setLevel] = useState(WHICH_REPEATS_START_COUNT) // Sin tope; los estímulos sí lo tienen
   const [round, setRound] = useState(null)
   const [selected, setSelected] = useState(null) // { card, index } del estímulo pulsado
   const [isVisible, setIsVisible] = useState(true) // Modo memoria: tarjetas visibles u ocultas
@@ -45,11 +57,11 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
     }, visibleSeconds * 1000)
   }
 
-  const startRound = (requestedCount) => {
+  const startRound = (roundLevel) => {
     timers.clearAll()
     const nextRound = buildWhichRepeatsRound({
       type: stimulus.stimulusType,
-      count: requestedCount,
+      count: Math.min(roundLevel, WHICH_REPEATS_MAX_COUNT),
       settings: {
         wordLength: stimulus.wordLength,
         numberDigits: stimulus.numberDigits,
@@ -64,10 +76,10 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
 
     preloadImages(nextRound.cards.flat())
     setRound(nextRound)
-    setCount(nextRound.count)
+    setLevel(roundLevel)
     setSelected(null)
     setPhase('responding')
-    score.trackLevel(nextRound.count)
+    score.trackLevel(roundLevel, getSummaryHeadline(roundLevel, nextRound.count))
     score.startTimer()
 
     if (mode === 'memory') runMemoryCycle()
@@ -119,13 +131,13 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
   const nextRound = () => {
     if (phase !== 'feedback' || session.isPaused) return
     const isCorrect = round.cards[selected.card][selected.index].key === round.commonKey
-    startRound(isCorrect ? Math.min(count + 1, WHICH_REPEATS_MAX_COUNT) : count)
+    startRound(isCorrect ? level + 1 : level)
   }
 
   return {
     session: score.withExitSummary(session),
     phase,
-    count,
+    levelLabel: round ? formatLevel(level, round.count) : String(level),
     round,
     selected,
     isVisible,

@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 
 const createStats = (level) => ({
   maxLevel: level,
+  maxHeadline: { value: level }, // Cifra principal del resumen para el nivel máximo
   total: 0,
   correct: 0,
   consecutiveFails: 0,
@@ -34,8 +35,14 @@ export function useRoundScore({ startLevel, headlineLabel, maxFails }) {
     setSummaryOpen(false)
   }
 
-  const trackLevel = (level) =>
-    setStats((prev) => ({ ...prev, maxLevel: Math.max(prev.maxLevel, level) }))
+  /**
+   * Nivel de la pantalla actual. `headline` es cómo se muestra en el resumen si no es solo el número
+   * (ej. { value: 8, detail: 'superado 2 veces' }).
+   */
+  const trackLevel = (level, headline = { value: level }) =>
+    setStats((prev) =>
+      level > prev.maxLevel ? { ...prev, maxLevel: level, maxHeadline: headline } : prev
+    )
 
   /** La pantalla ya se ve: empieza a contar el tiempo de respuesta */
   const startTimer = () => {
@@ -83,7 +90,7 @@ export function useRoundScore({ startLevel, headlineLabel, maxFails }) {
   /** Props listas para <SessionSummary /> */
   const getSummary = (session) => ({
     open: summaryOpen,
-    headline: { value: stats.maxLevel, label: headlineLabel },
+    headline: { ...stats.maxHeadline, label: headlineLabel },
     stats: [
       { label: 'Precisión', value: `${accuracy}% (${stats.correct}/${stats.total})` },
       { label: 'Tiempo medio de respuesta', value: `${averageSeconds} s` },

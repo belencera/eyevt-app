@@ -1712,6 +1712,14 @@
   text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
 }
 
+/* Nota pequeña bajo la cifra principal (ej. 'superado 2 veces') */
+.sessionSummaryDetail {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
 .sessionSummaryMeta {
   display: flex;
   align-items: center;

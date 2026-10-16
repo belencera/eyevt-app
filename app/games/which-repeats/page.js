@@ -110,10 +110,10 @@ export default function WhichRepeatsGame() {
     >
       {session.started && game.round && (
         <>
-          <LevelStatus level={game.count} />
+          <LevelStatus level={game.levelLabel} />
 
           <RepeatsBoard
-            key={game.round.commonKey + game.count}
+            key={game.round.commonKey + game.levelLabel}
             type={stimulus.stimulusType}
             round={game.round}
             cardPx={stimulus.sizePx * CARD_SIZE_FACTOR}
