@@ -26,6 +26,7 @@ export { useGameSession } from './hooks/useGameSession'
 export { useStimulusManager } from './hooks/useStimulusManager'
 export { useTimers } from './hooks/useTimers'
 export { useAdaptiveLevel } from './hooks/useAdaptiveLevel'
+export { useViewportSize } from './hooks/useViewportSize'
 
 // Constantes, opciones y catálogos (incluye animales, frutas, letras, palabras)
 export * from './data/constants'

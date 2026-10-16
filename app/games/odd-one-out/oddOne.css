@@ -1,0 +1,92 @@
+/* ============================================================
+   Encuentra el diferente: tablero de estímulos pulsables
+   ============================================================ */
+
+.oddOneBoard {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  padding: 72px 16px 24px;
+  animation: oddOneFadeIn 0.2s ease;
+  transition: opacity 0.2s ease;
+}
+
+@keyframes oddOneFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Posiciones aleatorias: los estímulos ocupan toda la pantalla y el botón queda abajo */
+.oddOneBoardScattered {
+  justify-content: flex-end;
+}
+
+.oddOneBoardPaused {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Centro: filas centradas, la última incompleta queda en el centro */
+.oddOneGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.oddOneScatter {
+  position: absolute;
+  inset: 0;
+}
+
+.oddOneScatter > .oddOneItem {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+/* ── Estímulo pulsable ── */
+.oddOneItem {
+  padding: 0;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.oddOneItem > .stimulusFlow {
+  width: 100%;
+  height: 100%;
+}
+
+.oddOneItem:hover:not(:disabled) {
+  border-color: rgba(56, 189, 248, 0.5);
+  background: rgba(30, 41, 59, 0.6);
+}
+
+.oddOneItem:disabled {
+  cursor: default;
+}
+
+/* ── Corrección ── */
+.oddOneItemCorrect {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.16);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+}
+
+.oddOneItemWrong {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.16);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+}
+
+/* El botón queda por encima de la capa de estímulos dispersos */
+.oddOneBoardScattered > .roundActions {
+  position: relative;
+  z-index: 1;
+}

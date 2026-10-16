@@ -49,16 +49,24 @@ async function buildIllustrationPair(type, prevKey) {
 }
 
 /**
- * @param {{ type: string, count: number, settings?: { wordLength?, numberDigits? }, prevKey?: string|null }} params
- * @returns {Promise<{ key: string, items: Array<any>, oddIndex: number } | null>}
- *   items: valores para StimulusItem (todos iguales salvo el de oddIndex); null si la categoría no sirve
+ * Estímulo base y su variante "diferente" (la parte lenta: en ilustraciones analiza el dibujo).
+ * Se puede preparar por adelantado porque no depende del número de estímulos.
+ *
+ * @param {{ type: string, settings?: { wordLength?, numberDigits? }, prevKey?: string|null }} params
+ * @returns {Promise<{ key: string, value: any, oddValue: any } | null>} null si la categoría no sirve
  */
-export async function buildOddRound({ type, count, settings = {}, prevKey = null }) {
-  const pair = getIllustrationCategory(type)
-    ? await buildIllustrationPair(type, prevKey)
+export async function buildOddPair({ type, settings = {}, prevKey = null }) {
+  return getIllustrationCategory(type)
+    ? buildIllustrationPair(type, prevKey)
     : buildTextPair(type, settings, prevKey)
-  if (!pair) return null
+}
 
+/**
+ * Pantalla con `count` estímulos iguales y el diferente en una posición al azar.
+ *
+ * @returns {{ key: string, items: Array<any>, oddIndex: number }}
+ */
+export function buildOddRound(pair, count) {
   const oddIndex = Math.floor(Math.random() * count)
   const items = Array.from({ length: count }, (_, i) => (i === oddIndex ? pair.oddValue : pair.value))
   return { key: pair.key, items, oddIndex }

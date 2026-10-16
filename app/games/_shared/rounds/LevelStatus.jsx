@@ -9,25 +9,29 @@ import './rounds.css'
  *
  * @param {number} level - Nivel actual
  * @param {number} filled - Puntos rellenos
- * @param {number} total - Puntos en total
+ * @param {number} [total=0] - Puntos en total (sin puntos solo se muestra el nivel)
  */
-export function LevelStatus({ level, filled, total }) {
+export function LevelStatus({ level, filled = 0, total = 0 }) {
   return (
     <div
       className="levelStatus"
       aria-live="polite"
-      aria-label={`Nivel ${level}, ${filled} de ${total}`}
+      aria-label={total > 0 ? `Nivel ${level}, ${filled} de ${total}` : `Nivel ${level}`}
     >
       <span className="levelStatusLabel">NIVEL {level}</span>
-      <span className="levelStatusSep" aria-hidden />
-      <span className="levelStatusDots" aria-hidden>
-        {Array.from({ length: total }, (_, i) => (
-          <span
-            key={i}
-            className={`levelStatusDot ${i < filled ? 'levelStatusDotFilled' : ''}`}
-          />
-        ))}
-      </span>
+      {total > 0 && (
+        <>
+          <span className="levelStatusSep" aria-hidden />
+          <span className="levelStatusDots" aria-hidden>
+            {Array.from({ length: total }, (_, i) => (
+              <span
+                key={i}
+                className={`levelStatusDot ${i < filled ? 'levelStatusDotFilled' : ''}`}
+              />
+            ))}
+          </span>
+        </>
+      )}
     </div>
   )
 }

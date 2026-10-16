@@ -1,7 +1,6 @@
 'use client'
 
-import { useSyncExternalStore } from 'react'
-import { StimulusItem } from '../../_shared'
+import { StimulusItem, useViewportSize } from '../../_shared'
 import '../../_shared/rounds/rounds.css'
 import './pairs.css'
 
@@ -16,16 +15,6 @@ const STIMULUS_RATIO = {
   numbers: 0.28,
   default: 0.55,
 }
-
-// Tamaño de la ventana sin efectos ni estado propio (se recalcula al redimensionar)
-const subscribeResize = (callback) => {
-  window.addEventListener('resize', callback)
-  return () => window.removeEventListener('resize', callback)
-}
-const getWidth = () => window.innerWidth
-const getHeight = () => window.innerHeight
-const getServerWidth = () => 1280
-const getServerHeight = () => 800
 
 /**
  * Tamaño de carta: el deseado (↑ / ↓) limitado a lo que cabe en pantalla.
@@ -65,10 +54,9 @@ export function PairsBoard({
   onFlip,
   onNext,
 }) {
-  const viewportW = useSyncExternalStore(subscribeResize, getWidth, getServerWidth)
-  const viewportH = useSyncExternalStore(subscribeResize, getHeight, getServerHeight)
+  const viewport = useViewportSize()
 
-  const cardSize = getCardSize(cardPx, deck.length, columns, viewportW, viewportH)
+  const cardSize = getCardSize(cardPx, deck.length, columns, viewport.width, viewport.height)
   const stimulusPx = Math.round(cardSize * (STIMULUS_RATIO[type] ?? STIMULUS_RATIO.default))
 
   return (
