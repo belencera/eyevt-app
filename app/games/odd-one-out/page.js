@@ -20,6 +20,7 @@ import {
   DEFAULT_ODD_ONE_STIMULUS,
   ODD_ONE_SHORTCUTS_HINT,
   ODD_ONE_SIZE_FACTOR,
+  ODD_ONE_SIZE_STEP,
   ODD_ONE_STIMULUS_OPTIONS,
 } from './data/constants'
 
@@ -46,6 +47,8 @@ export default function OddOneOutGame() {
       hint={ODD_ONE_HINT}
       session={session}
       stimulus={stimulus}
+      onIncreaseSize={() => stimulus.adjustSize(ODD_ONE_SIZE_STEP)}
+      onDecreaseSize={() => stimulus.adjustSize(-ODD_ONE_SIZE_STEP)}
       gameControls={
         <ModeSelector
           id="odd-one-out-mode"

@@ -1135,6 +1135,8 @@
     0 0 24px rgba(56, 189, 248, 0.85),
     0 0 48px rgba(56, 189, 248, 0.35);
   will-change: left, top;
+  /* Cambio de tamaño suave con ↑ / ↓ (como en Fusión) */
+  transition: width 0.18s cubic-bezier(0.25, 1, 0.5, 1), height 0.18s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .gameDot-xs {
@@ -1189,6 +1191,7 @@
   display: inline-block;
   line-height: 1;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  transition: font-size 0.18s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* Tamaños configurables del estímulo de letra
@@ -1259,6 +1262,7 @@
   display: inline-block;
   line-height: 1;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  transition: font-size 0.18s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* Tamaños configurables del estímulo de palabra
@@ -1317,7 +1321,7 @@
   background: transparent;
   border: none;
   box-shadow: none;
-  transition: opacity 0.15s ease, filter 0.15s ease;
+  transition: opacity 0.15s ease, filter 0.15s ease, width 0.18s cubic-bezier(0.25, 1, 0.5, 1), height 0.18s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .stimulusIllustrationImg {
@@ -1390,7 +1394,7 @@
   line-height: 1;
   color: #f8fafc;
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, width 0.18s cubic-bezier(0.25, 1, 0.5, 1), height 0.18s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .stimulusArrowSvg {

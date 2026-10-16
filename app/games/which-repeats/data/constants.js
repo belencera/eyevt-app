@@ -17,6 +17,7 @@ export const WHICH_REPEATS_STIMULUS_OPTIONS = STIMULUS_OPTIONS.filter(
 export const WHICH_REPEATS_START_COUNT = 3 // Estímulos por tarjeta al empezar; cada acierto suma uno
 export const WHICH_REPEATS_MAX_COUNT = 8 // Como las cartas del juego original
 export const CARD_SIZE_FACTOR = 7 // Diámetro de tarjeta respecto al tamaño de estímulo (↑ / ↓)
+export const CARD_SIZE_STEP = 1.5 // Paso de ↑ / ↓ (× factor ≈ 10 px de tarjeta por pulsación, cambio suave)
 /** Separación entre las dos tarjetas (px), ajustable con ← / → durante la partida */
 export const CARD_GAP = { initial: 64, min: 16, max: 320, step: 16 }
 export const WHICH_REPEATS_INFINITE_MAX_FAILS = 5 // Fallos seguidos que terminan la sesión en duración "Infinito"

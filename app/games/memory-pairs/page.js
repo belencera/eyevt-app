@@ -18,6 +18,7 @@ import {
   DEFAULT_PREVIEW_SECONDS,
   MEMORY_STIMULUS_OPTIONS,
   PAIRS_SHORTCUTS_HINT,
+  PAIRS_SIZE_STEP,
   PREVIEW_OPTIONS,
   formatPreviewBadge,
 } from '../_memory'
@@ -38,6 +39,8 @@ export default function MemoryPairsGame() {
       hint={MEMORY_PAIRS_HINT}
       session={session}
       stimulus={stimulus}
+      onIncreaseSize={() => stimulus.adjustSize(PAIRS_SIZE_STEP)}
+      onDecreaseSize={() => stimulus.adjustSize(-PAIRS_SIZE_STEP)}
       speedContent={
         <OptionPicker
           id="memory-pairs-preview"

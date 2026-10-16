@@ -19,6 +19,7 @@ import { useWhichRepeatsGame } from './hooks/useWhichRepeatsGame'
 import {
   CARD_GAP,
   CARD_SIZE_FACTOR,
+  CARD_SIZE_STEP,
   DEFAULT_ROTATION_SECONDS,
   DEFAULT_VISIBLE_SECONDS,
   DEFAULT_WHICH_REPEATS_MODE,
@@ -98,6 +99,8 @@ export default function WhichRepeatsGame() {
       hint={WHICH_REPEATS_HINT}
       session={session}
       stimulus={stimulus}
+      onIncreaseSize={() => stimulus.adjustSize(CARD_SIZE_STEP)}
+      onDecreaseSize={() => stimulus.adjustSize(-CARD_SIZE_STEP)}
       gameControls={
         <ModeSelector
           id="which-repeats-mode"

@@ -26,6 +26,7 @@
   gap: var(--pairs-gap);
   width: calc(var(--pairs-cols) * var(--pairs-card) + (var(--pairs-cols) - 1) * var(--pairs-gap));
   perspective: 900px;
+  transition: width 0.18s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* ── Carta ── */
@@ -41,6 +42,7 @@
      ("backwards": al acabar no deja transform y no rompe el 3D) */
   animation: pairsCardIn 0.4s ease backwards;
   animation-delay: calc(0.2s + var(--pairs-index, 0) * 35ms);
+  transition: width 0.18s cubic-bezier(0.25, 1, 0.5, 1), height 0.18s cubic-bezier(0.25, 1, 0.5, 1); /* ↑ / ↓ suave */
 }
 
 @keyframes pairsCardIn {

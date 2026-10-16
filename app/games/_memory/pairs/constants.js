@@ -19,6 +19,7 @@ export const formatPreviewBadge = (option) =>
 
 // ── Tamaño ──
 export const CARD_SIZE_FACTOR = 2.5 // Carta = tamaño del estímulo (↑ / ↓) × factor; tamaño estándar 48 px → carta de 120 px
+export const PAIRS_SIZE_STEP = 2 // Paso de ↑ / ↓ (× factor = 5 px de carta por pulsación, cambio suave)
 
 // ── Juego ──
 export const MISMATCH_MS = 1000 // Tiempo que se ven dos cartas distintas antes de esconderse

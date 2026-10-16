@@ -14,6 +14,7 @@ export const ODD_ONE_STIMULUS_OPTIONS = STIMULUS_OPTIONS.filter((opt) => !EXCLUD
 // ── Progresión ──
 export const ODD_ONE_START_COUNT = 3 // Estímulos de la primera pantalla; cada acierto suma uno, sin tope
 export const ODD_ONE_SIZE_FACTOR = 2 // Estímulos más grandes que en otros juegos para distinguir los detalles
+export const ODD_ONE_SIZE_STEP = 2 // Paso de ↑ / ↓ (× factor = 4 px por pulsación, cambio suave)
 export const ODD_ONE_INFINITE_MAX_FAILS = 5 // Fallos seguidos que terminan la sesión en duración "Infinito"
 
 // ── Detalle eliminado en ilustraciones ──
