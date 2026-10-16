@@ -31,7 +31,7 @@ export function useWhichRepeatsGame({ stimulus, mode, visibleSeconds }) {
   const timers = useTimers()
   const score = useRoundScore({
     startLevel: WHICH_REPEATS_START_COUNT,
-    headlineLabel: 'estímulos por tarjeta como máximo',
+    headlineLabel: 'estímulos por tarjeta',
     maxFails: WHICH_REPEATS_INFINITE_MAX_FAILS,
   })
   const endSessionRef = useRef(null) // session.handleEnd (la sesión se crea después de startRound)
